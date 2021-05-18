@@ -1,0 +1,32 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: utf-8
+      enabled: true
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/velog?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+    username: kang
+    password: Stella@6767
+
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+    security:
+      user:
+        name: kang
+        password: 1234
+
