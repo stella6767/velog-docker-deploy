@@ -1,0 +1,25 @@
+.HeaderSubA {
+  color: rgb(52, 58, 64);
+  display: flex;
+  height: 3rem;
+  font-weight: bold;
+  font-size: 1.125rem;
+  align-items: center;
+  text-decoration: none;
+  justify-content: center;
+  width: 7rem;
+
+  img {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+  }
+}
+
+.HomeHeader {
+  //position: fixed;
+  align-items: center;
+  background: white;
+  width: 100%;
+  z-index: 10;
+  box-shadow: #f8f9fa 0px 0px 8px;
+}
