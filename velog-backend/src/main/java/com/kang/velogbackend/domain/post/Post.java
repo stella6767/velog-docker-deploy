@@ -24,6 +24,8 @@ public class Post extends BaseTimeEntity {
     @Lob
     private String content;
 
+    private String sumNail;
+
     @JsonIgnoreProperties({"posts"})
     @ManyToOne
     @JoinColumn(name="userId")

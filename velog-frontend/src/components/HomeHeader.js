@@ -9,7 +9,7 @@ import styled from "styled-components";
 import logo_img from "../logo.svg";
 import "./MyHeader.scss";
 import { FcGoogle } from "react-icons/fc";
-import LoginForm from "./LoginForm";
+import AuthModal from "./auth/AuthModal";
 
 const HeaderTopDiv = styled.div`
   display: flex;
@@ -79,30 +79,16 @@ const HeaderDateDiv = styled.div`
 `;
 
 const HomeHeader = memo(() => {
-  const [visible, setVisible] = useState(false);
-  const [confirmLoading, setConfirmLoading] = React.useState(false);
-  const [modalText, setModalText] = React.useState("Content of the modal");
+  //랜더링 되는 부분
+
+  const [visible, setVisible] = useState(false); //로그인 모달창이 보일지 안 보일지
 
   const showModal = () => {
     setVisible(true);
   };
 
-  const handleOk = () => {
-    setModalText("The modal will be closed after one seconds");
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setVisible(false);
-      setConfirmLoading(false);
-    }, 1000);
-  };
-
-  const handleCancel = () => {
-    console.log("Clicked cancel button");
-    setVisible(false);
-  };
-
   return (
-    <div className="HomeHeader">
+    <header className="HomeHeader">
       <HeaderTopDiv>
         <div>
           <img src={logo_img} />
@@ -119,17 +105,7 @@ const HomeHeader = memo(() => {
             >
               로그인
             </ColorButton>
-            <Modal
-              title="소셜 계정으로 로그인"
-              visible={visible}
-              onOk={handleOk}
-              confirmLoading={confirmLoading}
-              onCancel={handleCancel}
-            >
-              <LoginForm />
-
-              <FcGoogle size="24" />
-            </Modal>
+            <AuthModal visible={visible} setVisible={setVisible} />
           </div>
         </LoginBox>
       </HeaderTopDiv>
@@ -154,7 +130,7 @@ const HomeHeader = memo(() => {
           <img src="/images/more.svg" />
         </div>
       </HeaderBottomDiv>
-    </div>
+    </header>
   );
 });
 

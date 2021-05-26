@@ -2,6 +2,7 @@ package com.kang.velogbackend.domain.user;
 
 import com.kang.velogbackend.domain.BaseTimeEntity;
 import com.kang.velogbackend.domain.post.Post;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 
+@Builder
+@AllArgsConstructor
 @Getter
 @NoArgsConstructor
 @Entity
@@ -35,13 +38,6 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Post> posts;
 
-    @Builder
-    public User(String name, String email, String picture, List<Post> posts, Role role) {
-        this.name = name;
-        this.email = email;
-        this.picture = picture;
-        this.posts = posts;
-        this.role = role;
-    }
+
 
 }

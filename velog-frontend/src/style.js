@@ -37,5 +37,14 @@ export const Global = createGlobalStyle`
   object-fit: fill;
 }
 
+.ant-row{
+  grid-gap: 3rem;
+}
+
+.ant-form-inline {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
 
 `;

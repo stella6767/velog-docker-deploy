@@ -15,8 +15,8 @@ const AppLayout = () => {
       <HomeHeader />
 
       <Content>
-        <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }} wrap={true}>
-          <Col className="gutter-row" span={8}>
+        <Row>
+          <Col flex="1 1 20rem">
             <Card
               hoverable
               cover={
@@ -32,7 +32,7 @@ const AppLayout = () => {
               />
             </Card>
           </Col>
-          <Col className="gutter-row" span={8}>
+          <Col flex="1 1 20rem">
             <Card
               hoverable
               cover={
@@ -48,8 +48,21 @@ const AppLayout = () => {
               />
             </Card>
           </Col>
-          <Col className="gutter-row" span={8}>
-            <div style={style}>col-6</div>
+          <Col flex="1 1 20rem">
+            <Card
+              hoverable
+              cover={
+                <img
+                  alt="example"
+                  src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+                />
+              }
+            >
+              <Meta
+                title="Europe Street beat"
+                description="www.instagram.com"
+              />
+            </Card>
           </Col>
         </Row>
       </Content>
