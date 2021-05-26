@@ -4,7 +4,7 @@ import client from "./client";
 export const login = ({ email }) => client.post("/auth/login", { email });
 
 // 회원가입
-export const register = ({ username, email }) =>
+export const join = ({ username, email }) =>
   client.post("/auth/join", { username, email });
 
 // 로그인 상태 확인

@@ -5,7 +5,7 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { changeField, initializeForm } from "../../reducers/auth";
+import { changeField, initializeForm, join } from "../../reducers/auth";
 import { ContactSupportOutlined } from "@material-ui/icons";
 
 const AuthModal = memo((props) => {
@@ -13,8 +13,10 @@ const AuthModal = memo((props) => {
   const { visible, setVisible } = props;
 
   const dispatch = useDispatch();
-  const { form } = useSelector(({ auth }) => ({
-    form: auth.register,
+  const { form, auth, authError } = useSelector(({ auth }) => ({
+    form: auth.join,
+    auth: auth.auth,
+    authError: auth.authError,
   }));
 
   const [joinVisible, setJoinVisible] = useState(false);
@@ -46,6 +48,17 @@ const AuthModal = memo((props) => {
     dispatch(initializeForm("join"));
   }, [dispatch]);
 
+  useEffect(() => {
+    if (authError) {
+      console.log("회원가입 실패");
+      return;
+    }
+
+    if (auth) {
+      console.log("회원가입 성공");
+    }
+  }, [auth, authError, dispatch]);
+
   const toggleModal = () => {
     setVisible(!visible);
     setJoinVisible(!joinVisible);
@@ -63,12 +76,18 @@ const AuthModal = memo((props) => {
     //   //showMsg()
     // ); //왜 콘솔에 변경사항이 바로 나타나지 않는가.. usestate가 비동기적으로 실행되서 그런가..? useEffect로 확인해봐야겠음.
 
-    dispatch(
-      changeField({
-        form: "join",
-        value: values,
-      })
-    );
+    const { username, email } = form;
+
+    console.log("form", form);
+
+    // dispatch(
+    //   changeField({
+    //     form: "join",
+    //     value: values,
+    //   })
+    // );
+
+    dispatch(join({ username, email }));
   };
 
   const onLoginFinish = (values) => {

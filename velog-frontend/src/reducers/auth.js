@@ -36,10 +36,12 @@ export const login = createAction(LOGIN, ({ email }) => ({
 }));
 
 //사가 생성
-const registerSaga = createRequestSaga(JOIN, authAPI.register);
+const joinSaga = createRequestSaga(JOIN, authAPI.join);
 const loginSaga = createRequestSaga(LOGIN, authAPI.login);
+
 export function* authSaga() {
-  yield takeLatest(JOIN, registerSaga);
+  //요걸 등록시킴!
+  yield takeLatest(JOIN, joinSaga); //takeLatest는 기존에 진행 중이던 작업이 있다면 취소 처리하고 가장 마지막으로 실행된 작업만 수행
   yield takeLatest(LOGIN, loginSaga);
 }
 
