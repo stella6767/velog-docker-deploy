@@ -1,8 +1,12 @@
-import { createStore } from "redux";
+import { applyMiddleware, createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import rootReducer from "../reducers";
+import createSagaMiddleware from "redux-saga";
+import rootSaga from "../sagas";
 
 const configureStore = () => {
+  const sagaMiddleware = createSagaMiddleware();
+
   // const enhancer =
   //   process.env.NODE_ENV === "production"
   //     ? compose(applyMiddleware(...middlewares, routerMiddleware(history)))
@@ -10,8 +14,11 @@ const configureStore = () => {
   //         applyMiddleware(...middlewares, routerMiddleware(history))
   //       );
 
-  const store = createStore(rootReducer, composeWithDevTools());
-
+  const store = createStore(
+    rootReducer,
+    composeWithDevTools(applyMiddleware(sagaMiddleware))
+  );
+  store.sagaTask = sagaMiddleware.run(rootSaga);
   return store;
 };
 

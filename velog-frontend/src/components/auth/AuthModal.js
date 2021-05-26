@@ -5,11 +5,11 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { changeField } from "../../reducers/auth";
+import { changeField, initializeForm } from "../../reducers/auth";
 import { ContactSupportOutlined } from "@material-ui/icons";
 
 const AuthModal = memo((props) => {
-  //로그인 모달창과 회원가입 모달창, 함수들은 나중에 다 useMemo로 바꿔주자..
+  //로그인 모달창과 회원가입 모달창, 함수들은 나중에 다 useMemo로 바꿔주자.. 로그인 모달과 회원가입 모달도 나중에 분리시키자..
   const { visible, setVisible } = props;
 
   const dispatch = useDispatch();
@@ -42,26 +42,30 @@ const AuthModal = memo((props) => {
     console.log("수정 후 joinReqDto", joinReqDto);
   }, [joinReqDto]);
 
+  useEffect(() => {
+    dispatch(initializeForm("join"));
+  }, [dispatch]);
+
   const toggleModal = () => {
     setVisible(!visible);
     setJoinVisible(!joinVisible);
   };
 
   const onJoinFinish = (values) => {
-    console.log("join Finish:", values);
-    console.log("수정 전 joinReqDto", joinReqDto);
-    setJoinReqDto(
-      //그냥 덮어씌우길 원할 때는... 전개연산자 필요없이..
-      {
-        username: values.username,
-        email: values.email,
-      }
-      //showMsg()
-    ); //왜 콘솔에 변경사항이 바로 나타나지 않는가.. usestate가 비동기적으로 실행되서 그런가..? useEffect로 확인해봐야겠음.
+    // console.log("join Finish:", values);
+    // console.log("수정 전 joinReqDto", joinReqDto);
+    // setJoinReqDto(
+    //   //그냥 덮어씌우길 원할 때는... 전개연산자 필요없이..
+    //   {
+    //     username: values.username,
+    //     email: values.email,
+    //   }
+    //   //showMsg()
+    // ); //왜 콘솔에 변경사항이 바로 나타나지 않는가.. usestate가 비동기적으로 실행되서 그런가..? useEffect로 확인해봐야겠음.
 
     dispatch(
       changeField({
-        form: "register",
+        form: "join",
         value: values,
       })
     );
