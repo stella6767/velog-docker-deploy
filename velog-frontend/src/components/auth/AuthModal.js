@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { changeField } from "../../reducers/auth";
+import { ContactSupportOutlined } from "@material-ui/icons";
 
 const AuthModal = memo((props) => {
   //로그인 모달창과 회원가입 모달창, 함수들은 나중에 다 useMemo로 바꿔주자..
@@ -35,19 +36,28 @@ const AuthModal = memo((props) => {
     forceUpdate({});
   }, []);
 
+  useEffect(() => {
+    //React에서는 한 함수 안에서 setState를 하고 console.log를  하면 console에는 한 박자씩 느리게 찍혀나가는 경우, hookes에는 callback 함수가 안 먹히므로
+    //요렇게 확인
+    console.log("수정 후 joinReqDto", joinReqDto);
+  }, [joinReqDto]);
+
   const toggleModal = () => {
     setVisible(!visible);
     setJoinVisible(!joinVisible);
   };
 
   const onJoinFinish = (values) => {
-    console.log("Finish:", values);
-    // setJoinReqDto({
-    //   ...joinReqDto,
-    //   values,
-    // }); //왜 클릭시 바로 적용이 안 되고 두번 클릭해야 적용되는지는 생각해보자..
-    //console.log(values.email);
-    //console.log("joinReqDto", joinReqDto);
+    console.log("join Finish:", values);
+    console.log("수정 전 joinReqDto", joinReqDto);
+    setJoinReqDto(
+      //그냥 덮어씌우길 원할 때는... 전개연산자 필요없이..
+      {
+        username: values.username,
+        email: values.email,
+      }
+      //showMsg()
+    ); //왜 콘솔에 변경사항이 바로 나타나지 않는가.. usestate가 비동기적으로 실행되서 그런가..? useEffect로 확인해봐야겠음.
 
     dispatch(
       changeField({
@@ -206,6 +216,7 @@ const AuthModal = memo((props) => {
             )}
           </Form.Item>
         </Form>
+        <div>{joinReqDto.username}</div>
       </Modal>
     </>
   );

@@ -1,8 +1,9 @@
-import { Content } from "antd/lib/layout/layout";
 import { Global } from "../style";
 import { Row, Col, Layout, Card } from "antd";
 import "antd/dist/antd.css";
 import HomeHeader from "./HomeHeader";
+
+const { Content } = Layout;
 
 const style = { background: "#0092ff", padding: "8px 0" };
 
