@@ -49,10 +49,11 @@ export function* authSaga() {
 const initialState = {
   join: {
     username: "",
-    email: "",
+    password: "",
   },
   login: {
-    email: "",
+    username: "",
+    password: "",
   },
   auth: null,
   authError: null,

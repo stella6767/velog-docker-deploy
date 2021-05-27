@@ -1,15 +1,10 @@
 import { Button, withStyles } from "@material-ui/core";
 import { blueGrey } from "@material-ui/core/colors";
-import { Modal } from "antd";
-import { Header } from "antd/lib/layout/layout";
-import React, { memo } from "react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { memo, useState } from "react";
 import styled from "styled-components";
 import logo_img from "../logo.svg";
+import AuthModal from "./auth/ModalContainer";
 import "./MyHeader.scss";
-import { FcGoogle } from "react-icons/fc";
-import AuthModal from "./auth/AuthModal";
 
 const HeaderTopDiv = styled.div`
   display: flex;
@@ -81,10 +76,10 @@ const HeaderDateDiv = styled.div`
 const HomeHeader = memo(() => {
   //랜더링 되는 부분
 
-  const [visible, setVisible] = useState(false); //로그인 모달창이 보일지 안 보일지
+  const [loginVisible, setLoginVisible] = useState(false); //로그인 모달창이 보일지 안 보일지
 
-  const showModal = () => {
-    setVisible(true);
+  const showLoginModal = () => {
+    setLoginVisible(true);
   };
 
   return (
@@ -101,11 +96,15 @@ const HomeHeader = memo(() => {
             <ColorButton
               variant="contained"
               color="primary"
-              onClick={showModal}
+              onClick={showLoginModal}
             >
               로그인
             </ColorButton>
-            <AuthModal visible={visible} setVisible={setVisible} />
+            {/* 모달 컨테이너 */}
+            <AuthModal
+              loginVisible={loginVisible}
+              setLoginVisible={setLoginVisible}
+            />
           </div>
         </LoginBox>
       </HeaderTopDiv>

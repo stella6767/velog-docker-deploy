@@ -22,9 +22,12 @@ public class User extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100) //12345 -> 해쉬(비밀번호 암호화)
+    private String password;
+
+    @Column
     private String email;
 
     @Column
@@ -38,6 +41,11 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Post> posts;
 
+
+    public void commonJoin(String password, Role role){
+        this.password = password;
+        this.role = role;
+    }
 
 
 }

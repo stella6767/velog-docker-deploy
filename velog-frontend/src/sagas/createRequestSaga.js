@@ -11,6 +11,8 @@ export default function createRequestSaga(type, request) {
   const SUCCESS = `${type}_SUCCESS`;
   const FAILURE = `${type}_FAILURE`;
 
+  console.log("호출이 된 것이냐..");
+
   return function* (action) {
     yield put(startLoading(type)); //로딩 시작
     //피라미터로 action을 받아 오면 액션의 정보를 조회할 수 있습니다.
@@ -21,6 +23,7 @@ export default function createRequestSaga(type, request) {
       const response = yield call(request, action.payload); //api 호출
 
       console.log("api 호출", type, action);
+
       yield put({
         type: SUCCESS,
         payload: response.data,
