@@ -2,14 +2,22 @@ import produce from "immer";
 import { createAction, handleActions } from "redux-actions";
 import createRequestSaga, {
   createRequestActionTypes,
-} from "../sagas/createRequestSaga";
+} from "../lib/createRequestSaga";
 import * as authAPI from "../lib/api/auth";
 import { takeLatest } from "@redux-saga/core/effects";
+
+//초기 상태
+const initialState = {
+  joinData: {},
+  login: {},
+  me: null,
+};
 
 // 액션 타입 정의
 const CHANGE_FIELD = "auth/CHANGE_FIELD";
 const INLTIALIZE_FORM = "auth/INLTIALIZE_FORM";
 
+//auth/JOIN, auth/JOIN_SUCCESS, auth/JOIN_FAILURE //액션 생성
 const [JOIN, JOIN_SUCCESS, JOIN_FAILURE] =
   createRequestActionTypes("auth/JOIN");
 
@@ -40,24 +48,10 @@ const joinSaga = createRequestSaga(JOIN, authAPI.join);
 const loginSaga = createRequestSaga(LOGIN, authAPI.login);
 
 export function* authSaga() {
-  //요걸 등록시킴!
+  //이벤트 리스너!
   yield takeLatest(JOIN, joinSaga); //takeLatest는 기존에 진행 중이던 작업이 있다면 취소 처리하고 가장 마지막으로 실행된 작업만 수행
   yield takeLatest(LOGIN, loginSaga);
 }
-
-//초기 상태
-const initialState = {
-  join: {
-    username: "",
-    password: "",
-  },
-  login: {
-    username: "",
-    password: "",
-  },
-  auth: null,
-  authError: null,
-};
 
 //리듀서
 const auth = handleActions(
@@ -70,6 +64,7 @@ const auth = handleActions(
       ...state,
       [form]: initialState[form], //JOIN: JOIN{username:'', email:''}
     }),
+
     // 회원가입 성공
     [JOIN_SUCCESS]: (state, { payload: auth }) => ({
       ...state,
@@ -78,17 +73,6 @@ const auth = handleActions(
     }),
     // 회원가입 실패
     [JOIN_FAILURE]: (state, { payload: error }) => ({
-      ...state,
-      authError: error,
-    }),
-    // 로그인 성공
-    [LOGIN_SUCCESS]: (state, { payload: auth }) => ({
-      ...state,
-      authError: null,
-      auth,
-    }),
-    // 로그인 실패
-    [LOGIN_FAILURE]: (state, { payload: error }) => ({
       ...state,
       authError: error,
     }),

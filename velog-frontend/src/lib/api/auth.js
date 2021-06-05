@@ -1,11 +1,12 @@
 import client from "./client";
 
 // 로그인
-export const login = ({ email }) => client.post("/auth/login", { email });
+export const login = ({ username, password }) =>
+  client.post("/auth/login", { username, password });
 
 // 회원가입
-export const join = ({ username, email }) =>
-  client.post("/auth/join", { username, email });
+export const join = ({ username, password }) =>
+  client.post("/auth/join", { username, password });
 
 // 로그인 상태 확인
 export const check = () => client.get("/auth/check");

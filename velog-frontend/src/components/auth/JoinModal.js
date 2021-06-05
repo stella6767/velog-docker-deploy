@@ -62,7 +62,7 @@ const JoinModal = memo((props) => {
               },
             ]}
           >
-            <Input placeholder="Password" />
+            <Input.Password placeholder="Password" />
           </Form.Item>
           <Form.Item shouldUpdate>
             {() => (
