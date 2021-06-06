@@ -8,73 +8,47 @@ import { takeLatest } from "@redux-saga/core/effects";
 
 //초기 상태
 const initialState = {
-  joinData: {},
   login: {},
   me: null,
+  joinError: null,
 };
 
-// 액션 타입 정의
-const CHANGE_FIELD = "auth/CHANGE_FIELD";
-const INLTIALIZE_FORM = "auth/INLTIALIZE_FORM";
 
-//auth/JOIN, auth/JOIN_SUCCESS, auth/JOIN_FAILURE //액션 생성
-const [JOIN, JOIN_SUCCESS, JOIN_FAILURE] =
-  createRequestActionTypes("auth/JOIN");
+const [JOIN_REQUEST, JOIN_SUCCESS, JOIN_FAILURE] =
+  createRequestActionTypes("JOIN");
 
-const [LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE] =
-  createRequestActionTypes("auth/LOGIN");
+const [LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE] =
+  createRequestActionTypes("LOGIN");
 
 //액션 생성 함수
-export const changeField = createAction(
-  CHANGE_FIELD, //type
-  ({ form, value }) => ({
-    form,
-    value,
-  })
-); //JOIN
-
-export const initializeForm = createAction(INLTIALIZE_FORM, (form) => form);
-
-export const join = createAction(JOIN, ({ username, email }) => ({
-  username,
-  email,
-}));
-export const login = createAction(LOGIN, ({ email }) => ({
-  email,
-}));
+export const join = createAction(JOIN_REQUEST, (data) => (data));
+export const login = createAction(LOGIN_REQUEST, (data) => (
+  data
+));
 
 //사가 생성
-const joinSaga = createRequestSaga(JOIN, authAPI.join);
-const loginSaga = createRequestSaga(LOGIN, authAPI.login);
+const joinSaga = createRequestSaga(JOIN_REQUEST, authAPI.join);
+const loginSaga = createRequestSaga(LOGIN_REQUEST, authAPI.login);
 
 export function* authSaga() {
   //이벤트 리스너!
-  yield takeLatest(JOIN, joinSaga); //takeLatest는 기존에 진행 중이던 작업이 있다면 취소 처리하고 가장 마지막으로 실행된 작업만 수행
-  yield takeLatest(LOGIN, loginSaga);
+  yield takeLatest(JOIN_REQUEST, joinSaga); //takeLatest는 기존에 진행 중이던 작업이 있다면 취소 처리하고 가장 마지막으로 실행된 작업만 수행
+  yield takeLatest(LOGIN_REQUEST, loginSaga);
 }
 
 //리듀서
 const auth = handleActions(
   {
-    [CHANGE_FIELD]: (state, { payload: { form, value } }) =>
-      produce(state, (draft) => {
-        draft[form] = value; //state.JOIN = values
-      }),
-    [INLTIALIZE_FORM]: (state, { payload: form }) => ({
-      ...state,
-      [form]: initialState[form], //JOIN: JOIN{username:'', email:''}
-    }),
-
     // 회원가입 성공
-    [JOIN_SUCCESS]: (state, { payload: auth }) => ({
+    [JOIN_SUCCESS]: (state, { payload: me }) => ({
       ...state,
-      authError: null,
-      auth,
+      joinError: null,
+      me,
     }),
     // 회원가입 실패
     [JOIN_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      authError: error,
+      joinError: error,
     }),
   },
   initialState

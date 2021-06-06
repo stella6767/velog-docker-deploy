@@ -17,10 +17,9 @@ const AuthModal = memo((props) => {
 
   //리덕스 관련코드
   const dispatch = useDispatch();
-  const { form, auth, authError } = useSelector(({ auth }) => ({
-    form: auth.join,
-    auth: auth.auth,
-    authError: auth.authError,
+  const { me, joinError } = useSelector(({ auth }) => ({
+    me: auth.me,
+    joinError: auth.joinError,
   }));
 
   useEffect(() => {
@@ -37,22 +36,22 @@ const AuthModal = memo((props) => {
     setJoinVisible(false);
   };
 
-  useEffect(() => {
-    dispatch(initializeForm("join"));
-  }, [dispatch]);
 
   useEffect(() => {
-    if (authError) {
+
+    console.log("me: ", me, "joinError: ", joinError);
+
+    if (joinError) {
       console.log("회원가입 실패");
-      console.log(authError);
+      console.log(joinError);
       return;
     }
 
-    if (auth) {
+    if (me) {
       console.log("회원가입 성공");
-      console.log(auth);
+      console.log(me);
     }
-  }, [auth, authError, dispatch]);
+  }, [me, joinError, dispatch]);
 
   const toggleModal = () => {
     setLoginVisible(!loginVisible);
@@ -61,18 +60,8 @@ const AuthModal = memo((props) => {
 
   const onJoinFinish = (values) => {
     console.log(values);
-
-    const { username, password } = form;
-    console.log("form", form);
-
-    // dispatch(
-    //   changeField({
-    //     form: "join",
-    //     value: values,
-    //   })
-    // );
-
-    dispatch(join({ username, password }));
+    
+    dispatch(join(values));
   };
 
   return (

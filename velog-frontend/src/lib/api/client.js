@@ -9,6 +9,11 @@ const client = axios.create();
 // client.defaults.baseURL = "https://localhost:8080/"
 // //헤더 설정
 // client.defaults.headers.common['Authorization'] = 'Bearer a1b2c3d4'
+
+client.defaults.headers.post['Content-Type'] = 'application/json; charset=UTF-8'; //json으로 던지기 위해서..
+
+
+
 // //인터셉터 설정
 // client.defaults.responseType.use(\
 //     response=>{

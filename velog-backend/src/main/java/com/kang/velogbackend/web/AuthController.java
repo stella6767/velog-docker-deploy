@@ -29,7 +29,8 @@ public class AuthController {
     @PostMapping("/auth/join") //Oauth 가 아닌
     public CMRespDto<?> join(@RequestBody AuthReqDto authReqDto) {
 
-        log.info(authReqDto.toString());
+
+        log.info(authReqDto.toString());//@RequestBody가 받을 수 있는 application/json 설정을 프론트엔드 쪽에서 꼭 해주라ㅠㅠ
 
         //User user = authReqDto.toEntity();
 

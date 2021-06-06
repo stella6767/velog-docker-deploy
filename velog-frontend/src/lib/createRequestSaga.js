@@ -2,9 +2,10 @@ import { put, call } from "redux-saga/effects";
 import { finishLoading, startLoading } from "../reducers/loading";
 
 export const createRequestActionTypes = (type) => {
+  const REQUEST = `${type}_REQUEST`;
   const SUCCESS = `${type}_SUCCESS`;
   const FAILURE = `${type}_FAILURE`;
-  return [type, SUCCESS, FAILURE];
+  return [REQUEST, SUCCESS, FAILURE];
 };
 
 export default function createRequestSaga(type, request) {
@@ -20,9 +21,13 @@ export default function createRequestSaga(type, request) {
 
       //call을 사용하면 promise를 반환하는 함수를 호출하고, 기다릴 수 있습니다.
       //첫 번째 피라미터는 함수, 나머지 피라미터는 해당 함수에 넣을 인수
+
+      console.log("json으로 던졌는데?",JSON.stringify(action.payload));
       const response = yield call(request, action.payload); //api 호출
 
       console.log("api 호출", type, action);
+
+      console.log(response);
 
       yield put({
         type: SUCCESS,
