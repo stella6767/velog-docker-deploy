@@ -1,10 +1,17 @@
-import { Button, withStyles } from "@material-ui/core";
-import { blueGrey } from "@material-ui/core/colors";
-import React, { memo, useState } from "react";
-import styled from "styled-components";
-import logo_img from "../logo.svg";
-import AuthModal from "./auth/ModalContainer";
-import "./MyHeader.scss";
+import { Button, withStyles } from '@material-ui/core';
+import { blueGrey } from '@material-ui/core/colors';
+import React, { memo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import logo_img from '../logo.svg';
+import AuthModal from './auth/ModalContainer';
+import './MyHeader.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { CaretDownOutlined } from '@ant-design/icons';
+import { Dropdown, Menu } from 'antd';
+import writeForm from '../pages/writeForm';
+import test from '../reducers/test';
 
 const HeaderTopDiv = styled.div`
   display: flex;
@@ -38,7 +45,7 @@ const ColorButton = withStyles((theme) => ({
     borderRadius: 50,
     height: 30,
 
-    "&:hover": {
+    '&:hover': {
       backgroundColor: blueGrey[700],
     },
   },
@@ -73,8 +80,31 @@ const HeaderDateDiv = styled.div`
   cursor: pointer;
 `;
 
+const StyledLoginSuccessDiv = styled.div`
+  display: flex;
+  margin-left: 1rem;
+`;
+
+const StyledUserImg = styled.img`
+  display: block;
+  height: 2rem;
+  width: 2rem;
+  box-shadow: rgb(0 0 0 / 9%) 0px 0px 8px;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: all 0.125s ease-in 0s;
+  background-image: url('/images/search.svg');
+`;
+
 const HomeHeader = memo(() => {
   //랜더링 되는 부분
+
+  const { loginDone } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log('loginDone:', loginDone);
+  }, [loginDone]);
 
   const [loginVisible, setLoginVisible] = useState(false); //로그인 모달창이 보일지 안 보일지
 
@@ -82,41 +112,93 @@ const HomeHeader = memo(() => {
     setLoginVisible(true);
   };
 
+  const tokenTest = () => {
+    console.log('nani??? 왜 두개 다 실행되지??? type을 잘못 생성했구나..');
+    dispatch(test());
+  };
+
+  const menu = (
+    <Menu>
+      <Menu.Item>
+        <Link
+          to="/aaa"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.antgroup.com"
+        >
+          내 벨로그
+        </Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to="/write">새 글 작성</Link>
+      </Menu.Item>
+      <Menu.Item>
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.luohanacademy.com"
+        >
+          로그아웃
+        </a>
+      </Menu.Item>
+      <Menu.Item>
+        <div onClick={tokenTest}>token Test</div>
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <header className="HomeHeader">
       <HeaderTopDiv>
-        <div>
-          <img src={logo_img} />
-        </div>
+        <Link to="/">
+          <img src={logo_img} alt="logo" />
+        </Link>
+
         <LoginBox>
-          <a>
-            <img src="/images/search.svg" />
-          </a>
-          <div>
-            <ColorButton
-              variant="contained"
-              color="primary"
-              onClick={showLoginModal}
-            >
-              로그인
-            </ColorButton>
-            {/* 모달 컨테이너 */}
-            <AuthModal
-              loginVisible={loginVisible}
-              setLoginVisible={setLoginVisible}
-            />
-          </div>
+          <Link to="">
+            <img src="/images/search.svg" alt="search" />
+          </Link>
+
+          {loginDone === false ? (
+            <div>
+              <ColorButton
+                variant="contained"
+                color="primary"
+                onClick={showLoginModal}
+              >
+                로그인
+              </ColorButton>
+              {/* 모달 컨테이너 */}
+              <AuthModal
+                loginVisible={loginVisible}
+                setLoginVisible={setLoginVisible}
+              />
+            </div>
+          ) : (
+            <StyledLoginSuccessDiv>
+              <div>
+                <StyledUserImg />
+              </div>
+              <div style={{ marginTop: '3px', marginLeft: '3px' }}>
+                <Dropdown overlay={menu}>
+                  <CaretDownOutlined
+                    style={{ fontSize: '1rem', cursor: 'pointer' }}
+                  />
+                </Dropdown>
+              </div>
+            </StyledLoginSuccessDiv>
+          )}
         </LoginBox>
       </HeaderTopDiv>
       <HeaderBottomDiv>
         <HeaderLeftDiv>
           <HeaderSubDiv>
-            <a className="HeaderSubA">
+            <Link to="" className="HeaderSubA">
               <img src="/images/trending.svg" /> 트렌딩
-            </a>
-            <a className="HeaderSubA">
+            </Link>
+            <Link to="" className="HeaderSubA">
               <img src="/images/recent.svg" /> 최신
-            </a>
+            </Link>
           </HeaderSubDiv>
           <HeaderSubDiv>
             <HeaderDateDiv>

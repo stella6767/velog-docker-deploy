@@ -22,12 +22,14 @@ public class AuthService {
     @Transactional
     public void 회원가입(User user) { //@RestController가 아니니까 return 할 필요없음. 리액트나 안드로이드에게 던질 때는 리턴 필요
 
+        //여기서 trim 검사말고 프론트쪽에서 검사하는 게 나을듯.
+
         String rawPassword = user.getPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
-
         user.commonJoin(encPassword, Role.USER);
 
         log.info("user: '{}'",user);
+
         userRepository.save(user);
     }
 

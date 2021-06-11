@@ -1,14 +1,10 @@
-import client from "./client";
+import client from './client';
 
 // 로그인
-export const login = ({ username, password }) =>
-  client.post("/auth/login", { username, password });
+export const login = (data) => client.post('login', JSON.stringify(data));
 
 // 회원가입
-export const join = (data) => ( 
-  
-  client.post("/auth/join", JSON.stringify(data)));
-
+export const join = (data) => client.post('auth/join', JSON.stringify(data));
 
 // 로그아웃
-export const logout = () => client.post("/auth/logout");
+export const logout = () => client.post('auth/logout');

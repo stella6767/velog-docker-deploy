@@ -20,7 +20,7 @@ public class PrincipalDetailsService implements UserDetailsService {
     @Override //Authentication Maneger 가 보내줌
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        log.info("/login 이 호출되면 자동 실행되어 username 이 DB에 있는지 확인한다.");
+        log.info("UsernamePasswordAuthenticationFilter =>  username 이 DB에 있는지 확인한다.");
         User principal = userRepository.findByUsername(username);
 
         if(principal == null) {

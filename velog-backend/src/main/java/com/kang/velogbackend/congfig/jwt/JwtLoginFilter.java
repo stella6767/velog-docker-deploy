@@ -26,6 +26,8 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
+    //formlogin을 disable했기 때문에 꼭 이 필터를 수정해서 등록시켜줘야함
+
     private static final Logger log = LoggerFactory.getLogger(JwtLoginFilter.class);
     private final AuthenticationManager authenticationManager;//시큐리티가 이미 ioc에 이 객체를 등록시켜놨음
 
@@ -40,7 +42,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         AuthReqDto authReqDto = null;
 
         try {
-            authReqDto = om.readValue(request.getInputStream(), AuthReqDto.class);
+            authReqDto = om.readValue(request.getInputStream(), AuthReqDto.class); //json => java object
             log.info("로그인 dto: '{}'", authReqDto);
         } catch (Exception e) {
             log.warn("JwtLoginFilter : 로그인 요청 dto 생성 중 실패: '{}'", e.getMessage());
@@ -55,6 +57,8 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         Authentication authentication = authenticationManager.authenticate(authToken);
 
         return authentication;
+        //return 될 때 authentication객체가 session 영역에 저장됨.
+        //굳이 세션을 만들 이유는 없지만, 권한 처리 때문에 session에 넣어주자.
     }
 
     @Override
@@ -66,13 +70,18 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         //JWT 토큰은 보안 파일이 아님!! - 전자서명
         String jwtToken = JWT.create()
-                .withSubject("blogToken")
-                .withExpiresAt(new Date(System.currentTimeMillis()+(1000*60*10))) //만료시간 10분
+                .withSubject("velogToken") //토큰이름
+                .withExpiresAt(new Date(System.currentTimeMillis()+(1000*60*10))) //만료시간 5분
                 .withClaim("userId", principalDetails.getUser().getId())
                 .sign(Algorithm.HMAC512("홍길동"));
 
+        //refresh token redis 연동은 차차 생각해보자.. 더럽게 어렵네.
+
+
         System.out.println("jwtToken: "+jwtToken);
         response.setHeader("Authorization", "Bearer "+jwtToken); //이제 이 토큰을 가지고,
+
+        //response.set
 
     }
 

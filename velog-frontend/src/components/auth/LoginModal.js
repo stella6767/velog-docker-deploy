@@ -1,6 +1,7 @@
 import { Button, Divider, Form, Input, Modal } from "antd";
 import React, { memo } from "react";
 import { FcGoogle } from "react-icons/fc";
+import { UserOutlined } from "@ant-design/icons";
 
 const LoginModal = memo((props) => {
   const { loginVisible, loginForm, handleCancel, toggleModal, onLoginFinish } =
@@ -39,16 +40,30 @@ const LoginModal = memo((props) => {
           layout="inline"
           onFinish={onLoginFinish}
         >
-          <Form.Item
-            name="email"
+       <Form.Item
+            name="username"
             rules={[
               {
                 required: true,
-                message: "Please input your email!",
+                message: "Please input your username!",
               },
             ]}
           >
-            <Input placeholder="Email" />
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Username"
+            />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: "Please input your password!",
+              },
+            ]}
+          >
+            <Input.Password placeholder="Password" />
           </Form.Item>
           <Form.Item shouldUpdate>
             {() => (

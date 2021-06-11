@@ -9,8 +9,10 @@ import { takeLatest } from "@redux-saga/core/effects";
 //초기 상태
 const initialState = {
   login: {},
-  me: null,
+  joinDone: null,
   joinError: null,
+  loginDone: false,
+  loginError: null,
 };
 
 
@@ -40,16 +42,28 @@ export function* authSaga() {
 const auth = handleActions(
   {
     // 회원가입 성공
-    [JOIN_SUCCESS]: (state, { payload: me }) => ({
+    [JOIN_SUCCESS]: (state, { payload: joinDone }) => ({
       ...state,
       joinError: null,
-      me,
+      joinDone,
     }),
     // 회원가입 실패
     [JOIN_FAILURE]: (state, { payload: error }) => ({
       ...state,
       joinError: error,
     }),
+    [LOGIN_SUCCESS]: (state) => ({
+      ...state,
+      loginError: null,
+      loginDone: true,
+    }),
+    // 회원가입 실패
+    [LOGIN_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      loginError: error,
+    }), 
+
+
   },
   initialState
 );

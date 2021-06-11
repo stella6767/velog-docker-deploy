@@ -28,7 +28,7 @@ public class User extends BaseTimeEntity {
     private String password;
 
     @Column
-    private String email;
+    private String email; //소셜가입이 아닌 사람은 이메일이 없도록..
 
     @Column
     private String picture;
@@ -42,7 +42,7 @@ public class User extends BaseTimeEntity {
     private List<Post> posts;
 
 
-    public void commonJoin(String password, Role role){
+    public void commonJoin(String password, Role role){ //소셜 로그인 아닐시
         this.password = password;
         this.role = role;
     }
