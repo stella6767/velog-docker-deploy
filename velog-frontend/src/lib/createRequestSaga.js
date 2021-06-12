@@ -1,5 +1,6 @@
 import { put, call } from 'redux-saga/effects';
 import { finishLoading, startLoading } from '../reducers/loading';
+import client from './api/client';
 
 export const createRequestActionTypes = (type) => {
   const REQUEST = `${type}_REQUEST`;
@@ -16,8 +17,10 @@ export default function createRequestSaga(type, request) {
   const SUCCESS = `${type.split('_')[0]}_SUCCESS`; //ESLINT가 에러 표시내는 거는 무시
   const FAILURE = `${type.split('_')[0]}_FAILURE`;
 
+  //console.log(client.headers);
+
   return function* (action) {
-    console.log('actionYype: ', type);
+    console.log('actionType: ', type);
 
     yield put(startLoading(type)); //로딩 시작
     //피라미터로 action을 받아 오면 액션의 정보를 조회할 수 있습니다.
@@ -29,6 +32,20 @@ export default function createRequestSaga(type, request) {
       //첫 번째 피라미터는 함수, 나머지 피라미터는 해당 함수에 넣을 인수
 
       //console.log("json으로 던졌는데?",JSON.stringify(action.payload));
+
+      if (type === 'TEST_REQUEST') {
+        //일단은 엉성하지만 이렇게 짜자..
+        const config = {
+          headers: {
+            Authorization: '' + localStorage.getItem('velogToken'),
+          },
+        };
+
+        action.payload = config;
+      }
+
+      console.log('action.payload: ', action.payload);
+
       const response = yield call(request, action.payload); //api 호출
 
       console.log('api 호출 성공: ', type, action);

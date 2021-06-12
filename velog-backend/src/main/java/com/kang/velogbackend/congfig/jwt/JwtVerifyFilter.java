@@ -39,6 +39,7 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter { //@Componet가 
             throws IOException, ServletException {
 
         log.info("권한이나 인증이 필요한 요청이 들어옴");
+
         String header = request.getHeader("Authorization");
         log.info("Authorization는 "+header);
 

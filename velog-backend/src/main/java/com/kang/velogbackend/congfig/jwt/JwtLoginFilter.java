@@ -71,12 +71,13 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         //JWT 토큰은 보안 파일이 아님!! - 전자서명
         String jwtToken = JWT.create()
                 .withSubject("velogToken") //토큰이름
-                .withExpiresAt(new Date(System.currentTimeMillis()+(1000*60*10))) //만료시간 5분
+                .withExpiresAt(new Date(System.currentTimeMillis()+(1000*60*10))) //만료시간 10분
                 .withClaim("userId", principalDetails.getUser().getId())
                 .sign(Algorithm.HMAC512("홍길동"));
 
         //refresh token redis 연동은 차차 생각해보자.. 더럽게 어렵네.
 
+        log.info("만료시간: "+ new Date(System.currentTimeMillis()+(1000*60*10)));
 
         System.out.println("jwtToken: "+jwtToken);
         response.setHeader("Authorization", "Bearer "+jwtToken); //이제 이 토큰을 가지고,

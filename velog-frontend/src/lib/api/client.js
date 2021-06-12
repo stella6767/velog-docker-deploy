@@ -13,9 +13,13 @@ const client = axios.create();
 client.defaults.headers.post['Content-Type'] =
   'application/json; charset=UTF-8'; //json으로 던지기 위해서..
 
-client.defaults.headers.common['Authorization'] =
-  //'Bearer ' + localStorage.getItem('velogToken')
-  localStorage.getItem('velogToken');
+// client.defaults.headers.common['Authorization'] =
+//   localStorage.getItem('velogToken');     //여기서 문제가 발생했네.. 초기값으록 고정됐나보다.
+
+client.interceptors.request.use((request) => {
+  console.log('Starting Request', JSON.stringify(request, null, 2));
+  return request;
+});
 
 // //인터셉터 설정
 // client.defaults.responseType.use(\
