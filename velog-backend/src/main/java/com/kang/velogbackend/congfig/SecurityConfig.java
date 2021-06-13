@@ -3,6 +3,7 @@ package com.kang.velogbackend.congfig;
 import com.kang.velogbackend.congfig.jwt.JwtLoginFilter;
 import com.kang.velogbackend.congfig.jwt.JwtVerifyFilter;
 import com.kang.velogbackend.domain.user.UserRepository;
+import com.kang.velogbackend.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
     private final UserRepository userRepository;
 
+    private final JwtUtil jwtUtil;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -36,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().configurationSource(corsConfigurationSource())//@CrossOrigin(인증X), 시큐리티 필터에 등록 인증(O)
                 .and()
                 .csrf().disable()
-                .addFilter(new JwtLoginFilter(authenticationManager()))
+                .addFilter(new JwtLoginFilter(authenticationManager(), jwtUtil))
                 .addFilter(new JwtVerifyFilter(authenticationManager(), userRepository))
                 .formLogin().disable()
                 .httpBasic().disable()

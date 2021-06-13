@@ -7,6 +7,18 @@ server:
       enabled: true
 
 spring:
+  cache:
+    type: redis
+  redis:
+    host: 127.0.0.1
+    port: 6397
+
+    lettuce:
+      pool:
+        max-active: 10
+        max-idle: 10
+        min-idle: 5
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/velog?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
@@ -30,3 +42,7 @@ spring:
         name: kang
         password: 1234
 
+
+
+jwt:
+  secret: hongKildong

@@ -37,6 +37,9 @@ public class AuthController {
 
 
 
+
+
+
     @PostMapping("/auth/join/google")
     public String jwtCreate(@RequestBody Map<String, Object> data) {
         log.info("jwtCreate 실행됨");

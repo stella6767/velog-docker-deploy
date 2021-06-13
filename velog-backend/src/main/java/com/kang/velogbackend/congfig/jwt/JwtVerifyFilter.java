@@ -60,6 +60,13 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter { //@Componet가 
         log.info(dJWT.toString() + userId);
 
 
+//        try {
+//            username = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwtToken).getClaim("username").asString();
+//        } catch (TokenExpiredException e) {
+//            response.sendError(HttpStatus.UNAUTHORIZED.value(), "세션이 만료되었습니다, 로그인 후 이용해주세요!");
+//            return;
+//        }
+
         User userEntity = userRepository.findById(userId).orElseThrow(()->{
             return new IllegalArgumentException("id를 찾을 수 없습니다.");
         });
@@ -68,8 +75,6 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter { //@Componet가 
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(principalDetails.getUsername(), principalDetails.getPassword(), principalDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-
 
 
         chain.doFilter(request, response);

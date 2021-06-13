@@ -1,9 +1,8 @@
 package com.kang.velogbackend.congfig.jwt;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kang.velogbackend.congfig.auth.PrincipalDetails;
+import com.kang.velogbackend.utils.JwtUtil;
 import com.kang.velogbackend.web.dto.auth.AuthReqDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -30,6 +29,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private static final Logger log = LoggerFactory.getLogger(JwtLoginFilter.class);
     private final AuthenticationManager authenticationManager;//시큐리티가 이미 ioc에 이 객체를 등록시켜놨음
+    private final JwtUtil jwtUtil;
 
     // 주소: Post 요청으로 /login 요청
     @Override   //기존 로그인 방식을 갈아치우는 과정
@@ -68,19 +68,19 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         System.out.println("로그인 완료되어서 세션 만들어짐. 이제 JWT토큰 만들어서 response.header에 응답할 차리");
         PrincipalDetails principalDetails = (PrincipalDetails)authResult.getPrincipal();
 
-        //JWT 토큰은 보안 파일이 아님!! - 전자서명
-        String jwtToken = JWT.create()
-                .withSubject("velogToken") //토큰이름
-                .withExpiresAt(new Date(System.currentTimeMillis()+(1000*60*10))) //만료시간 10분
-                .withClaim("userId", principalDetails.getUser().getId())
-                .sign(Algorithm.HMAC512("홍길동"));
+
+        String accessToken = jwtUtil.generateAccessToken(principalDetails.getUser().getId());
+        String refreshToken = jwtUtil.generateRefreshToken(principalDetails.getUser().getId());
+
+
 
         //refresh token redis 연동은 차차 생각해보자.. 더럽게 어렵네.
 
-        log.info("만료시간: "+ new Date(System.currentTimeMillis()+(1000*60*10)));
+        log.info("accessToken 만료시간: "+ new Date(System.currentTimeMillis()+(1000*60*10)));
+        log.info("refreshToken 만료시간: "+ new Date(System.currentTimeMillis()+(1000*60*60*24*7)));
 
-        System.out.println("jwtToken: "+jwtToken);
-        response.setHeader("Authorization", "Bearer "+jwtToken); //이제 이 토큰을 가지고,
+        System.out.println("accessToken: "+accessToken);
+        response.setHeader("Authorization", "Bearer "+accessToken); //이제 이 토큰을 가지고,
 
         //response.set
 
