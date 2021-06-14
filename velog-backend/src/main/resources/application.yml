@@ -42,7 +42,13 @@ spring:
         name: kang
         password: 1234
 
+#logging:
+#  level:
+#    root: debug
+#
 
 
 jwt:
   secret: hongKildong
+
+

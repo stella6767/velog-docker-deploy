@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kang.velogbackend.congfig.auth.PrincipalDetails;
 import com.kang.velogbackend.utils.JwtUtil;
 import com.kang.velogbackend.web.dto.auth.AuthReqDto;
+import com.kang.velogbackend.web.dto.auth.LoginRespDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,17 +19,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 
 
 //토큰 만들어주기
 @RequiredArgsConstructor
 public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
-
     //formlogin을 disable했기 때문에 꼭 이 필터를 수정해서 등록시켜줘야함
 
+    private final AuthenticationManager authenticationManager;
     private static final Logger log = LoggerFactory.getLogger(JwtLoginFilter.class);
-    private final AuthenticationManager authenticationManager;//시큐리티가 이미 ioc에 이 객체를 등록시켜놨음
     private final JwtUtil jwtUtil;
 
     // 주소: Post 요청으로 /login 요청
@@ -68,21 +69,49 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         System.out.println("로그인 완료되어서 세션 만들어짐. 이제 JWT토큰 만들어서 response.header에 응답할 차리");
         PrincipalDetails principalDetails = (PrincipalDetails)authResult.getPrincipal();
 
+        ObjectMapper om = new ObjectMapper();
+
+
+//        User user = principalDetails.getUser();
+//        String jsonUser = om.writeValueAsString(user);
+//        log.info("user는 " + jsonUser);
+
+        log.info(principalDetails.getUsername());
+//        log.info("lazy loading fail role 해결되나.. "+om.writeValueAsString(principalDetails.getUser()));
 
         String accessToken = jwtUtil.generateAccessToken(principalDetails.getUser().getId());
         String refreshToken = jwtUtil.generateRefreshToken(principalDetails.getUser().getId());
 
-
-
         //refresh token redis 연동은 차차 생각해보자.. 더럽게 어렵네.
-
         log.info("accessToken 만료시간: "+ new Date(System.currentTimeMillis()+(1000*60*10)));
         log.info("refreshToken 만료시간: "+ new Date(System.currentTimeMillis()+(1000*60*60*24*7)));
 
-        System.out.println("accessToken: "+accessToken);
+
+        LoginRespDto loginRespDto = new LoginRespDto();
+
+        loginRespDto = loginRespDto.builder()
+                .id(principalDetails.getUser().getId())
+                .picture(principalDetails.getUser().getPicture())
+                .email(principalDetails.getUser().getEmail())
+                .username(principalDetails.getUser().getUsername())
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+
+        log.info("loginRespDto: "+om.writeValueAsString(loginRespDto));
+
         response.setHeader("Authorization", "Bearer "+accessToken); //이제 이 토큰을 가지고,
 
+
+        refreshToken = om.writeValueAsString(refreshToken);
+
+        PrintWriter out = response.getWriter();
+        out.print(refreshToken);
+        out.flush();
+
         //response.set
+
+        //setAuthenticationSuccessHandler();
 
     }
 

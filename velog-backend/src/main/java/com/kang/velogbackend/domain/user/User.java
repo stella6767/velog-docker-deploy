@@ -5,15 +5,15 @@ import com.kang.velogbackend.domain.post.Post;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.List;
+
 
 @Builder
 @AllArgsConstructor
 @Getter
-@NoArgsConstructor
 @Entity
 public class User extends BaseTimeEntity {
 
@@ -37,8 +37,8 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private Role role;
 
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    //@JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY) //일단 임시방편 eager로
     private List<Post> posts;
 
 
@@ -47,5 +47,9 @@ public class User extends BaseTimeEntity {
         this.role = role;
     }
 
+    public User() { //기본생성자로 posts 초기화 값을 미리 준다면?
+        this.posts = Arrays.asList();
 
+        System.out.println("why??? " + posts);
+    }
 }

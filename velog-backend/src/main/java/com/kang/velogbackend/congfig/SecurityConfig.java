@@ -31,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserRepository userRepository;
 
     private final JwtUtil jwtUtil;
+   // private final AuthenticationManager authenticationManager;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -38,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .cors().configurationSource(corsConfigurationSource())//@CrossOrigin(인증X), 시큐리티 필터에 등록 인증(O)
                 .and()
-                .csrf().disable()
+                .csrf().disable() //rest api이므로 csrf 보안이 필요없으므로 disable처리.
                 .addFilter(new JwtLoginFilter(authenticationManager(), jwtUtil))
                 .addFilter(new JwtVerifyFilter(authenticationManager(), userRepository))
                 .formLogin().disable()
@@ -48,6 +49,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/user/**").access("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
                 .anyRequest().permitAll();
+
+
+
+
     }
 
     @Bean
@@ -62,4 +67,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", config);
         return source;
     }
+
+
+
+
 }
