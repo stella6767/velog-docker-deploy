@@ -44,10 +44,15 @@ client.interceptors.response.use(
       localStorage.setItem('refreshToken', refreshToken);
     }
 
+    if (response.data.msg === 'token 기간만료') {
+    }
+
     return response;
   },
   (error) => {
     //요청 실패 시 특정 작업 수행
+    console.log('error는: ', error);
+
     return Promise.reject(error);
   },
 );

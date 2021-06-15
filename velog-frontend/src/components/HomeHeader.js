@@ -99,12 +99,16 @@ const StyledUserImg = styled.img`
 const HomeHeader = memo(() => {
   //랜더링 되는 부분
 
-  const { loginDone } = useSelector((state) => state.auth);
+  const { loginDone, loginError } = useSelector((state) => state.auth);
+  const { testError } = useSelector((state) => state.test);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     console.log('loginDone:', loginDone);
-  }, [loginDone]);
+    console.log('testError', testError);
+    failureHandler();
+  }, [loginDone, loginError, testError]);
 
   const [loginVisible, setLoginVisible] = useState(false); //로그인 모달창이 보일지 안 보일지
 
@@ -115,6 +119,12 @@ const HomeHeader = memo(() => {
   const tokenTest = () => {
     console.log('nani??? 왜 두개 다 실행되지??? type을 잘못 생성했구나..');
     dispatch(test());
+  };
+
+  const failureHandler = () => {
+    if (loginError != null) {
+      console.log('loginError', loginError);
+    }
   };
 
   const menu = (

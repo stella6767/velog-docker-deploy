@@ -1,6 +1,5 @@
-import logo from './logo.svg';
+import { Route } from 'react-router';
 import './App.css';
-import { Route, Router } from 'react-router';
 import Home from './pages/Home';
 import writeForm from './pages/writeForm';
 

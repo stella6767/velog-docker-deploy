@@ -3,6 +3,7 @@ package com.kang.velogbackend.congfig.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kang.velogbackend.congfig.auth.PrincipalDetails;
 import com.kang.velogbackend.utils.JwtUtil;
+import com.kang.velogbackend.utils.Script;
 import com.kang.velogbackend.web.dto.CMRespDto;
 import com.kang.velogbackend.web.dto.auth.AuthReqDto;
 import com.kang.velogbackend.web.dto.auth.LoginRespDto;
@@ -20,7 +21,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Date;
 
 
@@ -79,6 +79,11 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         log.info("refreshToken 만료시간: "+ new Date(System.currentTimeMillis()+(1000*60*60*24*7)));
 
 
+        //RefreshToken을 Redis에 저장
+        jwtUtil.saveTokenInRedis(refreshToken, principalDetails.getUser().getId().toString());
+
+
+
         //이제 이 토큰들을 가지고, LoginRespDTO에 넣어줌
         LoginRespDto loginRespDto = new LoginRespDto();
         loginRespDto = loginRespDto.builder()
@@ -91,21 +96,15 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
                 .build();
 
 
+
         //이 DTO를 JSON으로 변환 후 BODY로 클라이언트에게 응답
         ObjectMapper om = new ObjectMapper();
         log.info("loginRespDto: "+om.writeValueAsString(loginRespDto));
         CMRespDto<?> cmRespDto = new CMRespDto(1,"로그인성공",loginRespDto);
         //response.setHeader("Authorization", "Bearer "+accessToken);
         String jsonData = om.writeValueAsString(cmRespDto);
-        log.info("로그인 응답 데이터: " + jsonData);
 
-        response.setHeader("Content-Type", "application/json; charset=utf-8");
-
-        PrintWriter out = response.getWriter();
-        out.print(jsonData);
-        out.flush();
-
-
+        Script.responseData(response, jsonData);
 
     }
 

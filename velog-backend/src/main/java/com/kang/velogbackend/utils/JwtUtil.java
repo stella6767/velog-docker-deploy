@@ -2,6 +2,8 @@ package com.kang.velogbackend.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.kang.velogbackend.service.RedisService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -9,11 +11,12 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class JwtUtil {
 
-    public final static long ACCESS_TOKEN_VALIDATION_SECOND = 1000*60*10; //10분
-    public final static long REFRESH_TOKEN_VALIDATION_SECOND = 1000*60*60*24*7; //1주
+    public final static int ACCESS_TOKEN_VALIDATION_SECOND = 1000*60*10; //10분
+    public final static int REFRESH_TOKEN_VALIDATION_SECOND = 1000*60*60*24*7; //1주
 
     final static public String ACCESS_TOKEN_NAME = "accessToken";
     final static public String REFRESH_TOKEN_NAME = "refreshToken";
@@ -21,7 +24,14 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String SECRET_KEY; //doc에 보면 raw secret value를 써야된단다. 이거 못 씀...
 
+    private final RedisService redisService;
 
+
+
+    public void saveTokenInRedis(String key, String value){  //refreshToken을 reids에 저장
+        //UUID uuid = UUID.randomUUID(); //고유키값 만들기
+        redisService.setDataExpire(key,value, REFRESH_TOKEN_VALIDATION_SECOND);
+    }
 
 
     public String generateAccessToken(Long userId) {

@@ -6,13 +6,16 @@ import createRequestSaga, {
   createRequestActionTypes,
 } from '../lib/createRequestSaga';
 
-const initialState = {};
+const initialState = {
+  testDone: null,
+  testError: null,
+};
 
 const [TEST_REQUST, TEST_SUCCESS, TEST_FAILURE] =
   createRequestActionTypes('TEST');
 
 //액션 생성 함수
-export const test = createAction(TEST_REQUST);
+export const testAction = createAction(TEST_REQUST);
 
 //사가 생성
 const getTestSaga = createRequestSaga(TEST_REQUST, testAPI.userTest);
@@ -23,12 +26,16 @@ export function* testSaga() {
 }
 
 //리듀서
-const auth = handleActions(
+const test = handleActions(
   {
-    // 회원가입 성공
-    [TEST_SUCCESS]: (state) => ({}),
-    // 회원가입 실패
-    [TEST_FAILURE]: (state) => ({}),
+    [TEST_SUCCESS]: (state, { payload: data }) => ({
+      ...state,
+      testDone: data,
+    }),
+    [TEST_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      testError: error,
+    }),
   },
   initialState,
 );

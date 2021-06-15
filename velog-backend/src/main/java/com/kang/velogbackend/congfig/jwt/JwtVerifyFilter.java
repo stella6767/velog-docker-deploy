@@ -2,12 +2,15 @@ package com.kang.velogbackend.congfig.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kang.velogbackend.congfig.auth.PrincipalDetails;
 import com.kang.velogbackend.domain.user.User;
 import com.kang.velogbackend.domain.user.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,6 +30,7 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter { //@Componet가 
 
     private final AuthenticationManager authenticationManager; //생성자를 이용
     private final UserRepository userRepository;
+    ObjectMapper om = new ObjectMapper();
 
     public JwtVerifyFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
         super(authenticationManager);
@@ -53,37 +57,49 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter { //@Componet가 
 
         log.info("token은 " + token);
 
-        //검증1 (헤더+페이로드+시크릿을 HMAC512 해쉬한 값) == SIGNATURE
-        //검증2 (만료시간 확인)
-        DecodedJWT dJWT = JWT.require(Algorithm.HMAC512("홍길동")).build().verify(token);
-        Long userId = dJWT.getClaim("userId").asLong();
 
-        log.info(dJWT.toString() + userId);
+        Long userId = null;
+
+        try {
+            //검증1 (헤더+페이로드+시크릿을 HMAC512 해쉬한 값) == SIGNATURE
+            //검증2 (만료시간 확인)
+            DecodedJWT dJWT = JWT.require(Algorithm.HMAC512("홍길동")).build().verify(token);
+            userId = dJWT.getClaim("userId").asLong();
+            log.info(dJWT.toString() + userId);
+        }catch (TokenExpiredException e){
+            //accessToken이 만료됐다면,
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "accessToken 기간이 만료되었습니다.");
+            //Handler에서 처리하는 게 더 깔끔한 걸 같긴 하지만 일단..
+            //CMRespDto<?> cmRespDto = new CMRespDto(-1,"token 기간만료",null);
+            //String jsonData = om.writeValueAsString(cmRespDto);
+            //Script.responseData(response, jsonData);
+
+            return;
+        }
 
 
-//        try {
-//            username = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwtToken).getClaim("username").asString();
-//        } catch (TokenExpiredException e) {
-//            response.sendError(HttpStatus.UNAUTHORIZED.value(), "세션이 만료되었습니다, 로그인 후 이용해주세요!");
-//            return;
-//        }
+        if(userId != null){
+            User userEntity = userRepository.findById(userId).orElseThrow(()->{
+                return new IllegalArgumentException("id를 찾을 수 없습니다.");
+            });
+            PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
 
-        User userEntity = userRepository.findById(userId).orElseThrow(()->{
-            return new IllegalArgumentException("id를 찾을 수 없습니다.");
-        });
-        PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
-        // Authentication 객체를 강제로 만들고 그걸 세션에 저장!
+            Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
+
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            log.info("시큐리티에 저장된 객체: " + authentication);
+
+        }
+
+
+     // Authentication 객체를 강제로 만들고 그걸 세션에 저장!
         //Seting in your @AuthenticationPrincipal!!! 씨빠!!!! 여기서 set하는 거였네.. 아래처럼 하면 String으로 저장되는듯..
 //        Authentication authentication =
 //                new UsernamePasswordAuthenticationToken(principalDetails.getUsername(), principalDetails.getPassword(), principalDetails.getAuthorities());
 
 // JWT 토큰 서명을 통해서 서명이 정상이면 Authentication 객체를 만들어 준다. 요렇게 해야, @AuthenticationPrincipal principalDetails 형테로
-        Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
-
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        log.info("시큐리티에 저장된 객체: " + authentication);
 
 
         chain.doFilter(request, response);
