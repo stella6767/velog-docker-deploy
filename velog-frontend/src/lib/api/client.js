@@ -18,7 +18,8 @@ client.defaults.headers.common['Authorization'] =
 
 client.interceptors.request.use(
   (request) => {
-    request.headers.Authorization = localStorage.getItem('accessToken');
+    request.headers.Authorization =
+      'Bearer ' + localStorage.getItem('accessToken');
     console.log('Starting Request', JSON.stringify(request, null, 2));
     return request;
   },
@@ -28,25 +29,21 @@ client.interceptors.request.use(
   },
 );
 
-// // Add a request interceptor
-// axios.interceptors.request.use(
-//   function (config) {
-//     // Do something before request is sent
-//     return config;
-//   },
-//   function (error) {
-//     // Do something with request error
-//     return Promise.reject(error);
-//   },
-// );
-
 //인터셉터 설정
 client.interceptors.response.use(
   (response) => {
     //요청 성공 시 특정 작업 수행
-    const accessToken = response.headers.authorization;
-    console.log('accessToken: ', accessToken);
-    localStorage.setItem('accessToken', accessToken);
+
+    console.log('응답값: ', response.data.data);
+
+    if (response.data.msg === '로그인성공') {
+      const accessToken = response.data.data.accessToken;
+      const refreshToken = response.data.data.refreshToken;
+
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+    }
+
     return response;
   },
   (error) => {

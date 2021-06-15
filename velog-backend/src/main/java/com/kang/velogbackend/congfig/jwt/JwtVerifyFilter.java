@@ -43,6 +43,7 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter { //@Componet가 
         String header = request.getHeader("Authorization");
         log.info("Authorization는 "+header);
 
+        //1차 거르기
         if(header == null || !header.startsWith("Bearer")) {
             chain.doFilter(request, response);
             return;
@@ -76,6 +77,7 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter { //@Componet가 
                 new UsernamePasswordAuthenticationToken(principalDetails.getUsername(), principalDetails.getPassword(), principalDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        log.info("세션에 저장된 객체: " + authentication);
 
         chain.doFilter(request, response);
     }

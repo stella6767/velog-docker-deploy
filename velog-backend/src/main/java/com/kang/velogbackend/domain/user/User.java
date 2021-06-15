@@ -5,14 +5,15 @@ import com.kang.velogbackend.domain.post.Post;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.List;
 
 
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Entity
 public class User extends BaseTimeEntity {
@@ -38,7 +39,7 @@ public class User extends BaseTimeEntity {
     private Role role;
 
     //@JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY) //일단 임시방편 eager로
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY) //DTO 만들어서 LazyLoading issue 해결
     private List<Post> posts;
 
 
@@ -47,9 +48,15 @@ public class User extends BaseTimeEntity {
         this.role = role;
     }
 
-    public User() { //기본생성자로 posts 초기화 값을 미리 준다면?
-        this.posts = Arrays.asList();
-
-        System.out.println("why??? " + posts);
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", picture='" + picture + '\'' +
+                ", role=" + role +
+                '}';
     }
 }
