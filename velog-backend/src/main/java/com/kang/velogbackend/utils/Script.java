@@ -1,5 +1,7 @@
 package com.kang.velogbackend.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kang.velogbackend.web.dto.CMRespDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,9 +24,11 @@ public class Script {
 
 
 
-    public static void responseData(HttpServletResponse resp, String jsonData) throws IOException {
+    public static void responseData(HttpServletResponse resp, CMRespDto<?> cmRespDto) throws IOException {
         PrintWriter out;
 
+        ObjectMapper om = new ObjectMapper();
+        String jsonData = om.writeValueAsString(cmRespDto);
         log.info("응답 데이터: " + jsonData);
 
         resp.setHeader("Content-Type", "application/json; charset=utf-8");

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import logo_img from '../logo.svg';
+import { reissueAction } from '../reducers/auth';
 import { adminTestAction, testAction } from '../reducers/test';
 import AuthModal from './auth/ModalContainer';
 import './MyHeader.scss';
@@ -97,16 +98,21 @@ const StyledUserImg = styled.img`
 const HomeHeader = memo(() => {
   //랜더링 되는 부분
 
-  const { loginDone, loginError } = useSelector((state) => state.auth);
+  const { loginDone, loginError, cmRespDto } = useSelector(
+    (state) => state.auth,
+  );
   const { testError } = useSelector((state) => state.test);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     console.log('loginDone:', loginDone);
+    console.log('loginError', loginError);
     console.log('testError', testError);
-    failureHandler();
-  }, [loginDone, loginError, testError]);
+    console.log('cmRespDto', cmRespDto);
+
+    //tokenExpireWatch(testError);
+  }, [loginDone, loginError, testError, cmRespDto]);
 
   const [loginVisible, setLoginVisible] = useState(false); //로그인 모달창이 보일지 안 보일지
 
@@ -122,11 +128,24 @@ const HomeHeader = memo(() => {
     dispatch(adminTestAction());
   };
 
-  const failureHandler = () => {
-    if (loginError != null) {
-      console.log('loginError', loginError);
-    }
-  };
+  // const tokenExpireWatch = (testError) => {
+  //   console.log('일단은 지켜보자');
+
+  //   if (testError != null && testError.msg === '토큰기간만료') {
+  //     console.log('재발급요청이 되는지..');
+
+  //     const refreshToken = localStorage.getItem('refreshToken');
+
+  //     dispatch(reissueAction(refreshToken));
+  //   }
+  // };
+
+  // const newAccessTokenSet = (data) => {
+  //   const accessToken = data.accessToken;
+  //   console.log(accessToken);
+  //   //기존 accessToken 지우고
+  //   localStorage.setItem('accessToken', accessToken);
+  // };
 
   const menu = (
     <Menu>

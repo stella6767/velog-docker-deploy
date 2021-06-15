@@ -6,7 +6,6 @@ import com.kang.velogbackend.utils.JwtUtil;
 import com.kang.velogbackend.utils.Script;
 import com.kang.velogbackend.web.dto.CMRespDto;
 import com.kang.velogbackend.web.dto.auth.AuthReqDto;
-import com.kang.velogbackend.web.dto.auth.LoginRespDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,28 +82,10 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         jwtUtil.saveTokenInRedis(refreshToken, principalDetails.getUser().getId().toString());
 
 
-
         //이제 이 토큰들을 가지고, LoginRespDTO에 넣어줌
-        LoginRespDto loginRespDto = new LoginRespDto();
-        loginRespDto = loginRespDto.builder()
-                .id(principalDetails.getUser().getId())
-                .picture(principalDetails.getUser().getPicture())
-                .email(principalDetails.getUser().getEmail())
-                .username(principalDetails.getUser().getUsername())
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
-
-
-
         //이 DTO를 JSON으로 변환 후 BODY로 클라이언트에게 응답
-        ObjectMapper om = new ObjectMapper();
-        log.info("loginRespDto: "+om.writeValueAsString(loginRespDto));
-        CMRespDto<?> cmRespDto = new CMRespDto(1,"로그인성공",loginRespDto);
-        //response.setHeader("Authorization", "Bearer "+accessToken);
-        String jsonData = om.writeValueAsString(cmRespDto);
-
-        Script.responseData(response, jsonData);
+        CMRespDto<?> cmRespDto = new CMRespDto(1,"로그인성공",jwtUtil.makeLoginRespDto(principalDetails,accessToken,refreshToken));
+        Script.responseData(response, cmRespDto);
 
     }
 

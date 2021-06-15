@@ -1,14 +1,18 @@
 package com.kang.velogbackend.web;
 
 
+import com.kang.velogbackend.congfig.auth.PrincipalDetails;
 import com.kang.velogbackend.congfig.oauth.GoogleInfo;
 import com.kang.velogbackend.congfig.oauth.OAuth2UserInfo;
 import com.kang.velogbackend.service.AuthService;
+import com.kang.velogbackend.service.RedisService;
+import com.kang.velogbackend.utils.JwtUtil;
 import com.kang.velogbackend.web.dto.CMRespDto;
 import com.kang.velogbackend.web.dto.auth.AuthReqDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +27,8 @@ public class AuthController {
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
     private final AuthService authService;
     private final BCryptPasswordEncoder encoder;
+    private final RedisService redisService;
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/auth/join") //Oauth 가 아닌
     public CMRespDto<?> join(@RequestBody AuthReqDto authReqDto) {
@@ -36,18 +42,37 @@ public class AuthController {
     }
 
 
+    //access토큰 재발급 요청
     @PostMapping("/auth/reissue")
-    public CMRespDto<?> reissue(String refreshToken){
+    public CMRespDto<?> reissue(String refreshToken, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        log.info("token 재발급 요청 옴 "+ refreshToken);
+        String redisUserId = redisService.getData(refreshToken);
 
-        log.info(refreshToken);
+        if(redisUserId != null){
+
+            log.info("원래 유저 아디 "+redisUserId);
+            String accessToken = jwtUtil.generateAccessToken(Long.parseLong(redisUserId));
+
+            return new CMRespDto<>(1,"재발급 성공", jwtUtil.makeLoginRespDto(principalDetails,accessToken,refreshToken));
+        }
+
+        return new CMRespDto<>(-1,"토큰이 만료되었습니다. 다시 로그인해주세요.",null);
+    }
 
 
+    //예외적으로 Restful 주소 형식에 안 맞게끔
+    @PostMapping("/logout")
+    public CMRespDto<?> logout(String refreshToken){
+        log.info("로그아웃 요청이 옴. 그냥 검증없이 지우는 게 나을까?");
+        redisService.deleteData(refreshToken);
 
-        return null;
+        return new CMRespDto<>(1,"로그아웃되었습니다.",null);
     }
 
 
 
+
+    //소셜 로그인
     @PostMapping("/auth/join/google")
     public String jwtCreate(@RequestBody Map<String, Object> data) {
         log.info("jwtCreate 실행됨");

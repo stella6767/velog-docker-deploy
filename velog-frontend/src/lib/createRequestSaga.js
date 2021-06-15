@@ -1,6 +1,8 @@
-import { put, call } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
+import { reissueAction } from '../reducers/auth';
 import { finishLoading, startLoading } from '../reducers/loading';
-import client from './api/client';
+
+//const reissueRequst = '토큰기간만료'; //utils에 이런 상수들을 모아놓을까..
 
 export const createRequestActionTypes = (type) => {
   const REQUEST = `${type}_REQUEST`;
@@ -41,15 +43,31 @@ export default function createRequestSaga(type, request) {
       });
     } catch (e) {
       //if(e.)
-      console.error('e는', e);
-      console.log('여기 왜 안 나오지????');
 
+      const errorData = e.response.data;
+      console.error('errorData는', errorData);
+
+      if (errorData.msg === '토큰기간만료') {
+        const refreshToken = localStorage.getItem('refreshToken');
+        //reissueAction(refreshToken); //여기가 오류구만!!
+
+        yield put({
+          type: 'REISSUE_REQUEST',
+        });
+      }
       yield put({
         type: FAILURE,
-        payload: e,
+        payload: errorData,
         error: true,
       });
     }
     yield put(finishLoading(type)); //로딩 끝
   };
 }
+
+const newAccessTokenSet = (data) => {
+  const accessToken = data.accessToken;
+  console.log(accessToken);
+  //기존 accessToken 지우고
+  localStorage.setItem('accessToken', accessToken);
+};

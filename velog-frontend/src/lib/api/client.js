@@ -1,6 +1,4 @@
-import { message } from 'antd';
 import axios from 'axios';
-import React from 'react';
 
 const client = axios.create();
 
@@ -46,18 +44,18 @@ client.interceptors.response.use(
     }
 
     if (response.data.msg === 'token 기간만료') {
+      console.log('토큰 비워야징');
     }
 
     return response;
   },
   (error) => {
     //요청 실패 시 특정 작업 수행
-    console.log('error는: ', error);
-    console.log('error.response: ', error.response);
-    console.log('errordata는: ', error.response.data);
-
+    console.error('error는: ', error);
     return Promise.reject(error);
   },
 );
+
+//const removeToken = () => {};
 
 export default client;

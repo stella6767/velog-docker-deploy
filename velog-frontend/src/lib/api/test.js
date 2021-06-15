@@ -1,6 +1,6 @@
 import client from './client';
 
-// 로그인
+// test
 export const userTest = () => client.get('user/test');
 
 export const adminTest = () => client.get('admin/test');

@@ -2,7 +2,9 @@ package com.kang.velogbackend.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.kang.velogbackend.congfig.auth.PrincipalDetails;
 import com.kang.velogbackend.service.RedisService;
+import com.kang.velogbackend.web.dto.auth.LoginRespDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +27,22 @@ public class JwtUtil {
     private String SECRET_KEY; //doc에 보면 raw secret value를 써야된단다. 이거 못 씀...
 
     private final RedisService redisService;
+
+
+    public LoginRespDto makeLoginRespDto(PrincipalDetails principalDetails, String accessToken, String refreshToken){
+
+        LoginRespDto loginRespDto = new LoginRespDto();
+        loginRespDto = loginRespDto.builder()
+                .id(principalDetails.getUser().getId())
+                .picture(principalDetails.getUser().getPicture())
+                .email(principalDetails.getUser().getEmail())
+                .username(principalDetails.getUser().getUsername())
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+
+        return loginRespDto;
+    }
 
 
 
