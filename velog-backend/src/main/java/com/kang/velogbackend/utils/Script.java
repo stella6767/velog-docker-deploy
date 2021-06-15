@@ -12,6 +12,16 @@ public class Script {
     private static final Logger log = LoggerFactory.getLogger(Script.class);
 
 
+//    public static void responseError(HttpServletResponse resp, CMRespDto<?> cmRespDto) throws IOException{
+//
+//        ObjectMapper om = new ObjectMapper();
+//        String jsonData = om.writeValueAsString(cmRespDto);
+//
+//        resp.sendError(HttpStatus.UNAUTHORIZED.value(),jsonData);
+//    }
+
+
+
     public static void responseData(HttpServletResponse resp, String jsonData) throws IOException {
         PrintWriter out;
 

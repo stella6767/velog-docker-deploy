@@ -1,5 +1,7 @@
 package com.kang.velogbackend.congfig;
 
+import com.kang.velogbackend.congfig.jwt.JwtAccessDeniedHandler;
+import com.kang.velogbackend.congfig.jwt.JwtAuthenticationEntryPoint;
 import com.kang.velogbackend.congfig.jwt.JwtLoginFilter;
 import com.kang.velogbackend.congfig.jwt.JwtVerifyFilter;
 import com.kang.velogbackend.domain.user.UserRepository;
@@ -7,6 +9,7 @@ import com.kang.velogbackend.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -18,7 +21,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 
-//@EnableGlobalMethodSecurity(prePostEnabled=true) // 특정 주소로 접근을 하면 권한 및 인증을 미리 체크하겠다는 뜻.
+@EnableGlobalMethodSecurity(prePostEnabled=true) // 특정 주소로 접근을 하면 권한 및 인증을 미리 체크하겠다는 뜻.
 @RequiredArgsConstructor
 @EnableWebSecurity //시큐리티 활성화
 @Configuration // ioc 등록
@@ -41,16 +44,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable() //rest api이므로 csrf 보안이 필요없으므로 disable처리.
                 .addFilter(new JwtLoginFilter(authenticationManager(), jwtUtil))
                 .addFilter(new JwtVerifyFilter(authenticationManager(), userRepository))
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint())
+                .accessDeniedHandler(jwtAccessDeniedHandler())
+
+
+                .and()
                 .formLogin().disable()
                 .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)// STATELESS: session을 사용하지 않겠다는 의미
+
+
+
                 .and()
                 .authorizeRequests()
                 .antMatchers("/user/**").access("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
+                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 .anyRequest().permitAll();
-
-
-
 
     }
 
@@ -65,6 +75,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
+    }
+
+
+    @Bean
+    public JwtAccessDeniedHandler jwtAccessDeniedHandler(){
+        JwtAccessDeniedHandler jwtAccessDeniedHandler = new JwtAccessDeniedHandler();
+
+        return jwtAccessDeniedHandler;
+    }
+
+
+    @Bean
+    public JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint(){
+        JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint = new JwtAuthenticationEntryPoint();
+
+        return jwtAuthenticationEntryPoint;
     }
 
 

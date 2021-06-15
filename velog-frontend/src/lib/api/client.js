@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import axios from 'axios';
 import React from 'react';
 
@@ -52,6 +53,8 @@ client.interceptors.response.use(
   (error) => {
     //요청 실패 시 특정 작업 수행
     console.log('error는: ', error);
+    console.log('error.response: ', error.response);
+    console.log('errordata는: ', error.response.data);
 
     return Promise.reject(error);
   },

@@ -8,9 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kang.velogbackend.congfig.auth.PrincipalDetails;
 import com.kang.velogbackend.domain.user.User;
 import com.kang.velogbackend.domain.user.UserRepository;
+import com.kang.velogbackend.web.dto.CMRespDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -68,11 +68,14 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter { //@Componet가 
             log.info(dJWT.toString() + userId);
         }catch (TokenExpiredException e){
             //accessToken이 만료됐다면,
-            response.sendError(HttpStatus.UNAUTHORIZED.value(), "accessToken 기간이 만료되었습니다.");
+            //response.sendError(HttpStatus.UNAUTHORIZED.value(), "accessToken 기간이 만료되었습니다.");
             //Handler에서 처리하는 게 더 깔끔한 걸 같긴 하지만 일단..
-            //CMRespDto<?> cmRespDto = new CMRespDto(-1,"token 기간만료",null);
+            CMRespDto<?> cmRespDto = new CMRespDto(-1,"token 기간만료",null);
             //String jsonData = om.writeValueAsString(cmRespDto);
             //Script.responseData(response, jsonData);
+
+            //Script.responseError(response,cmRespDto);
+
 
             return;
         }

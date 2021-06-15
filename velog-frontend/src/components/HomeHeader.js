@@ -1,17 +1,15 @@
+import { CaretDownOutlined } from '@ant-design/icons';
 import { Button, withStyles } from '@material-ui/core';
 import { blueGrey } from '@material-ui/core/colors';
-import React, { memo, useState } from 'react';
+import { Dropdown, Menu } from 'antd';
+import React, { memo, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import logo_img from '../logo.svg';
+import { adminTestAction, testAction } from '../reducers/test';
 import AuthModal from './auth/ModalContainer';
 import './MyHeader.scss';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { CaretDownOutlined } from '@ant-design/icons';
-import { Dropdown, Menu } from 'antd';
-import writeForm from '../pages/writeForm';
-import test from '../reducers/test';
 
 const HeaderTopDiv = styled.div`
   display: flex;
@@ -117,8 +115,11 @@ const HomeHeader = memo(() => {
   };
 
   const tokenTest = () => {
-    console.log('nani??? 왜 두개 다 실행되지??? type을 잘못 생성했구나..');
-    dispatch(test());
+    dispatch(testAction());
+  };
+
+  const adminTeset = () => {
+    dispatch(adminTestAction());
   };
 
   const failureHandler = () => {
@@ -152,7 +153,10 @@ const HomeHeader = memo(() => {
         </a>
       </Menu.Item>
       <Menu.Item>
-        <div onClick={tokenTest}>token Test</div>
+        <div onClick={tokenTest}>user Test</div>
+      </Menu.Item>
+      <Menu.Item>
+        <div onClick={adminTeset}>admin Test</div>
       </Menu.Item>
     </Menu>
   );

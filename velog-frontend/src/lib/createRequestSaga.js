@@ -40,6 +40,10 @@ export default function createRequestSaga(type, request) {
         payload: response.data,
       });
     } catch (e) {
+      //if(e.)
+      console.error('e는', e);
+      console.log('여기 왜 안 나오지????');
+
       yield put({
         type: FAILURE,
         payload: e,

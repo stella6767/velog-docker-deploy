@@ -36,7 +36,15 @@ public class AuthController {
     }
 
 
+    @PostMapping("/auth/reissue")
+    public CMRespDto<?> reissue(String refreshToken){
 
+        log.info(refreshToken);
+
+
+
+        return null;
+    }
 
 
 

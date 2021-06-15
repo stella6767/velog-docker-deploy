@@ -1,9 +1,7 @@
-import { UserOutlined } from '@ant-design/icons';
-import { Button, Divider, Form, Input, Modal } from 'antd';
+import { Form } from 'antd';
 import React, { memo, useEffect, useState } from 'react';
-import { FcGoogle } from 'react-icons/fc';
 import { useDispatch, useSelector } from 'react-redux';
-import { initializeForm, join, login } from '../../reducers/auth';
+import { joinAction, loginAction } from '../../reducers/auth';
 import JoinModal from './JoinModal';
 import LoginModal from './LoginModal';
 
@@ -65,7 +63,7 @@ const AuthModal = memo((props) => {
       return alert('공백 금지');
     } else {
       console.log('개빡치네 이게 왜 실행되는거임? 단순 오류??');
-      dispatch(join(values));
+      dispatch(joinAction(values));
       joinForm.resetFields();
     }
   };
@@ -78,7 +76,7 @@ const AuthModal = memo((props) => {
     if (whiteSpace) {
       return alert('공백 금지');
     } else {
-      dispatch(login(values));
+      dispatch(loginAction(values));
       loginForm.resetFields();
     }
   };

@@ -29,9 +29,9 @@ const [REISSUE_REQUEST, REISSUE_SUCCESS, REISSUE_FAILURE] =
   createRequestActionTypes('REISSUE');
 
 //액션 생성 함수
-export const join = createAction(JOIN_REQUEST, (data) => data);
-export const login = createAction(LOGIN_REQUEST, (data) => data);
-export const reissue = createAction(REISSUE_REQUEST, (data) => data); //토큰 재발급 액션실행함수
+export const joinAction = createAction(JOIN_REQUEST, (data) => data);
+export const loginAction = createAction(LOGIN_REQUEST, (data) => data);
+export const reissueAction = createAction(REISSUE_REQUEST, (data) => data); //토큰 재발급 액션실행함수
 
 //사가 생성
 const joinSaga = createRequestSaga(JOIN_REQUEST, authAPI.join);
