@@ -7,7 +7,6 @@ import com.kang.velogbackend.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -19,9 +18,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 
-@EnableGlobalMethodSecurity(prePostEnabled=true) // 특정 주소로 접근을 하면 권한 및 인증을 미리 체크하겠다는 뜻.
+//@EnableGlobalMethodSecurity(prePostEnabled=true) // 특정 주소로 접근을 하면 권한 및 인증을 미리 체크하겠다는 뜻.
 @RequiredArgsConstructor
-@EnableWebSecurity
+@EnableWebSecurity //시큐리티 활성화
 @Configuration // ioc 등록
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean

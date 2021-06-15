@@ -20,13 +20,16 @@ public class PrincipalDetailsService implements UserDetailsService {
     @Override //Authentication Maneger 가 보내줌
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        log.info("UsernamePasswordAuthenticationFilter =>  username 이 DB에 있는지 확인한다.");
+        log.info("UsernamePasswordAuthenticationFilter => +" + username+"이 DB에 있는지 확인한다.");
         User principal = userRepository.findByUsername(username);
+
+        log.info("나오는 게 정상인디.. "+principal.toString());
 
         if(principal == null) {
             return null;
         }else {
-            //session.setAttribute("principal",principal); - jsp 아니라면 세션에 저장하고 사용해야된다.
+
+            //session.setAttribute("principal",principal); // jsp 아니라면 세션에 저장하고 사용해야된다.
             return new PrincipalDetails(principal);
             //@AuthenticationPrincipal 애노테이션을 사용하면 UserDetailsService에서 Return한 객체 를 파라메터로 직접 받아 사용할 수 있다.
         }

@@ -73,11 +73,18 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter { //@Componet가 
         });
         PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
         // Authentication 객체를 강제로 만들고 그걸 세션에 저장!
-        Authentication authentication =
-                new UsernamePasswordAuthenticationToken(principalDetails.getUsername(), principalDetails.getPassword(), principalDetails.getAuthorities());
+        //Seting in your @AuthenticationPrincipal!!! 씨빠!!!! 여기서 set하는 거였네.. 아래처럼 하면 String으로 저장되는듯..
+//        Authentication authentication =
+//                new UsernamePasswordAuthenticationToken(principalDetails.getUsername(), principalDetails.getPassword(), principalDetails.getAuthorities());
+
+// JWT 토큰 서명을 통해서 서명이 정상이면 Authentication 객체를 만들어 준다. 요렇게 해야, @AuthenticationPrincipal principalDetails 형테로
+        Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
+
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        log.info("세션에 저장된 객체: " + authentication);
+        log.info("시큐리티에 저장된 객체: " + authentication);
+
 
         chain.doFilter(request, response);
     }
