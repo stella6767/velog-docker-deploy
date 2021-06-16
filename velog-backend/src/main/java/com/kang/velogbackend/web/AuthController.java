@@ -50,7 +50,7 @@ public class AuthController {
 
 
     //access토큰 재발급 요청
-    @PostMapping("/auth/reissue")// @AuthenticationPrincipal PrincipalDetails principalDetails
+    @PostMapping( "/auth/reissue")// @AuthenticationPrincipal PrincipalDetails principalDetails
     public CMRespDto<?> reissue(@RequestBody String refreshToken) throws IOException {
         log.info("token 재발급 요청 옴 "+ refreshToken);
 

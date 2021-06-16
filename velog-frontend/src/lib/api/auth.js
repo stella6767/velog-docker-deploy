@@ -12,7 +12,7 @@ export const join = (data) => client.post('auth/join', JSON.stringify(data));
 //토큰 재발급
 //export const reissue = (data) => client.post('auth/reissue', data, { headers });
 export const reissue = (data) =>
-  client.post('auth/reissue', JSON.stringify(data));
+  client.post('auth/reissue', JSON.stringify(data).replace(/\\/g, ''));
 
 // const headers = {
 //   post: {

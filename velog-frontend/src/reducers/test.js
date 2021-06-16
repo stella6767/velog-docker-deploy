@@ -7,7 +7,7 @@ import createRequestSaga, {
 } from '../lib/createRequestSaga';
 
 const initialState = {
-  done: null,
+  done: {},
   error: {}, //오브젝트로 받자.
 };
 

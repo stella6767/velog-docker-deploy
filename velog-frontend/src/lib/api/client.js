@@ -34,7 +34,8 @@ client.interceptors.response.use(
   (response) => {
     //요청 성공 시 특정 작업 수행
 
-    //console.log('응답값: ', response.data.data);
+    console.log('응답값: ', response.data);
+    //response.data
 
     if (response.data.msg === '로그인성공') {
       setToken(response);
@@ -58,8 +59,10 @@ const setToken = (response) => {
   const accessToken = response.data.data.accessToken;
   const refreshToken = response.data.data.refreshToken;
 
+  const parserToken = refreshToken.replace(/"/g, '');
+
   localStorage.setItem('accessToken', accessToken);
-  localStorage.setItem('refreshToken', refreshToken);
+  localStorage.setItem('refreshToken', parserToken);
 };
 
 export default client;
