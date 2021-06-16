@@ -86,7 +86,6 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter { //@Componet가 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             log.info("시큐리티에 저장된 객체: " + authentication);
-
         }
 
 

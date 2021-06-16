@@ -51,7 +51,7 @@ client.interceptors.response.use(
   },
   (error) => {
     //요청 실패 시 특정 작업 수행
-    console.error('error는: ', error);
+    //console.error('error는: ', error);
     return Promise.reject(error);
   },
 );

@@ -1,20 +1,18 @@
 import { Global } from '../style';
 import { Row, Col, Layout, Card } from 'antd';
 import 'antd/dist/antd.css';
-import HomeHeader from './HomeHeader';
+import AppHeader from './AppHeader';
 
 const { Content } = Layout;
-
-//const style = { background: '#0092ff', padding: '8px 0' };
-
 const { Meta } = Card;
 
-const AppLayout = () => {
+const AppLayout = (props) => {
+  const { isHome } = props;
+
   return (
     <Layout>
       <Global />
-      <HomeHeader />
-
+      <AppHeader isHome={isHome} />
       <Content>
         <Row>
           <Col flex="1 1 20rem">

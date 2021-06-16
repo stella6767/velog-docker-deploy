@@ -1,10 +1,13 @@
-import React, { useEffect } from "react";
-import AppLayout from "../components/AppLayout";
+import React, { useEffect } from 'react';
+import { useState } from 'react';
+import AppLayout from '../components/AppLayout';
 
 const Home = () => {
+  const [isHome, setIshome] = useState(true);
+
   return (
     <>
-      <AppLayout></AppLayout>
+      <AppLayout isHome={isHome}></AppLayout>
     </>
   );
 };
