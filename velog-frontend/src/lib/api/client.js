@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { newTokenIssue } from '../constants/auth';
 
 const client = axios.create();
 
@@ -33,18 +34,15 @@ client.interceptors.response.use(
   (response) => {
     //요청 성공 시 특정 작업 수행
 
-    console.log('응답값: ', response.data.data);
+    //console.log('응답값: ', response.data.data);
 
     if (response.data.msg === '로그인성공') {
-      const accessToken = response.data.data.accessToken;
-      const refreshToken = response.data.data.refreshToken;
-
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
+      setToken(response);
     }
 
-    if (response.data.msg === 'token 기간만료') {
-      console.log('토큰 비워야징');
+    if (response.data.msg === newTokenIssue) {
+      console.log('토큰 다시 셋팅해야징');
+      setToken(response);
     }
 
     return response;
@@ -56,6 +54,12 @@ client.interceptors.response.use(
   },
 );
 
-//const removeToken = () => {};
+const setToken = (response) => {
+  const accessToken = response.data.data.accessToken;
+  const refreshToken = response.data.data.refreshToken;
+
+  localStorage.setItem('accessToken', accessToken);
+  localStorage.setItem('refreshToken', refreshToken);
+};
 
 export default client;

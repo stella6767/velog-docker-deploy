@@ -23,6 +23,21 @@ public class Script {
 //    }
 
 
+    public static String parseString(String str){
+
+        String str_imsi   = "";
+        String []filter_word = {"\"","\\\\"};
+
+        for(int i=0;i<filter_word.length;i++){
+            str_imsi = str.replaceAll(filter_word[i],"");
+            str = str_imsi;
+        }
+        return str;
+    }
+
+
+
+
 
     public static void responseData(HttpServletResponse resp, CMRespDto<?> cmRespDto) throws IOException {
         PrintWriter out;

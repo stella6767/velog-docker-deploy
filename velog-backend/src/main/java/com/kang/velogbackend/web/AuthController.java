@@ -9,6 +9,7 @@ import com.kang.velogbackend.service.AuthService;
 import com.kang.velogbackend.service.RedisService;
 import com.kang.velogbackend.service.UserService;
 import com.kang.velogbackend.utils.JwtUtil;
+import com.kang.velogbackend.utils.Script;
 import com.kang.velogbackend.web.dto.CMRespDto;
 import com.kang.velogbackend.web.dto.auth.AuthReqDto;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +54,8 @@ public class AuthController {
     public CMRespDto<?> reissue(@RequestBody String refreshToken) throws IOException {
         log.info("token 재발급 요청 옴 "+ refreshToken);
 
-        String key = refreshToken.replaceAll("\"","");
+        String key = Script.parseString(refreshToken);
+        //String key = refreshToken.substring(1, refreshToken.length()-1);
         log.info("파싱된 token:  "+ key);
 
         String redisUserId = redisService.getData(key);
@@ -75,7 +77,7 @@ public class AuthController {
 //		            SecurityContextHolder.getContext().setAuthentication(authentication);//세션에 담는다.
                 //log.info("제대로 담김? " + principalDetails.getUser().getId());
 
-                String accessToken = jwtUtil.generateAccessToken(Long.parseLong(redisUserId));
+                String accessToken = jwtUtil.generateAccessToken(userEntity.getId());
                 return new CMRespDto<>(1,"재발급 성공", jwtUtil.makeLoginRespDto(principalDetails,accessToken,refreshToken));
             }
 
