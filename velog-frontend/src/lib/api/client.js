@@ -17,7 +17,7 @@ client.defaults.headers.common['Authorization'] =
 
 client.interceptors.request.use(
   (request) => {
-    request.headers.Authorization =
+    request.headers.common.Authorization =
       'Bearer ' + localStorage.getItem('accessToken');
     console.log('Starting Request', JSON.stringify(request, null, 2));
     return request;

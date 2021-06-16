@@ -8,6 +8,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 @RestController
 public class TestController {
 
@@ -22,6 +28,26 @@ public class TestController {
 
         return new CMRespDto<>(1, "토큰이 만료되지 않았네",null );
     }
+
+    @GetMapping("test")
+    public CMRespDto<?> test(HttpServletRequest req) throws IOException {
+
+        log.info("권한이 필요없는 주소 요청할 때");
+
+        InputStream in = System.in;
+        InputStreamReader ir = new InputStreamReader(in);
+        BufferedReader br = new BufferedReader(ir);
+
+        br = req.getReader(); // http body 데이터 순수하게 읽기
+        String requestData = null;
+        while((requestData = br.readLine()) != null) {
+            log.info(requestData);
+        }
+
+
+        return null;
+    }
+
 
 
     @GetMapping("admin/test")

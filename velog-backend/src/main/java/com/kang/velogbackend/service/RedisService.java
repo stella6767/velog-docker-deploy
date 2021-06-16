@@ -26,9 +26,14 @@ public class RedisService { //refreshToken을 저장하기 위한 용도
     }
 
     public void setDataExpire(String key, String value, int duration) {
+
+        System.out.println("key: " + key);
+
         ValueOperations<String,String> valueOperations = stringRedisTemplate.opsForValue();
         Duration tempDuration = Duration.ofSeconds(duration);
         valueOperations.set(key,value,tempDuration);
+
+        System.out.println("check: "+valueOperations.get(key));
     }
 
     public void deleteData(String key){

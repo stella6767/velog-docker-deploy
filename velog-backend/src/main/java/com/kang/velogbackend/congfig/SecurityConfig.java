@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -35,6 +36,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtUtil jwtUtil;
    // private final AuthenticationManager authenticationManager;
 
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        super.configure(web);
+
+       web.ignoring().antMatchers("/auth/reissue"); //아예 BasicAuthenticationFilter 자체를 안 타게 할 수 있음.
+        //시큐리티를 완전 무시함. 토큰 재발급 요청을 할 때에
+
+
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -44,12 +56,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable() //rest api이므로 csrf 보안이 필요없으므로 disable처리.
                 .addFilter(new JwtLoginFilter(authenticationManager(), jwtUtil))
                 .addFilter(new JwtVerifyFilter(authenticationManager(), userRepository))
-                .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint())
-                .accessDeniedHandler(jwtAccessDeniedHandler())
-
-
-                .and()
                 .formLogin().disable()
                 .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)// STATELESS: session을 사용하지 않겠다는 의미
@@ -60,7 +66,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/user/**").access("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-                .anyRequest().permitAll();
+                .anyRequest().permitAll() //이게 아닌가..
+
+
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint()) //로그인 에러
+                .accessDeniedHandler(jwtAccessDeniedHandler()); //권한이 없을 때
 
     }
 

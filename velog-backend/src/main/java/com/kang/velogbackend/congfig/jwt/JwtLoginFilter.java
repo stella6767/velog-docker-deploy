@@ -77,6 +77,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         log.info("accessToken 만료시간: "+ new Date(System.currentTimeMillis()+(1000*60*10)));
         log.info("refreshToken 만료시간: "+ new Date(System.currentTimeMillis()+(1000*60*60*24*7)));
 
+        log.info("refreshToken: " + refreshToken);
 
         //RefreshToken을 Redis에 저장
         jwtUtil.saveTokenInRedis(refreshToken, principalDetails.getUser().getId().toString());

@@ -4,11 +4,12 @@ import React, { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import logo_img from '../logo.svg';
-import { adminTestAction, testAction } from '../reducers/test';
+import { adminTestAction, test2Action, testAction } from '../reducers/test';
 import AuthModal from './auth/ModalContainer';
 import HomeHeader from './HomeHeader';
 import './MyHeader.scss';
 import { Button } from 'antd';
+import { tokenExpire } from '../lib/constants/auth';
 
 import {
   Global,
@@ -17,7 +18,6 @@ import {
   StyledLoginSuccessDiv,
   StyledUserImg,
 } from './style';
-import { tokenExpire } from '../lib/constants/auth';
 import { reissueAction } from '../reducers/auth';
 
 const AppHeader = memo((props) => {
@@ -25,30 +25,36 @@ const AppHeader = memo((props) => {
 
   const { isHome } = props;
 
-  const { loginDone, loginError, cmRespDto } = useSelector(
-    (state) => state.auth,
+  // const { loginDone, loginError, cmRespDto } = useSelector(
+  //   (state) => state.auth,
+  // );
+  // const { testError } = useSelector((state) => state.test);
+
+  const { loginDone, loginError, data, testError } = useSelector(
+    ({ auth, test }) => ({
+      loginDone: auth.loginDone,
+      loginError: auth.loginError,
+      testError: test.error,
+      data: auth.cmRespDto,
+    }),
   );
-  const { testError } = useSelector((state) => state.test);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     console.log('loginDone:', loginDone);
     console.log('loginError', loginError);
+    console.log('responsedata', data);
     console.log('testError', testError);
-    console.log('cmRespDto', cmRespDto);
+    console.log('testError', testError.message);
 
-    console.log('why', cmRespDto.msg);
+    if (testError.message === tokenExpire) {
+      const refreshToken = localStorage.getItem('refreshToken');
+      console.log('재발급 요청', refreshToken);
 
-    // console.log('why', testError.error); //Error는 .으로 접근할 수 없는디..
-
-    // if (testError.message === tokenExpire) {
-    //   const refreshToken = localStorage.getItem('refreshToken');
-    //   console.log('재발급 요청', refreshToken);
-
-    //   dispatch(reissueAction(refreshToken));
-    // }
-  }, [loginDone, loginError, testError, cmRespDto, dispatch]);
+      dispatch(reissueAction(refreshToken));
+    }
+  }, [loginDone, loginError, testError, data, dispatch]);
 
   const [loginVisible, setLoginVisible] = useState(false); //로그인 모달창이 보일지 안 보일지
 
@@ -62,6 +68,10 @@ const AppHeader = memo((props) => {
 
   const adminTeset = () => {
     dispatch(adminTestAction());
+  };
+
+  const generalTeset = () => {
+    dispatch(test2Action());
   };
 
   const menu = (
@@ -93,6 +103,9 @@ const AppHeader = memo((props) => {
       </Menu.Item>
       <Menu.Item>
         <div onClick={adminTeset}>admin Test</div>
+      </Menu.Item>
+      <Menu.Item>
+        <div onClick={generalTeset}>general Test</div>
       </Menu.Item>
     </Menu>
   );

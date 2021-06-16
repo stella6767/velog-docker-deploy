@@ -42,6 +42,13 @@ public class JwtVerifyFilter extends BasicAuthenticationFilter { //@Componet가 
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
+//        log.info("path: "+ request.getRequestURI());
+//        if(!request.getRequestURI().startsWith("/auth") || !request.getRequestURI().startsWith("/user")){
+//            log.info("인증이 필요없는 요청");
+//            chain.doFilter(request, response);
+//        }
+
+
         log.info("권한이나 인증이 필요한 요청이 들어옴");
 
         String header = request.getHeader("Authorization");
