@@ -3,21 +3,27 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { Route } from 'react-router';
 import './App.css';
-import { realTokenExpire } from './lib/constants/auth';
+import { logoutMsg, realTokenExpire } from './lib/constants/auth';
 import Home from './pages/Home';
 import writeForm from './pages/writeForm';
 
 function App() {
-  const { testData } = useSelector(({ test }) => ({
-    testData: test.done,
+  const { cmRespDto, loginDone } = useSelector(({ auth }) => ({
+    cmRespDto: auth.cmRespDto,
+    loginDone: auth.loginDone,
   }));
   useEffect(() => {
     //refreshToken 만료시 절차
-    console.log('testData:  ', testData);
-    if (testData.msg === realTokenExpire) {
+    console.log('reissueData:  ', cmRespDto);
+    if (cmRespDto.msg === realTokenExpire) {
       alert(realTokenExpire);
     }
-  }, [testData]);
+
+    if (cmRespDto.msg === logoutMsg) {
+      localStorage.clear();
+      alert(logoutMsg);
+    }
+  }, [cmRespDto]);
 
   return (
     <>

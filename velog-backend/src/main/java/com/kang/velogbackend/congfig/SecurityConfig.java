@@ -1,10 +1,8 @@
 package com.kang.velogbackend.congfig;
 
-import com.kang.velogbackend.congfig.jwt.JwtAccessDeniedHandler;
-import com.kang.velogbackend.congfig.jwt.JwtAuthenticationEntryPoint;
-import com.kang.velogbackend.congfig.jwt.JwtLoginFilter;
-import com.kang.velogbackend.congfig.jwt.JwtVerifyFilter;
+import com.kang.velogbackend.congfig.jwt.*;
 import com.kang.velogbackend.domain.user.UserRepository;
+import com.kang.velogbackend.service.RedisService;
 import com.kang.velogbackend.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +19,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
-
 @EnableGlobalMethodSecurity(prePostEnabled=true) // 특정 주소로 접근을 하면 권한 및 인증을 미리 체크하겠다는 뜻.
 @RequiredArgsConstructor
 @EnableWebSecurity //시큐리티 활성화
@@ -33,8 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
     private final UserRepository userRepository;
 
+
     private final JwtUtil jwtUtil;
-   // private final AuthenticationManager authenticationManager;
+    private final RedisService redisService;
 
 
     @Override
@@ -72,7 +70,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint()) //로그인 에러
-                .accessDeniedHandler(jwtAccessDeniedHandler()); //권한이 없을 때
+                .accessDeniedHandler(jwtAccessDeniedHandler()) //권한이 없을 때
+
+
+                .and()
+                .logout()
+//                .logoutUrl("/auth/logout")
+//                .addLogoutHandler(new LogoutHandler() {
+//                    @Override
+//                    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+//
+//                        System.out.println("여기가 자동생성되는건가?");
+//
+//                    }
+//                })
+                .logoutSuccessHandler(new jwtLogoutSuccessHandler(redisService))
+
+        ;
+
+
 
     }
 
@@ -84,6 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         config.addAllowedMethod("*"); // 모든 post,get,put,delete, patch ..요청을 허용하겠다.
         config.addAllowedHeader("*"); //모든 header에 응답을 허용하겠다.
         config.addExposedHeader("Authorization");
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;

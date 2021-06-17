@@ -18,7 +18,7 @@ import {
   StyledLoginSuccessDiv,
   StyledUserImg,
 } from './style';
-import { reissueAction } from '../reducers/auth';
+import { logoutAction, reissueAction } from '../reducers/auth';
 
 const AppHeader = memo((props) => {
   //랜더링 되는 부분
@@ -74,6 +74,11 @@ const AppHeader = memo((props) => {
     dispatch(test2Action());
   };
 
+  const logout = () => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    dispatch(logoutAction(refreshToken));
+  };
+
   const menu = (
     <Menu>
       <Menu.Item>
@@ -90,13 +95,7 @@ const AppHeader = memo((props) => {
         <Link to="/write">새 글 작성</Link>
       </Menu.Item>
       <Menu.Item>
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.luohanacademy.com"
-        >
-          로그아웃
-        </a>
+        <div onClick={logout}>로그아웃</div>
       </Menu.Item>
       <Menu.Item>
         <div onClick={tokenTest}>user Test</div>

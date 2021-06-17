@@ -48,6 +48,7 @@ const initialState = {
   reissueDone: false,
 
   cmRespDto: {},
+  error: {},
   principal: null,
 };
 
@@ -76,16 +77,25 @@ const auth = handleActions(
       ...state,
       loginError: error,
     }),
-    // [REISSUE_SUCCESS]: (state, { payload: data }) => ({
-    //   ...state,
-    //   reissueError: null,
-    //   reissueDone: true,
-    //   cmRespDto: data,
-    // }),
-    // [REISSUE_FAILURE]: (state, { payload: error }) => ({
-    //   ...state,
-    //   reissueError: error,
-    // }),
+    [REISSUE_SUCCESS]: (state, { payload: data }) => ({
+      ...state,
+      reissueError: null,
+      reissueDone: true,
+      cmRespDto: data,
+    }),
+    [REISSUE_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      reissueError: error,
+    }),
+    [LOGOUT_SUCCESS]: (state, { payload: data }) => ({
+      ...state,
+      cmRespDto: data,
+      loginDone: false,
+    }),
+    [LOGOUT_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      error: error,
+    }),
   },
   initialState,
 );

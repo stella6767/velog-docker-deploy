@@ -87,14 +87,17 @@ public class AuthController {
     }
 
 
-    //예외적으로 Restful 주소 형식에 안 맞게끔
-    @PostMapping("/logout")
-    public CMRespDto<?> logout(String refreshToken){
-        log.info("로그아웃 요청이 옴. 그냥 검증없이 지우는 게 나을까?");
-        redisService.deleteData(refreshToken);
-
-        return new CMRespDto<>(1,"로그아웃되었습니다.",null);
-    }
+//    //예외적으로 Restful 주소 형식에 안 맞게끔
+//    @PostMapping("/logout")
+//    public CMRespDto<?> logout(@RequestBody String refreshToken){
+//        log.info("로그아웃 요청이 옴. 그냥 검증없이 지우는 게 나을까?");
+//        String key = Script.parseString(refreshToken);
+//        //String key = refreshToken.substring(1, refreshToken.length()-1);
+//        log.info("파싱된 token:  "+ key);
+//        redisService.deleteData(key);
+//
+//        return new CMRespDto<>(1,"로그아웃되었습니다.",null);
+//    }
 
 
 
