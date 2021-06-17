@@ -70,6 +70,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
                 .and()
+                .oauth2Login()
+                
+
+
+                .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint()) //로그인 에러
                 .accessDeniedHandler(jwtAccessDeniedHandler()); //권한이 없을 때
