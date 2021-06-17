@@ -1,15 +1,20 @@
 package com.kang.velogbackend.utils;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.kang.velogbackend.congfig.auth.PrincipalDetails;
 import com.kang.velogbackend.service.RedisService;
 import com.kang.velogbackend.web.dto.auth.LoginRespDto;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Date;
 
 @Slf4j
@@ -29,7 +34,9 @@ public class JwtUtil {
     private final RedisService redisService;
 
 
-    public LoginRespDto makeLoginRespDto(PrincipalDetails principalDetails, String accessToken, String refreshToken){
+
+
+    public LoginRespDto makeLoginRespDto(PrincipalDetails principalDetails, String accessToken){
 
         LoginRespDto loginRespDto = new LoginRespDto();
         loginRespDto = loginRespDto.builder()
@@ -38,13 +45,10 @@ public class JwtUtil {
                 .email(principalDetails.getUser().getEmail())
                 .username(principalDetails.getUser().getUsername())
                 .accessToken(accessToken)
-                .refreshToken(refreshToken)
                 .build();
 
         return loginRespDto;
     }
-
-
 
     public void saveTokenInRedis(String key, String value){  //refreshToken을 reids에 저장
         //UUID uuid = UUID.randomUUID(); //고유키값 만들기
@@ -52,27 +56,64 @@ public class JwtUtil {
     }
 
 
+
+
+
+    private Key getSigningKey(String secretKey) {
+        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public Claims extractAllClaims(String token) throws ExpiredJwtException {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey(SECRET_KEY))
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public Long getUserId(String token) {
+        return extractAllClaims(token).get("userId", Long.class);
+    }
+
+    public Boolean isTokenExpired(String token) {
+        final Date expiration = extractAllClaims(token).getExpiration();
+        return expiration.before(new Date());
+    }
+
+
+
+
+
     public String generateAccessToken(Long userId) {
-        return doGenerateToken(userId, ACCESS_TOKEN_VALIDATION_SECOND, ACCESS_TOKEN_NAME);
+        return doGenerateToken(userId, ACCESS_TOKEN_VALIDATION_SECOND);
     }
 
     public String generateRefreshToken(Long userId) {
-        return doGenerateToken(userId, REFRESH_TOKEN_VALIDATION_SECOND, REFRESH_TOKEN_NAME);
+        return doGenerateToken(userId, REFRESH_TOKEN_VALIDATION_SECOND);
     }
 
-    public String doGenerateToken(Long userId, long expireTime, String tokenName) {
+    public String doGenerateToken(Long userId, long expireTime) {
 
-        String jwtToken = JWT.create()
-                .withSubject(tokenName) //토큰이름
-                .withExpiresAt(new Date(System.currentTimeMillis()+(expireTime)))
-                .withClaim("userId", userId)
-                .sign(Algorithm.HMAC512("홍길동"));
+        Claims claims = Jwts.claims();
+        claims.put("id", userId);
 
-        return jwtToken;
+        String jwt = Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expireTime))
+                .signWith(getSigningKey(SECRET_KEY), SignatureAlgorithm.HS256)
+                .compact();
+
+        return jwt;
     }
 
 
+    public Boolean validateToken(String token, PrincipalDetails principalDetails) {
+        final Long userId = getUserId(token);
 
+        return (userId.equals(principalDetails.getUser().getId()) && !isTokenExpired(token));
+    }
 
 
 

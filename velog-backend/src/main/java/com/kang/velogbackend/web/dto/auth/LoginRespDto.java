@@ -18,6 +18,6 @@ public class LoginRespDto { //프론트서버에 돌려줄 로그인유저객체
 //    private Role role;
 
     private String accessToken;
-    private String refreshToken;
+//    private String refreshToken;
 
 }

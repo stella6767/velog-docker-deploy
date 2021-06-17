@@ -78,7 +78,7 @@ public class AuthController {
                 //log.info("제대로 담김? " + principalDetails.getUser().getId());
 
                 String accessToken = jwtUtil.generateAccessToken(userEntity.getId());
-                return new CMRespDto<>(1,"재발급 성공", jwtUtil.makeLoginRespDto(principalDetails,accessToken,refreshToken));
+                return new CMRespDto<>(1,"재발급 성공", jwtUtil.makeLoginRespDto(principalDetails,accessToken));
             }
 
         }

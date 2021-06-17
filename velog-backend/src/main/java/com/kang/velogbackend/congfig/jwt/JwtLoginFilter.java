@@ -2,6 +2,7 @@ package com.kang.velogbackend.congfig.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kang.velogbackend.congfig.auth.PrincipalDetails;
+import com.kang.velogbackend.utils.CookieUtill;
 import com.kang.velogbackend.utils.JwtUtil;
 import com.kang.velogbackend.utils.Script;
 import com.kang.velogbackend.web.dto.CMRespDto;
@@ -17,10 +18,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 
 
 //토큰 만들어주기
@@ -31,6 +32,8 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private static final Logger log = LoggerFactory.getLogger(JwtLoginFilter.class);
     private final JwtUtil jwtUtil;
+
+    private final CookieUtill cookieUtill;
 
     // 주소: Post 요청으로 /login 요청
     @Override   //기존 로그인 방식을 갈아치우는 과정
@@ -71,21 +74,28 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         System.out.println("로그인 완료되어서 세션 만들어짐. 이제 JWT토큰 만들어서 response.header에 응답할 차리");
         PrincipalDetails principalDetails = (PrincipalDetails)authResult.getPrincipal();
 
-       //이를 활용해 refresh token과 accessToken을 만들고
-        String accessToken = jwtUtil.generateAccessToken(principalDetails.getUser().getId());
-        String refreshToken = jwtUtil.generateRefreshToken(principalDetails.getUser().getId());
-        log.info("accessToken 만료시간: "+ new Date(System.currentTimeMillis()+(1000*60*10)));
-        log.info("refreshToken 만료시간: "+ new Date(System.currentTimeMillis()+(1000*60*60*24*7)));
 
-        log.info("refreshToken: " + refreshToken);
+
+        //이를 활용해 refresh token과 accessToken을 만들고
+        final String token = jwtUtil.generateAccessToken(principalDetails.getUser().getId());
+        final String refreshJwt = jwtUtil.generateRefreshToken(principalDetails.getUser().getId());
+
+        //cookie로 만듬
+        Cookie accessToken = cookieUtill.createCookie(JwtUtil.ACCESS_TOKEN_NAME, token);
+        Cookie refreshToken = cookieUtill.createCookie(JwtUtil.REFRESH_TOKEN_NAME, refreshJwt);
 
         //RefreshToken을 Redis에 저장
-        jwtUtil.saveTokenInRedis(refreshToken, principalDetails.getUser().getId().toString());
+        jwtUtil.saveTokenInRedis(refreshJwt, principalDetails.getUser().getId().toString());
+
+        log.info("refreshToken: " + refreshToken); //쿠키
+
+        //이제 이 쿠키를 클라이언트 서버로
+        response.addCookie(accessToken);
+        response.addCookie(refreshToken);
 
 
-        //이제 이 토큰들을 가지고, LoginRespDTO에 넣어줌
         //이 DTO를 JSON으로 변환 후 BODY로 클라이언트에게 응답
-        CMRespDto<?> cmRespDto = new CMRespDto(1,"로그인성공",jwtUtil.makeLoginRespDto(principalDetails,accessToken,refreshToken));
+        CMRespDto<?> cmRespDto = new CMRespDto(1,"로그인성공",jwtUtil.makeLoginRespDto(principalDetails,token));
         Script.responseData(response, cmRespDto);
 
     }

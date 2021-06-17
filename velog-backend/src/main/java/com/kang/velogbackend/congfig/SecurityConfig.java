@@ -3,6 +3,7 @@ package com.kang.velogbackend.congfig;
 import com.kang.velogbackend.congfig.jwt.*;
 import com.kang.velogbackend.domain.user.UserRepository;
 import com.kang.velogbackend.service.RedisService;
+import com.kang.velogbackend.utils.CookieUtill;
 import com.kang.velogbackend.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -33,7 +35,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtUtil jwtUtil;
     private final RedisService redisService;
-
+    private final CookieUtill cookieUtill;
+    private final JwtRequestFilter jwtRequestFilter;
+    //private final RedisService redisService;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -52,8 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().configurationSource(corsConfigurationSource())//@CrossOrigin(인증X), 시큐리티 필터에 등록 인증(O)
                 .and()
                 .csrf().disable() //rest api이므로 csrf 보안이 필요없으므로 disable처리.
-                .addFilter(new JwtLoginFilter(authenticationManager(), jwtUtil))
-                .addFilter(new JwtVerifyFilter(authenticationManager(), userRepository))
+                .addFilter(new JwtLoginFilter(authenticationManager(), jwtUtil, cookieUtill))
+                .addFilter(new JwtVerifyFilter(authenticationManager(), userRepository, jwtUtil, cookieUtill,redisService ))
                 .formLogin().disable()
                 .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)// STATELESS: session을 사용하지 않겠다는 의미
@@ -88,6 +92,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         ;
 
+        http.addFilterBefore(jwtRequestFilter, BasicAuthenticationFilter.class);
 
 
     }
