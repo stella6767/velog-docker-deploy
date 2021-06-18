@@ -45,6 +45,12 @@ const initialState = {
 //리듀서
 const auth = handleActions(
   {
+    [JOIN_REQUEST]: (state, { payload: data }) =>
+      produce(state, (draft) => {
+        draft.cmRespDto = data;
+        draft.joinDone = false;
+        draft.joinError = null;
+      }),
     // 회원가입 성공
     [JOIN_SUCCESS]: (state, { payload: data }) => ({
       ...state,
@@ -57,6 +63,12 @@ const auth = handleActions(
       ...state,
       joinError: error,
     }),
+    [LOGIN_REQUEST]: (state, { payload: data }) =>
+      produce(state, (draft) => {
+        draft.cmRespDto = data;
+        draft.loginDone = false;
+        draft.loginError = null;
+      }),
     [LOGIN_SUCCESS]: (state, { payload: data }) =>
       produce(state, (draft) => {
         draft.cmRespDto = data;
@@ -64,22 +76,23 @@ const auth = handleActions(
         draft.loginError = null;
         draft.principal = data.data;
       }),
-    // [LOGIN_SUCCESS]: (state, { payload: data }) => ({
-    //   ...state,
-    //   loginError: null,
-    //   loginDone: true,
-    //   cmRespDto: data,
-    //   principal: data.data,
-    // }),
+
     [LOGIN_FAILURE]: (state, { payload: error }) => ({
       ...state,
       loginError: error,
     }),
+
+    [LOGOUT_REQUEST]: (state, { payload: data }) =>
+      produce(state, (draft) => {
+        draft.cmRespDto = data;
+        draft.logoutDone = false;
+        draft.logoutError = null;
+      }),
     [LOGOUT_SUCCESS]: (state, { payload: data }) => ({
       ...state,
       cmRespDto: data,
-      logoutDone: false,
-      loginDone: false,
+      logoutDone: true,
+      logoutError: null,
     }),
 
     [LOGOUT_FAILURE]: (state, { payload: error }) => ({

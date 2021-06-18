@@ -6,19 +6,13 @@ import JoinModal from './JoinModal';
 import LoginModal from './LoginModal';
 
 const AuthModal = memo((props) => {
-  const { joinDone, joinError, loginDone2, loginLoading, joinLoading, loginError } = useSelector(({ auth, loading }) => ({
-    joinDone: auth.joinDone,
-    joinError: auth.joinError,
-    //loginDone: auth.loginDone,
-    loginError: auth.loginError,
+  const { loginLoading, joinLoading } = useSelector(({ loading }) => ({
     loginLoading: loading['LOGIN_REQUEST'],
     joinLoading: loading['JOIN_REQUEST'],
   }));
 
-  const { loginDone } = useSelector((state) => state.auth);
-
   //로그인 모달창과 회원가입 모달창, 함수들은 나중에 다 useMemo로 바꿔주자.. 로그인 모달과 회원가입 모달도 나중에 분리시키자..
-  const { loginVisible, setLoginVisible } = props;
+  const { loginVisible, setLoginVisible, joinDone, joinError } = props;
   const [joinVisible, setJoinVisible] = useState(false);
   const [loginForm] = Form.useForm();
   const [joinForm] = Form.useForm();
@@ -34,20 +28,14 @@ const AuthModal = memo((props) => {
 
   useEffect(() => {
     console.log('loginLoading: ', loginLoading, 'joinLoaing', joinLoading);
-  }, [dispatch, loginLoading, joinLoading]);
-
-  const handleCancel = () => {
-    console.log('Clicked cancel button');
-    joinForm.resetFields();
-    loginForm.resetFields();
-    setLoginVisible(false);
-    setJoinVisible(false);
-  };
+    //console.log('loginDone', loginDone, 'trigger 안 되는디..');
+    //console.log('joinDone', joinDone, 'trigger 안 되는디..');
+    //왜 여기서 바로 반영이 안 되는 거지...진짜 짜증나네...이유를 모르겠으니까 답답해 뒤지겄네..
+  }, [loginLoading, joinLoading]);
 
   useEffect(() => {
-    console.log('joinDone: ', joinDone, 'joinError: ', joinError, 'loginDone', loginDone, 'loginError', loginError);
     if (joinError) {
-      console.log('회원가입 실패');
+      alert('회원가입 실패');
       console.log(joinError);
       return;
     }
@@ -57,23 +45,15 @@ const AuthModal = memo((props) => {
       console.log(joinDone);
       setJoinVisible(false);
     }
+  }, [joinDone]);
 
-    if (loginDone) {
-      console.log('why 실행안됨?');
-      alert('로그인 성공');
-      //console.log('쿠키는?', document.cookie);
-    }
-
-    if (loginError) {
-      console.log('로그인 실패');
-      return;
-    }
-  }, [joinDone, joinError, dispatch, loginDone, loginError]);
-
-  useEffect(() => {
-    //debugger;
-    console.log('loginDone', loginDone, 'trigger 안 되는디..');
-  }, [loginDone, dispatch]);
+  const handleCancel = () => {
+    console.log('Clicked cancel button');
+    joinForm.resetFields();
+    loginForm.resetFields();
+    setLoginVisible(false);
+    setJoinVisible(false);
+  };
 
   const toggleModal = () => {
     setLoginVisible(!loginVisible);

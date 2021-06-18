@@ -16,9 +16,6 @@ function App() {
     if (cmRespDto.msg === logoutMsg) {
       alert(logoutMsg);
     }
-    if (cmRespDto.msg === '로그인성공') {
-      alert('로그인 성공');
-    }
   }, [cmRespDto]);
 
   return (
