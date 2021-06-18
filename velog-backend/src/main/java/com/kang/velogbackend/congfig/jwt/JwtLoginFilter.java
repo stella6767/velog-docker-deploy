@@ -94,8 +94,8 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         response.addCookie(refreshToken);
 
 
-        //이 DTO를 JSON으로 변환 후 BODY로 클라이언트에게 응답
-        CMRespDto<?> cmRespDto = new CMRespDto(1,"로그인성공",jwtUtil.makeLoginRespDto(principalDetails,token));
+        //이 DTO를 JSON으로 변환 후 BODY로 클라이언트에게 응답,
+        CMRespDto<?> cmRespDto = new CMRespDto(1,"로그인성공",jwtUtil.makeLoginRespDto(principalDetails));
         Script.responseData(response, cmRespDto);
 
     }

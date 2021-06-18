@@ -49,6 +49,7 @@ spring:
 
 
 jwt:
-  secret: hongKildong
+  secret: kimdonggeunkimdonggeunkimdonggeunkimdonggeunkimdonggeunkimdonggeunkimdonggeunkimdonggeun
+
 
 

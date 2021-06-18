@@ -26,7 +26,8 @@ public class PrincipalDetailsService implements UserDetailsService {
         log.info("나오는 게 정상인디.. "+principal.toString());
 
         if(principal == null) {
-            return null;
+            throw new IllegalArgumentException("id를 찾을 수 없습니다.");
+            //return null;
         }else {
 
             //session.setAttribute("principal",principal); // jsp 아니라면 세션에 저장하고 사용해야된다.

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { newTokenIssue } from '../constants/auth';
 
 const client = axios.create();
 
@@ -10,16 +9,13 @@ const client = axios.create();
 // //헤더 설정
 // client.defaults.headers.common['Authorization'] = 'Bearer a1b2c3d4'
 
-client.defaults.headers.post['Content-Type'] =
-  'application/json; charset=UTF-8'; //json으로 던지기 위해서..
+client.defaults.headers.post['Content-Type'] = 'application/json; charset=UTF-8'; //json으로 던지기 위해서..
 
-client.defaults.headers.common['Authorization'] =
-  localStorage.getItem('accessToken'); //여기서 문제가 발생했네.. 초기값으록 고정됐나보다.
+client.defaults.headers.common['Authorization'] = localStorage.getItem('accessToken'); //여기서 문제가 발생했네.. 초기값으록 고정됐나보다.
 
 client.interceptors.request.use(
   (request) => {
-    request.headers.common.Authorization =
-      'Bearer ' + localStorage.getItem('accessToken');
+    request.headers.common.Authorization = 'Bearer ' + localStorage.getItem('accessToken');
     console.log('Starting Request', JSON.stringify(request, null, 2));
     return request;
   },
@@ -33,19 +29,7 @@ client.interceptors.request.use(
 client.interceptors.response.use(
   (response) => {
     //요청 성공 시 특정 작업 수행
-
-    console.log('응답값: ', response.data);
-    //response.data
-
-    if (response.data.msg === '로그인성공') {
-      setToken(response);
-    }
-
-    if (response.data.msg === newTokenIssue) {
-      console.log('토큰 다시 셋팅해야징');
-      setToken(response);
-    }
-
+    //console.log('응답값: ', response.data);
     return response;
   },
   (error) => {
@@ -54,15 +38,5 @@ client.interceptors.response.use(
     return Promise.reject(error);
   },
 );
-
-const setToken = (response) => {
-  const accessToken = response.data.data.accessToken;
-  const refreshToken = response.data.data.refreshToken;
-
-  const parserToken = refreshToken.replace(/"/g, '');
-
-  localStorage.setItem('accessToken', accessToken);
-  localStorage.setItem('refreshToken', parserToken);
-};
 
 export default client;

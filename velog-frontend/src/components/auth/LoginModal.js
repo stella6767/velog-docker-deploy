@@ -1,15 +1,15 @@
-import { Button, Divider, Form, Input, Modal } from "antd";
-import React, { memo } from "react";
-import { FcGoogle } from "react-icons/fc";
-import { UserOutlined } from "@ant-design/icons";
+import { Button, Divider, Form, Input, Modal } from 'antd';
+import React, { memo } from 'react';
+import { FcGoogle } from 'react-icons/fc';
+import { UserOutlined } from '@ant-design/icons';
+import loading from '../../reducers/loading';
 
 const LoginModal = memo((props) => {
-  const { loginVisible, loginForm, handleCancel, toggleModal, onLoginFinish } =
-    props;
+  const { loginVisible, loginForm, handleCancel, toggleModal, onLoginFinish, loading } = props;
 
   return (
     <>
-      {" "}
+      {' '}
       <Modal
         title="로그인"
         visible={loginVisible}
@@ -17,49 +17,37 @@ const LoginModal = memo((props) => {
         footer={[
           <div
             style={{
-              display: "flex",
-              justifyContent: "flex-end",
+              display: 'flex',
+              justifyContent: 'flex-end',
             }}
           >
-            <div style={{ marginTop: "0.3rem" }}>
+            <div style={{ marginTop: '0.3rem' }}>
               <span style={{}}>아직 회원이 아니십니까? </span>
             </div>
-            <Button
-              type="link"
-              style={{ color: "green" }}
-              onClick={toggleModal}
-            >
+            <Button type="link" style={{ color: 'green' }} onClick={toggleModal}>
               회원가입
             </Button>
           </div>,
         ]}
       >
-        <Form
-          form={loginForm}
-          name="horizontal_login"
-          layout="inline"
-          onFinish={onLoginFinish}
-        >
-       <Form.Item
+        <Form form={loginForm} name="horizontal_login" layout="inline" onFinish={onLoginFinish}>
+          <Form.Item
             name="username"
             rules={[
               {
                 required: true,
-                message: "Please input your username!",
+                message: 'Please input your username!',
               },
             ]}
           >
-            <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder="Username"
-            />
+            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
           </Form.Item>
           <Form.Item
             name="password"
             rules={[
               {
                 required: true,
-                message: "Please input your password!",
+                message: 'Please input your password!',
               },
             ]}
           >
@@ -70,12 +58,8 @@ const LoginModal = memo((props) => {
               <Button
                 type="primary"
                 htmlType="submit"
-                disabled={
-                  !loginForm.isFieldsTouched(true) ||
-                  !!loginForm
-                    .getFieldsError()
-                    .filter(({ errors }) => errors.length).length
-                }
+                loading={loading}
+                disabled={!loginForm.isFieldsTouched(true) || !!loginForm.getFieldsError().filter(({ errors }) => errors.length).length}
               >
                 Log in
               </Button>

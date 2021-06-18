@@ -1,6 +1,7 @@
 package com.kang.velogbackend.utils;
 
 import com.kang.velogbackend.congfig.auth.PrincipalDetails;
+import com.kang.velogbackend.domain.user.User;
 import com.kang.velogbackend.service.RedisService;
 import com.kang.velogbackend.web.dto.auth.LoginRespDto;
 import io.jsonwebtoken.Claims;
@@ -36,7 +37,7 @@ public class JwtUtil {
 
 
 
-    public LoginRespDto makeLoginRespDto(PrincipalDetails principalDetails, String accessToken){
+    public LoginRespDto makeLoginRespDto(PrincipalDetails principalDetails){
 
         LoginRespDto loginRespDto = new LoginRespDto();
         loginRespDto = loginRespDto.builder()
@@ -44,7 +45,6 @@ public class JwtUtil {
                 .picture(principalDetails.getUser().getPicture())
                 .email(principalDetails.getUser().getEmail())
                 .username(principalDetails.getUser().getUsername())
-                .accessToken(accessToken)
                 .build();
 
         return loginRespDto;
@@ -96,7 +96,7 @@ public class JwtUtil {
     public String doGenerateToken(Long userId, long expireTime) {
 
         Claims claims = Jwts.claims();
-        claims.put("id", userId);
+        claims.put("userId", userId);
 
         String jwt = Jwts.builder()
                 .setClaims(claims)
@@ -109,10 +109,10 @@ public class JwtUtil {
     }
 
 
-    public Boolean validateToken(String token, PrincipalDetails principalDetails) {
+    public Boolean validateToken(String token, User user) {
         final Long userId = getUserId(token);
 
-        return (userId.equals(principalDetails.getUser().getId()) && !isTokenExpired(token));
+        return (userId == user.getId() && !isTokenExpired(token));
     }
 
 

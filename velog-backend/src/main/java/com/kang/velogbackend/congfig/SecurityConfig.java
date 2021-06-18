@@ -15,7 +15,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -36,8 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtUtil jwtUtil;
     private final RedisService redisService;
     private final CookieUtill cookieUtill;
-    private final JwtRequestFilter jwtRequestFilter;
-    //private final RedisService redisService;
+    //private final JwtRequestFilter jwtRequestFilter;
+
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -79,20 +78,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .logout()
-//                .logoutUrl("/auth/logout")
-//                .addLogoutHandler(new LogoutHandler() {
-//                    @Override
-//                    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-//
-//                        System.out.println("여기가 자동생성되는건가?");
-//
-//                    }
-//                })
-                .logoutSuccessHandler(new jwtLogoutSuccessHandler(redisService))
+                .logoutSuccessHandler(new jwtLogoutSuccessHandler(redisService, cookieUtill))
 
         ;
-
-        http.addFilterBefore(jwtRequestFilter, BasicAuthenticationFilter.class);
+//        http.addFilterBefore(jwtRequestFilter, BasicAuthenticationFilter.class);
 
 
     }

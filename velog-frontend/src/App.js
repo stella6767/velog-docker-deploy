@@ -13,15 +13,11 @@ function App() {
     loginDone: auth.loginDone,
   }));
   useEffect(() => {
-    //refreshToken 만료시 절차
-    console.log('reissueData:  ', cmRespDto);
-    if (cmRespDto.msg === realTokenExpire) {
-      alert(realTokenExpire);
-    }
-
     if (cmRespDto.msg === logoutMsg) {
-      localStorage.clear();
       alert(logoutMsg);
+    }
+    if (cmRespDto.msg === '로그인성공') {
+      alert('로그인 성공');
     }
   }, [cmRespDto]);
 
