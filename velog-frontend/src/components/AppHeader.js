@@ -112,14 +112,16 @@ const AppHeader = memo((props) => {
             </div>
           ) : (
             <StyledLoginSuccessDiv>
-              <div>
-                <StyledUserImg />
-              </div>
-              <div style={{ marginTop: '3px', marginLeft: '3px' }}>
-                <Dropdown overlay={menu}>
-                  <CaretDownOutlined style={{ fontSize: '1rem', cursor: 'pointer' }} />
-                </Dropdown>
-              </div>
+              <Dropdown overlay={menu} trigger={['click']} overlayStyle={{ fontSize: '1rem' }}>
+                <div className="ant-dropdown-link" onClick={(e) => e.preventDefault()} style={{ display: 'flex', marginTop: '0.3rem' }}>
+                  <div>
+                    <StyledUserImg />
+                  </div>
+                  <div style={{ marginTop: '3px', marginLeft: '3px' }}>
+                    <CaretDownOutlined style={{ fontSize: '1rem', cursor: 'pointer' }} />
+                  </div>
+                </div>
+              </Dropdown>
             </StyledLoginSuccessDiv>
           )}
         </LoginBox>
