@@ -93,6 +93,7 @@ const auth = handleActions(
       cmRespDto: data,
       logoutDone: true,
       logoutError: null,
+      loginDone: false,
     }),
 
     [LOGOUT_FAILURE]: (state, { payload: error }) => ({

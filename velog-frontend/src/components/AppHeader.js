@@ -34,6 +34,7 @@ const AppHeader = memo((props) => {
     if (loginDone) {
       console.log('why 실행안됨?');
       alert('로그인 성공');
+      setLoginVisible(false);
       //console.log('쿠키는?', document.cookie);
     }
 

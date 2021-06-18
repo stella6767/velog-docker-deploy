@@ -1,22 +1,31 @@
 package com.kang.velogbackend.web;
 
 
+import com.kang.velogbackend.congfig.auth.PrincipalDetails;
 import com.kang.velogbackend.congfig.oauth.GoogleInfo;
 import com.kang.velogbackend.congfig.oauth.OAuth2UserInfo;
+import com.kang.velogbackend.domain.user.User;
+import com.kang.velogbackend.domain.user.UserRepository;
 import com.kang.velogbackend.service.AuthService;
 import com.kang.velogbackend.service.RedisService;
-import com.kang.velogbackend.service.UserService;
+import com.kang.velogbackend.utils.CookieUtill;
 import com.kang.velogbackend.utils.JwtUtil;
 import com.kang.velogbackend.web.dto.CMRespDto;
 import com.kang.velogbackend.web.dto.auth.AuthReqDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -25,10 +34,10 @@ public class AuthController {
 
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
     private final AuthService authService;
-    private final BCryptPasswordEncoder encoder;
     private final RedisService redisService;
     private final JwtUtil jwtUtil;
-    private final UserService userService;
+    private final UserRepository userRepository;
+    private final CookieUtill cookieUtill;
 
     @PostMapping("/auth/join") //Oauth 가 아닌
     public CMRespDto<?> join(@RequestBody AuthReqDto authReqDto) {
@@ -42,42 +51,47 @@ public class AuthController {
     }
 
 
-//    //access토큰 재발급 요청
-//    @PostMapping( "/auth/reissue")// @AuthenticationPrincipal PrincipalDetails principalDetails
-//    public CMRespDto<?> reissue(@RequestBody String refreshToken) throws IOException {
-//        log.info("token 재발급 요청 옴 "+ refreshToken);
-//
-//        String key = Script.parseString(refreshToken);
-//        //String key = refreshToken.substring(1, refreshToken.length()-1);
-//        log.info("파싱된 token:  "+ key);
-//
-//        String redisUserId = redisService.getData(key);
-//        log.info("redisUserID: " + redisUserId);
-//
-//
-//        if(redisUserId != null){
-//            User userEntity = userService.회원찾기(Long.parseLong(redisUserId));
-//            if(userEntity != null){
-//                log.info(userEntity.getUsername());
-//
-//
-//                PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
-//                Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
-//                SecurityContextHolder.getContext().setAuthentication(authentication); // 세션에 담기
-//
-////                Authentication authentication =
-////				    new UsernamePasswordAuthenticationToken(userEntity.getUsername(), userEntity.getPassword());
-////		            SecurityContextHolder.getContext().setAuthentication(authentication);//세션에 담는다.
-//                //log.info("제대로 담김? " + principalDetails.getUser().getId());
-//
-//                String accessToken = jwtUtil.generateAccessToken(userEntity.getId());
-//                return new CMRespDto<>(1,"재발급 성공", jwtUtil.makeLoginRespDto(principalDetails,accessToken));
-//            }
-//
-//        }
-//
-//        return new CMRespDto<>(-1,"토큰이 만료되었습니다. 다시 로그인해주세요.",null);
-//    }
+    @PostMapping("/login")
+    public CMRespDto<?> login(@RequestBody AuthReqDto authReqDto, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        log.info("로그인 요청 옴");
+
+        User principal = userRepository.findByUsername(authReqDto.getUsername());
+
+        if(principal != null){
+
+            PrincipalDetails principalDetails = new PrincipalDetails(principal);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            final String token = jwtUtil.generateAccessToken(principal.getId());
+            final String refreshJwt = jwtUtil.generateRefreshToken(principal.getId());
+
+            //cookie로 만듬
+            Cookie accessToken = cookieUtill.createCookie(JwtUtil.ACCESS_TOKEN_NAME, token);
+            Cookie refreshToken = cookieUtill.createCookie(JwtUtil.REFRESH_TOKEN_NAME, refreshJwt);
+
+            //RefreshToken을 Redis에 저장
+            jwtUtil.saveTokenInRedis(refreshJwt, principal.getId().toString());
+
+            log.info("refreshToken: " + refreshToken); //쿠키
+
+            //이제 이 쿠키를 클라이언트 서버로
+            response.addCookie(accessToken);
+            response.addCookie(refreshToken);
+
+            return new CMRespDto<>(1,"로그인성공",jwtUtil.makeLoginRespDto(principal));
+
+        }else{
+            //response.sendError(HttpStatus.UNAUTHORIZED.value(),"유저정보를 찾을 수 없습니다.");
+            return new CMRespDto<>(-1,"로그인에러",null);
+        }
+
+
+    }
+
+
+
+
 
 
 //    //예외적으로 Restful 주소 형식에 안 맞게끔

@@ -8,15 +8,20 @@ import Home from './pages/Home';
 import writeForm from './pages/writeForm';
 
 function App() {
-  const { cmRespDto, loginDone } = useSelector(({ auth }) => ({
+  const { cmRespDto, logoutDone } = useSelector(({ auth }) => ({
     cmRespDto: auth.cmRespDto,
-    loginDone: auth.loginDone,
+    logoutDone: auth.logoutDone,
   }));
   useEffect(() => {
-    if (cmRespDto.msg === logoutMsg) {
+    //console.log(cmRespDto);
+    // if (cmRespDto.msg === logoutMsg) {
+    //   alert(logoutMsg);
+    // }
+
+    if (logoutDone) {
       alert(logoutMsg);
     }
-  }, [cmRespDto]);
+  }, [logoutDone]);
 
   return (
     <>

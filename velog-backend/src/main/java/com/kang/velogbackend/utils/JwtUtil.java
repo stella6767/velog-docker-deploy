@@ -1,6 +1,5 @@
 package com.kang.velogbackend.utils;
 
-import com.kang.velogbackend.congfig.auth.PrincipalDetails;
 import com.kang.velogbackend.domain.user.User;
 import com.kang.velogbackend.service.RedisService;
 import com.kang.velogbackend.web.dto.auth.LoginRespDto;
@@ -37,14 +36,14 @@ public class JwtUtil {
 
 
 
-    public LoginRespDto makeLoginRespDto(PrincipalDetails principalDetails){
+    public LoginRespDto makeLoginRespDto(User principalDetails){
 
         LoginRespDto loginRespDto = new LoginRespDto();
         loginRespDto = loginRespDto.builder()
-                .id(principalDetails.getUser().getId())
-                .picture(principalDetails.getUser().getPicture())
-                .email(principalDetails.getUser().getEmail())
-                .username(principalDetails.getUser().getUsername())
+                .id(principalDetails.getId())
+                .picture(principalDetails.getPicture())
+                .email(principalDetails.getEmail())
+                .username(principalDetails.getUsername())
                 .build();
 
         return loginRespDto;
