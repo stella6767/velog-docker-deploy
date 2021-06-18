@@ -1,7 +1,7 @@
-import { call, put } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
+import { OAUTH_REQUEST } from '../reducers/auth';
 import { finishLoading, startLoading } from '../reducers/loading';
-
-//const reissueRequst = '토큰기간만료'; //utils에 이런 상수들을 모아놓을까..
+import * as authAPI from '../lib/api/auth';
 
 export const createRequestActionTypes = (type) => {
   const REQUEST = `${type}_REQUEST`;
@@ -11,26 +11,14 @@ export const createRequestActionTypes = (type) => {
 };
 
 export default function createRequestSaga(type, request) {
-  // const typeArray = type.split('_');
-  // console.log("type 확인:",typeArray[0]);
-  // const prefixType = typeArray[0];
-
   const SUCCESS = `${type.split('_')[0]}_SUCCESS`; //ESLINT가 에러 표시내는 거는 무시
   const FAILURE = `${type.split('_')[0]}_FAILURE`;
 
-  //console.log(client.headers);
-
   return function* (action) {
-    console.log('actionType: ', type);
-
     yield put(startLoading(type)); //로딩 시작
     //피라미터로 action을 받아 오면 액션의 정보를 조회할 수 있습니다.
 
     try {
-      //call을 사용하면 promise를 반환하는 함수를 호출하고, 기다릴 수 있습니다.
-      //첫 번째 피라미터는 함수, 나머지 피라미터는 해당 함수에 넣을 인수
-      console.log('action.payload: ', action.payload);
-
       const response = yield call(request, action.payload); //api 호출
       console.log('api 호출 성공: ', type, action);
       console.log('response: ', response);
@@ -51,4 +39,24 @@ export default function createRequestSaga(type, request) {
     }
     yield put(finishLoading(type)); //로딩 끝
   };
+}
+
+export function* oauthLogin(action) {
+  console.log('작동안하니?' + action);
+
+  try {
+    const response = yield call(authAPI.socialLogin, action.data);
+    console.log('response: ', response);
+    yield put({
+      type: 'LOGIN_SUCCESS',
+      payload: response.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: 'LOGIN_FAILURE',
+      payload: err.response.data,
+      error: true,
+    });
+  }
 }

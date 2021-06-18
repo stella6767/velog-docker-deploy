@@ -1,60 +1,48 @@
 import { CaretDownOutlined } from '@ant-design/icons';
-import { Dropdown, Menu } from 'antd';
+import { Button, Dropdown, Menu } from 'antd';
 import React, { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import logo_img from '../logo.svg';
+import { logoutAction } from '../reducers/auth';
 import { adminTestAction, test2Action, testAction } from '../reducers/test';
 import AuthModal from './auth/ModalContainer';
 import HomeHeader from './HomeHeader';
 import './MyHeader.scss';
-import { Button } from 'antd';
-import { tokenExpire } from '../lib/constants/auth';
-
-import {
-  Global,
-  HeaderTopDiv,
-  LoginBox,
-  StyledLoginSuccessDiv,
-  StyledUserImg,
-} from './style';
-import { reissueAction } from '../reducers/auth';
+import { Global, HeaderTopDiv, LoginBox, StyledLoginSuccessDiv, StyledUserImg } from './style';
 
 const AppHeader = memo((props) => {
   //랜더링 되는 부분
 
   const { isHome } = props;
 
-  // const { loginDone, loginError, cmRespDto } = useSelector(
-  //   (state) => state.auth,
-  // );
-  // const { testError } = useSelector((state) => state.test);
-
-  const { loginDone, loginError, data, testError } = useSelector(
-    ({ auth, test }) => ({
-      loginDone: auth.loginDone,
-      loginError: auth.loginError,
-      testError: test.error,
-      data: auth.cmRespDto,
-    }),
-  );
+  const { loginDone, loginError, data, testError, loading, joinDone, joinError } = useSelector(({ auth, test, loading }) => ({
+    loginDone: auth.loginDone,
+    loginError: auth.loginError,
+    testError: test.error,
+    data: auth.cmRespDto,
+    joinDone: auth.joinDone,
+    joinError: auth.joinError,
+    loading: loading['LOGOUT_REQUEST'], //그때 그때 순간순간적으로 키 값이 바뀌는데 맞춰서 loading 값을 가져오면 된다.
+  }));
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('loginDone:', loginDone);
-    console.log('loginError', loginError);
-    console.log('responsedata', data);
-    console.log('testError', testError);
-    console.log('testError', testError.message);
+    console.log('joinDone: ', joinDone, 'joinError: ', joinError, 'loginDone', loginDone, 'loginError', loginError);
 
-    if (testError.message === tokenExpire) {
-      const refreshToken = localStorage.getItem('refreshToken');
-      console.log('재발급 요청', refreshToken);
-
-      dispatch(reissueAction(refreshToken));
+    if (loginDone) {
+      console.log('why 실행안됨?');
+      alert('로그인 성공');
+      setLoginVisible(false);
+      //console.log('쿠키는?', document.cookie);
     }
-  }, [loginDone, loginError, testError, data, dispatch]);
+
+    if (loginError) {
+      alert('로그인 실패');
+      return;
+    }
+  }, [dispatch, loginDone, joinDone, joinError, loginError]);
 
   const [loginVisible, setLoginVisible] = useState(false); //로그인 모달창이 보일지 안 보일지
 
@@ -74,15 +62,14 @@ const AppHeader = memo((props) => {
     dispatch(test2Action());
   };
 
+  const logout = () => {
+    dispatch(logoutAction());
+  };
+
   const menu = (
     <Menu>
       <Menu.Item>
-        <Link
-          to="/aaa"
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.antgroup.com"
-        >
+        <Link to="/aaa" target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
           내 벨로그
         </Link>
       </Menu.Item>
@@ -90,13 +77,7 @@ const AppHeader = memo((props) => {
         <Link to="/write">새 글 작성</Link>
       </Menu.Item>
       <Menu.Item>
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.luohanacademy.com"
-        >
-          로그아웃
-        </a>
+        <div onClick={logout}>로그아웃</div>
       </Menu.Item>
       <Menu.Item>
         <div onClick={tokenTest}>user Test</div>
@@ -127,10 +108,7 @@ const AppHeader = memo((props) => {
             <div style={{ marginLeft: '1rem' }} className="loginButtonDiv">
               <Button onClick={showLoginModal}>로그인</Button>
               {/* 모달 컨테이너 */}
-              <AuthModal
-                loginVisible={loginVisible}
-                setLoginVisible={setLoginVisible}
-              />
+              <AuthModal loginVisible={loginVisible} setLoginVisible={setLoginVisible} joinDone={joinDone} joinError={joinError} />
             </div>
           ) : (
             <StyledLoginSuccessDiv>
@@ -139,9 +117,7 @@ const AppHeader = memo((props) => {
               </div>
               <div style={{ marginTop: '3px', marginLeft: '3px' }}>
                 <Dropdown overlay={menu}>
-                  <CaretDownOutlined
-                    style={{ fontSize: '1rem', cursor: 'pointer' }}
-                  />
+                  <CaretDownOutlined style={{ fontSize: '1rem', cursor: 'pointer' }} />
                 </Dropdown>
               </div>
             </StyledLoginSuccessDiv>

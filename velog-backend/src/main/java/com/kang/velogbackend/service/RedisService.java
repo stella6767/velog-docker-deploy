@@ -15,7 +15,7 @@ public class RedisService { //refreshToken을 저장하기 위한 용도
     private final StringRedisTemplate stringRedisTemplate;
 
 
-    public String getData(String key) {
+    public  String getData(String key) {
         ValueOperations<String,String> valueOperations = stringRedisTemplate.opsForValue();
         return valueOperations.get(key);
     }

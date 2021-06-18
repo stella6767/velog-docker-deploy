@@ -6,8 +6,13 @@ import JoinModal from './JoinModal';
 import LoginModal from './LoginModal';
 
 const AuthModal = memo((props) => {
+  const { loginLoading, joinLoading } = useSelector(({ loading }) => ({
+    loginLoading: loading['LOGIN_REQUEST'],
+    joinLoading: loading['JOIN_REQUEST'],
+  }));
+
   //로그인 모달창과 회원가입 모달창, 함수들은 나중에 다 useMemo로 바꿔주자.. 로그인 모달과 회원가입 모달도 나중에 분리시키자..
-  const { loginVisible, setLoginVisible } = props;
+  const { loginVisible, setLoginVisible, joinDone, joinError } = props;
   const [joinVisible, setJoinVisible] = useState(false);
   const [loginForm] = Form.useForm();
   const [joinForm] = Form.useForm();
@@ -15,29 +20,22 @@ const AuthModal = memo((props) => {
 
   //리덕스 관련코드
   const dispatch = useDispatch();
-  const { joinDone, joinError } = useSelector(({ auth }) => ({
-    joinDone: auth.joinDone,
-    joinError: auth.joinError,
-  }));
 
   useEffect(() => {
-    console.log('joinForm', joinForm);
+    //console.log('joinForm', joinForm);
     forceUpdate({});
   }, []);
 
-  const handleCancel = () => {
-    console.log('Clicked cancel button');
-    joinForm.resetFields();
-    loginForm.resetFields();
-    setLoginVisible(false);
-    setJoinVisible(false);
-  };
+  useEffect(() => {
+    console.log('loginLoading: ', loginLoading, 'joinLoaing', joinLoading);
+    //console.log('loginDone', loginDone, 'trigger 안 되는디..');
+    //console.log('joinDone', joinDone, 'trigger 안 되는디..');
+    //왜 여기서 바로 반영이 안 되는 거지...진짜 짜증나네...이유를 모르겠으니까 답답해 뒤지겄네..
+  }, [loginLoading, joinLoading]);
 
   useEffect(() => {
-    console.log('joinDone: ', joinDone, 'joinError: ', joinError);
-
     if (joinError) {
-      console.log('회원가입 실패');
+      alert('회원가입 실패');
       console.log(joinError);
       return;
     }
@@ -47,7 +45,15 @@ const AuthModal = memo((props) => {
       console.log(joinDone);
       setJoinVisible(false);
     }
-  }, [joinDone, joinError, dispatch]);
+  }, [joinDone]);
+
+  const handleCancel = () => {
+    console.log('Clicked cancel button');
+    joinForm.resetFields();
+    loginForm.resetFields();
+    setLoginVisible(false);
+    setJoinVisible(false);
+  };
 
   const toggleModal = () => {
     setLoginVisible(!loginVisible);
@@ -62,7 +68,6 @@ const AuthModal = memo((props) => {
     if (whiteSpace) {
       return alert('공백 금지');
     } else {
-      console.log('개빡치네 이게 왜 실행되는거임? 단순 오류??');
       dispatch(joinAction(values));
       joinForm.resetFields();
     }
@@ -100,6 +105,7 @@ const AuthModal = memo((props) => {
         handleCancel={handleCancel}
         toggleModal={toggleModal}
         onLoginFinish={onLoginFinish}
+        loading={loginLoading}
       />
 
       <JoinModal
@@ -108,6 +114,7 @@ const AuthModal = memo((props) => {
         handleCancel={handleCancel}
         toggleModal={toggleModal}
         onJoinFinish={onJoinFinish}
+        loading={joinLoading}
       />
     </>
   );
