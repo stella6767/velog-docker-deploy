@@ -6,6 +6,7 @@ import './App.css';
 import { logoutMsg, realTokenExpire } from './lib/constants/auth';
 import Home from './pages/Home';
 import writeForm from './pages/writeForm';
+import Search from './pages/Search';
 
 function App() {
   const { cmRespDto, logoutDone } = useSelector(({ auth }) => ({
@@ -27,6 +28,7 @@ function App() {
     <>
       <Route path="/" exact={true} component={Home} />
       <Route path="/write" exact={true} component={writeForm} />
+      <Route path="/search" exact={true} component={Search} />
     </>
   );
 }

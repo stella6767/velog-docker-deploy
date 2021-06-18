@@ -100,7 +100,7 @@ const AppHeader = memo((props) => {
         </Link>
 
         <LoginBox>
-          <Link to="">
+          <Link to="/search">
             <img src="/images/search.svg" alt="search" />
           </Link>
 
