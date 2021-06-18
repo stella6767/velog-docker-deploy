@@ -1,8 +1,7 @@
-import { Global } from '../style';
-import { Row, Col, Layout, Card } from 'antd';
+import { Card, Layout, Row } from 'antd';
 import 'antd/dist/antd.css';
+import { Global } from '../style';
 import AppHeader from './AppHeader';
-import { Children } from 'react';
 
 const { Content } = Layout;
 const { Meta } = Card;
@@ -16,23 +15,7 @@ const AppLayout = (props) => {
       <AppHeader isHome={isHome} />
 
       <Content>
-        <Row>
-          <Col flex="1 1 20rem">
-            <Card hoverable cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}>
-              <Meta title="Europe Street beat" description="www.instagram.com" />
-            </Card>
-          </Col>
-          <Col flex="1 1 20rem">
-            <Card hoverable cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}>
-              <Meta title="Europe Street beat" description="www.instagram.com" />
-            </Card>
-          </Col>
-          <Col flex="1 1 20rem">
-            <Card hoverable cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}>
-              <Meta title="Europe Street beat" description="www.instagram.com" />
-            </Card>
-          </Col>
-        </Row>
+        <Row>{props.children}</Row>
       </Content>
     </Layout>
   );
