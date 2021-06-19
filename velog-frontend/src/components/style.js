@@ -37,8 +37,6 @@ export const Global = createGlobalStyle`
     } */
   }
 
-
-
   }
 
 `;
@@ -48,8 +46,7 @@ export const HeaderTopDiv = styled.div`
   align-items: center;
   justify-content: space-between;
   height: 4rem;
-  padding-left: 10rem;
-  padding-right: 10rem;
+  padding-left: 1rem;
 `;
 
 export const LoginBox = styled.div`
@@ -78,8 +75,6 @@ export const HeaderBottomDiv = styled.div`
   align-items: center;
   justify-content: space-between;
   height: 4rem;
-  padding-left: 10rem;
-  padding-right: 10rem;
 `;
 
 export const HeaderLeftDiv = styled.div`
@@ -109,4 +104,20 @@ export const HeaderDateDiv = styled.div`
   font-size: 0.875rem;
   box-shadow: rgb(0 0 0 / 5%) 0px 0px 4px;
   cursor: pointer;
+`;
+
+export const StyledAppHeader = styled.header`
+  //position: fixed;
+  align-items: center;
+  width: 100%;
+  z-index: 10;
+  box-shadow: #f8f9fa 0px 0px 8px;
+  padding-left: 2rem;
+  padding-right: 2rem;
+
+  @media only screen and (min-width: 900px) {
+    padding-left: 10rem;
+    padding-right: 10rem;
+    //900px 이상이면 적용
+  }
 `;

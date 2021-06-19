@@ -9,7 +9,7 @@ import { adminTestAction, test2Action, testAction } from '../reducers/test';
 import AuthModal from './auth/ModalContainer';
 import HomeHeader from './HomeHeader';
 import './MyHeader.scss';
-import { Global, HeaderTopDiv, LoginBox, StyledLoginSuccessDiv, StyledUserImg } from './style';
+import { Global, HeaderTopDiv, LoginBox, StyledAppHeader, StyledLoginSuccessDiv, StyledUserImg } from './style';
 
 const AppHeader = memo((props) => {
   //랜더링 되는 부분
@@ -29,10 +29,10 @@ const AppHeader = memo((props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('joinDone: ', joinDone, 'joinError: ', joinError, 'loginDone', loginDone, 'loginError', loginError);
+    console.log(loginDone, 'loginError', loginError);
 
     if (loginDone) {
-      console.log('why 실행안됨?');
+      console.log('why 계속 실행??');
       alert('로그인 성공');
       setLoginVisible(false);
       //console.log('쿠키는?', document.cookie);
@@ -42,7 +42,7 @@ const AppHeader = memo((props) => {
       alert('로그인 실패');
       return;
     }
-  }, [dispatch, loginDone, joinDone, joinError, loginError]);
+  }, [loginDone, loginError]);
 
   const [loginVisible, setLoginVisible] = useState(false); //로그인 모달창이 보일지 안 보일지
 
@@ -86,13 +86,13 @@ const AppHeader = memo((props) => {
         <div onClick={adminTeset}>admin Test</div>
       </Menu.Item>
       <Menu.Item>
-        <div onClick={generalTeset}>general Test</div>
+        <Link to="/setting">설정</Link>
       </Menu.Item>
     </Menu>
   );
 
   return (
-    <header className="HomeHeader">
+    <StyledAppHeader>
       <Global />
       <HeaderTopDiv>
         <Link to="/">
@@ -128,7 +128,7 @@ const AppHeader = memo((props) => {
       </HeaderTopDiv>
 
       {isHome && <HomeHeader />}
-    </header>
+    </StyledAppHeader>
   );
 });
 

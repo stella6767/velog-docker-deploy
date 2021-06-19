@@ -13,8 +13,8 @@ export const createRequestActionTypes = (type) => {
 };
 
 export function createRequestSaga(type, request) {
-  const SUCCESS = `${type.split('_')[0]}_SUCCESS`; //ESLINT가 에러 표시내는 거는 무시
-  const FAILURE = `${type.split('_')[0]}_FAILURE`;
+  const SUCCESS = type.replace(/REQUEST/g, 'SUCCESS');
+  const FAILURE = type.replace(/REQUEST/g, 'FAILURE');
 
   return function* (action) {
     yield put(startLoading(type)); //로딩 시작
@@ -64,8 +64,9 @@ export function* oauthLogin(action) {
 }
 
 export default function createFakeRequestSaga(type, request) {
-  const SUCCESS = `${type.split('_')[0]}_SUCCESS`; //ESLINT가 에러 표시내는 거는 무시
-  const FAILURE = `${type.split('_')[0]}_FAILURE`;
+  const SUCCESS = type.replace(/REQUEST/g, 'SUCCESS');
+  const FAILURE = type.replace(/REQUEST/g, 'FAILURE');
+  //console.log('요게 더 좋은 듯', aa);
 
   return function* (action) {
     yield put(startLoading(type)); //로딩 시작
@@ -74,11 +75,13 @@ export default function createFakeRequestSaga(type, request) {
     try {
       //const response = yield call(request, action.payload); //api 호출
       console.log('api 호출 성공: ', type, action);
-      yield delay(500);
+      yield delay(100);
+
+      console.log('fake Data:', generateDummyPost(action.payload));
 
       yield put({
         type: SUCCESS,
-        payload: generateDummyPost(action.data),
+        payload: generateDummyPost(action.payload),
       });
     } catch (e) {
       const errorData = e.response.data;

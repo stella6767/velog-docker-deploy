@@ -3,11 +3,12 @@ import { createAction, handleActions } from 'redux-actions';
 import * as authAPI from '../lib/api/auth';
 import produce from 'immer';
 
-import { createRequestActionTypes, createRequestSaga, oauthLogin } from '../lib/createRequestSaga';
+import createFakeRequestSaga, { createRequestActionTypes, createRequestSaga, oauthLogin } from '../lib/createRequestSaga';
 
 const [JOIN_REQUEST, JOIN_SUCCESS, JOIN_FAILURE] = createRequestActionTypes('JOIN');
 const [LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE] = createRequestActionTypes('LOGIN');
 const [LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAILURE] = createRequestActionTypes('LOGOUT');
+const [LOAD_USER_REQUEST, LOAD_USER_SUCCESS, LOAD_USER_FAILURE] = createRequestActionTypes('LOAD_USER');
 
 export const OAUTH_REQUEST = 'OAUTH_REQUEST';
 export const oauthAction = (data) => ({
@@ -19,11 +20,13 @@ export const oauthAction = (data) => ({
 export const joinAction = createAction(JOIN_REQUEST, (data) => data);
 export const loginAction = createAction(LOGIN_REQUEST, (data) => data);
 export const logoutAction = createAction(LOGOUT_REQUEST, (data) => data);
+export const loadUserAction = createAction(LOAD_USER_REQUEST, (data) => data);
 
 // //사가 생성
 const joinSaga = createRequestSaga(JOIN_REQUEST, authAPI.join);
 const loginSaga = createRequestSaga(LOGIN_REQUEST, authAPI.login);
 const logoutSaga = createRequestSaga(LOGOUT_REQUEST, authAPI.logout); //토큰재발급 요청
+const loadUserSaga = createFakeRequestSaga(LOAD_USER_REQUEST, ''); //SSR 적용 안할 시 일단 가짜로..
 
 export function* authSaga() {
   //이벤트 리스너!
@@ -31,6 +34,7 @@ export function* authSaga() {
   yield takeLatest(LOGIN_REQUEST, loginSaga);
   yield takeLatest(LOGOUT_REQUEST, logoutSaga);
   yield takeLatest(OAUTH_REQUEST, oauthLogin);
+  yield takeLatest(LOAD_USER_REQUEST, loadUserSaga);
 }
 
 //초기 상태
@@ -102,10 +106,30 @@ const auth = handleActions(
       logoutError: null,
       loginDone: false,
     }),
-
     [LOGOUT_FAILURE]: (state, { payload: error }) => ({
       ...state,
       logoutError: error,
+    }),
+
+    [LOAD_USER_REQUEST]: (state, { payload: data }) =>
+      produce(state, (draft) => {
+        // draft.cmRespDto = data;
+        // draft.logoutDone = false;
+        // draft.logoutError = null;
+        draft.loginDone = false;
+      }),
+    [LOAD_USER_SUCCESS]: (state, { payload: data }) => ({
+      ...state,
+      // cmRespDto: data,
+      // logoutDone: true,
+      // logoutError: null,
+      // loginDone: false,
+      loginDone: true,
+    }),
+    [LOAD_USER_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      // logoutError: error,
+      loginDone: false,
     }),
   },
   initialState,

@@ -1,6 +1,6 @@
 import produce from 'immer';
 import { createAction, handleActions } from 'redux-actions';
-import { takeLatest } from 'redux-saga/effects';
+import { takeLatest, throttle } from 'redux-saga/effects';
 import createFakeRequestSaga, { createRequestActionTypes } from '../lib/createRequestSaga';
 
 const [LOAD_POSTS_REQUEST, LOAD_POSTS_SUCCESS, LOAD_POSTS_FAILURE] = createRequestActionTypes('LOAD_POSTS');
@@ -11,13 +11,14 @@ const loadPostSaga = createFakeRequestSaga(LOAD_POSTS_REQUEST, '');
 
 export function* postSaga() {
   //이벤트 리스너!
-  yield takeLatest(LOAD_POSTS_REQUEST, loadPostSaga);
+  yield throttle(3000, LOAD_POSTS_REQUEST, loadPostSaga);
 }
 
 const initialState = {
   loadPostsDone: false,
   loadPostsError: null,
 
+  hasMorePosts: true,
   cmRespDto: {},
   error: {},
   mainPosts: [],
@@ -31,14 +32,14 @@ const post = handleActions(
         draft.loadPostsDone = false;
         draft.loadPostsError = null;
       }),
-    // 회원가입 성공
     [LOAD_POSTS_SUCCESS]: (state, { payload: data }) => ({
       ...state,
       loadPostsError: null,
       loadPostsDone: true,
+      mainPosts: state.mainPosts.concat(data),
       cmRespDto: data,
+      hasMorePosts: state.mainPosts.length < 100,
     }),
-    // 회원가입 실패
     [LOAD_POSTS_FAILURE]: (state, { payload: error }) => ({
       ...state,
       loadPostsError: error,

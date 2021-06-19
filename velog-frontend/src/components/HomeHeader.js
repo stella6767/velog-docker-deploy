@@ -1,28 +1,16 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { test2Action } from '../reducers/test';
-import {
-  HeaderBottomDiv,
-  HeaderDateDiv,
-  HeaderLeftDiv,
-  HeaderSubDiv,
-} from './style';
+import { HeaderBottomDiv, HeaderDateDiv, HeaderLeftDiv, HeaderSubDiv } from './style';
+import { MoreOutlined } from '@ant-design/icons';
 
 const HomeHeader = () => {
-  const dispatch = useDispatch();
-
-  const test = () => {
-    dispatch(test2Action());
-  };
-
   return (
     <>
       <HeaderBottomDiv>
         <HeaderLeftDiv>
           <HeaderSubDiv>
             <Link to="" className="HeaderSubA">
-              <img src="/images/trending.svg" onClick={test} />
+              <img src="/images/trending.svg" />
               트렌딩
             </Link>
             <Link to="" className="HeaderSubA">
@@ -37,7 +25,7 @@ const HomeHeader = () => {
           </HeaderSubDiv>
         </HeaderLeftDiv>
         <div>
-          <img src="/images/more.svg" />
+          <MoreOutlined style={{ fontSize: '1.5rem' }} />
         </div>
       </HeaderBottomDiv>
     </>

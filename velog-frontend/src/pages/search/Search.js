@@ -2,8 +2,8 @@ import { SearchOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import SearchLayout from '../components/SearchLayout';
-import '../pages/style.css';
+import SearchLayout from '../../components/SearchLayout';
+import './style.css';
 
 const StyledSearchDiv = styled.div`
   display: flex;

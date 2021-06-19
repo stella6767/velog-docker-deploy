@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { useState } from 'react';
-import TextEditor from '../components/TextEditor';
+import TextEditor from '../../components/TextEditor';
 import styled from 'styled-components';
 
 const StyledPostDiv = styled.div`
