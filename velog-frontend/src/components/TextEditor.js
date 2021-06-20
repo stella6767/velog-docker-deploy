@@ -19,6 +19,10 @@ class TextEditor extends Component {
     ],
   };
 
+  handlers = {
+    image: this.imageHandler,
+  };
+
   formats = [
     //'font',
     'header',

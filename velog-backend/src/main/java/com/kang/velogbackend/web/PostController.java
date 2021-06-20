@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RequiredArgsConstructor
 @RestController
 public class PostController {
@@ -23,7 +25,7 @@ public class PostController {
 
     @PostMapping("/post")
     public CMRespDto<?> image(@RequestBody PostSaveReqDto postSaveReqDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        log.info("저장하기 요청 옴" + postSaveReqDto);
+        log.info("저장하기 요청 옴" + postSaveReqDto.getTitle());
 
         if(principalDetails == null) {
             log.info("세션에 없네??");
@@ -31,8 +33,11 @@ public class PostController {
         }
 
 
-
-        postService.저장하기(postSaveReqDto, principalDetails);
+        try {
+            postService.저장하기(postSaveReqDto, principalDetails);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //return "redirect:/user/"+principalDetails.getUser().getId();
         return null;

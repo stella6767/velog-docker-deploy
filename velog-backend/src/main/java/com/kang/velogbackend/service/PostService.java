@@ -3,16 +3,19 @@ package com.kang.velogbackend.service;
 import com.kang.velogbackend.congfig.auth.PrincipalDetails;
 import com.kang.velogbackend.domain.post.Post;
 import com.kang.velogbackend.domain.post.PostRepository;
-import com.kang.velogbackend.domain.tag.Tag;
 import com.kang.velogbackend.domain.tag.TagRepository;
-import com.kang.velogbackend.utils.TagUtils;
 import com.kang.velogbackend.web.dto.post.PostSaveReqDto;
 import lombok.RequiredArgsConstructor;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.misc.BASE64Decoder;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -25,20 +28,29 @@ public class PostService {
     private final TagRepository tagRepository;
 
     @Transactional//서비스 함수가 종료될 때 commit할지 rollback할지 트랜잭션 관리하겠다.
-    public void 저장하기(PostSaveReqDto postSaveReqDto, PrincipalDetails principalDetails) {
+    public void 저장하기(PostSaveReqDto postSaveReqDto, PrincipalDetails principalDetails) throws IOException {
 
-        log.info("내용" + postSaveReqDto.getContent());
 
-        if(postSaveReqDto.getContent().contains("<img src")){
-            log.info("파싱할 차례");
+        String imgSrc = null;
+
+        //썸네일 추출
+        Document doc = Jsoup.parseBodyFragment(postSaveReqDto.getContent());
+        Elements imgs = doc.getElementsByTag("img");
+        if(imgs.size() > 0) {
+            imgSrc = imgs.get(0).attr("src"); //첫번째 이미지 썸네일
+            //log.info("thunnail 추출: " + src);
+
+            BASE64Decoder base64Decoder = new BASE64Decoder();
+            byte[] decodeSrc = base64Decoder.decodeBuffer(imgSrc);
+            log.info("decode" + decodeSrc);
 
         }
-
-        Post post = postSaveReqDto.toEntity("", principalDetails.getUser());
-        Post postEntity = postRepository.save(post);
-
-        List<Tag> tags = TagUtils.parsingToTagObject(postSaveReqDto.getTags(), postEntity);
-        tagRepository.saveAll(tags);
+//
+//        Post post = postSaveReqDto.toEntity(imgSrc, principalDetails.getUser());
+//        Post postEntity = postRepository.save(post);
+//
+//        List<Tag> tags = TagUtils.parsingToTagObject(postSaveReqDto.getTags(), postEntity);
+//        tagRepository.saveAll(tags);
     }
 
     @Transactional(readOnly = true) //JPA 변경감지라는 내부 기능 활성화 X, update시의 정합성을 유지해줌. inset의 유령데이터현상(팬텀현상) 못막음
