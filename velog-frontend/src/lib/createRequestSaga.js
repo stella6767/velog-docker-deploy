@@ -1,9 +1,8 @@
-import { call, delay, put, takeLatest } from 'redux-saga/effects';
-import { OAUTH_REQUEST } from '../reducers/auth';
-import { finishLoading, startLoading } from '../reducers/loading';
-import * as authAPI from '../lib/api/auth';
-import shortId from 'shortid';
 import faker from 'faker';
+import { call, delay, put } from 'redux-saga/effects';
+import shortId from 'shortid';
+import * as authAPI from '../lib/api/auth';
+import { finishLoading, startLoading } from '../reducers/loading';
 
 export const createRequestActionTypes = (type) => {
   const REQUEST = `${type}_REQUEST`;

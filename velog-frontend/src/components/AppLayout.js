@@ -1,10 +1,9 @@
-import { Card, Col, Layout, Row } from 'antd';
+import { Col, Layout, Row } from 'antd';
 import 'antd/dist/antd.css';
 import { Global } from '../style';
 import AppHeader from './AppHeader';
 
 const { Content } = Layout;
-const { Meta } = Card;
 
 const AppLayout = (props) => {
   const { isHome } = props;

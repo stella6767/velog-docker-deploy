@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import logo_img from '../logo.svg';
 import { logoutAction } from '../reducers/auth';
-import { adminTestAction, test2Action, testAction } from '../reducers/test';
+import { adminTestAction, testAction } from '../reducers/test';
 import AuthModal from './auth/ModalContainer';
 import HomeHeader from './HomeHeader';
 import './MyHeader.scss';
@@ -16,14 +16,14 @@ const AppHeader = memo((props) => {
 
   const { isHome } = props;
 
-  const { loginDone, loginError, data, testError, loading, joinDone, joinError } = useSelector(({ auth, test, loading }) => ({
+  const { loginDone, loginError, joinDone, joinError } = useSelector(({ auth, test, loading }) => ({
     loginDone: auth.loginDone,
     loginError: auth.loginError,
-    testError: test.error,
-    data: auth.cmRespDto,
+    //testError: test.error,
+    //data: auth.cmRespDto,
     joinDone: auth.joinDone,
     joinError: auth.joinError,
-    loading: loading['LOGOUT_REQUEST'], //그때 그때 순간순간적으로 키 값이 바뀌는데 맞춰서 loading 값을 가져오면 된다.
+    //loading: loading['LOGOUT_REQUEST'], //그때 그때 순간순간적으로 키 값이 바뀌는데 맞춰서 loading 값을 가져오면 된다.
   }));
 
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ const AppHeader = memo((props) => {
 
     if (loginDone) {
       console.log('why 계속 실행??');
-      alert('로그인 성공');
+      //alert('로그인 성공');
       setLoginVisible(false);
       //console.log('쿠키는?', document.cookie);
     }
@@ -58,9 +58,9 @@ const AppHeader = memo((props) => {
     dispatch(adminTestAction());
   };
 
-  const generalTeset = () => {
-    dispatch(test2Action());
-  };
+  // const generalTeset = () => {
+  //   dispatch(test2Action());
+  // };
 
   const logout = () => {
     dispatch(logoutAction());

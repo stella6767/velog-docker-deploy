@@ -10,24 +10,27 @@ const initialState = {
 };
 
 const [TEST_REQUST, TEST_SUCCESS, TEST_FAILURE] = createRequestActionTypes('TEST');
-const [ADMIN_REQUST, ADMIN_SUCCESS, ADMIN_FAILURE] = createRequestActionTypes('ADMIN');
-const [TEST2_REQUST, TEST2_SUCCESS, TEST2_FAILURE] = createRequestActionTypes('TEST2');
+export const ADMIN_REQUEST = 'ADMIN_REQUEST';
+export const TEST2_REQUEST = 'TEST2_REQUEST';
+
+// const [ADMIN_REQUST, ADMIN_SUCCESS, ADMIN_FAILURE] = createRequestActionTypes('ADMIN');
+//const [TEST2_REQUST, TEST2_SUCCESS, TEST2_FAILURE] = createRequestActionTypes('TEST2');
 
 //액션 생성 함수
 export const testAction = createAction(TEST_REQUST);
-export const test2Action = createAction(TEST2_REQUST);
-export const adminTestAction = createAction(ADMIN_REQUST);
+export const test2Action = createAction(TEST2_REQUEST);
+export const adminTestAction = createAction(ADMIN_REQUEST);
 
 //사가 생성
 const getTestSaga = createRequestSaga(TEST_REQUST, testAPI.userTest);
-const getTest2Saga = createRequestSaga(TEST2_REQUST, testAPI.generalTest);
-const getAdminSaga = createRequestSaga(ADMIN_REQUST, testAPI.adminTest);
+const getTest2Saga = createRequestSaga(TEST2_REQUEST, testAPI.generalTest);
+const getAdminSaga = createRequestSaga(ADMIN_REQUEST, testAPI.adminTest);
 
 export function* testSaga() {
   //이벤트 리스너!
   yield takeLatest(TEST_REQUST, getTestSaga);
-  yield takeLatest(ADMIN_REQUST, getAdminSaga);
-  yield takeLatest(TEST2_REQUST, getTest2Saga);
+  yield takeLatest(ADMIN_REQUEST, getAdminSaga);
+  yield takeLatest(TEST2_REQUEST, getTest2Saga);
 }
 
 //리듀서

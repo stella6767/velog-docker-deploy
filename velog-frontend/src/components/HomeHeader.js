@@ -10,17 +10,17 @@ const HomeHeader = () => {
         <HeaderLeftDiv>
           <HeaderSubDiv>
             <Link to="" className="HeaderSubA">
-              <img src="/images/trending.svg" />
+              <img src="/images/trending.svg" alt="" />
               트렌딩
             </Link>
             <Link to="" className="HeaderSubA">
-              <img src="/images/recent.svg" /> 최신
+              <img src="/images/recent.svg" alt="" /> 최신
             </Link>
           </HeaderSubDiv>
           <HeaderSubDiv>
             <HeaderDateDiv>
               이번 주
-              <img src="/images/down.svg" />
+              <img src="/images/down.svg" alt="" />
             </HeaderDateDiv>
           </HeaderSubDiv>
         </HeaderLeftDiv>

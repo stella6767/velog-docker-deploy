@@ -1,16 +1,14 @@
-import { Card, Col } from 'antd';
+import { Card } from 'antd';
 import Meta from 'antd/lib/card/Meta';
-import React, { useState } from 'react';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import AppLayout from '../../components/AppLayout';
 import { loadUserAction } from '../../reducers/auth';
-import { loadPostAction } from '../../reducers/post';
+import { loadPostsAction } from '../../reducers/post';
 import { StyledMainDiv } from './style';
 
 const Home = () => {
-  const [isHome, setIshome] = useState(true);
+  const [isHome] = useState(true);
 
   const { mainPosts, hasMorePosts, loadPostLoading, loadPostsDone } = useSelector(({ post, loading }) => ({
     mainPosts: post.mainPosts,
@@ -23,10 +21,8 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(loadUserAction());
-
     console.log('더미데이터 최초 한번 받아옴');
-
-    dispatch(loadPostAction(10));
+    dispatch(loadPostsAction(10));
   }, []);
 
   useEffect(() => {
@@ -34,7 +30,7 @@ const Home = () => {
       if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
         if (hasMorePosts && !loadPostLoading && loadPostsDone) {
           //console.log('요청함', loadPostLoading);
-          dispatch(loadPostAction(10));
+          dispatch(loadPostsAction(10));
         }
       }
     }

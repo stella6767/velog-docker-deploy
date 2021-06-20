@@ -45,7 +45,7 @@ const AuthModal = memo((props) => {
       console.log(joinDone);
       setJoinVisible(false);
     }
-  }, [joinDone]);
+  }, [joinDone, joinError]);
 
   const handleCancel = () => {
     console.log('Clicked cancel button');

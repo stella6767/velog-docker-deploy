@@ -1,8 +1,15 @@
 package com.kang.velogbackend.service;
 
+import com.kang.velogbackend.congfig.auth.PrincipalDetails;
 import com.kang.velogbackend.domain.post.Post;
 import com.kang.velogbackend.domain.post.PostRepository;
+import com.kang.velogbackend.domain.tag.Tag;
+import com.kang.velogbackend.domain.tag.TagRepository;
+import com.kang.velogbackend.utils.TagUtils;
+import com.kang.velogbackend.web.dto.post.PostSaveReqDto;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,11 +19,26 @@ import java.util.List;
 @Service
 public class PostService {
 
+    private static final Logger log = LoggerFactory.getLogger(PostService.class);
+
     private final PostRepository postRepository;
-    
+    private final TagRepository tagRepository;
+
     @Transactional//서비스 함수가 종료될 때 commit할지 rollback할지 트랜잭션 관리하겠다.
-    public Post 저장하기(Post Post) {
-        return postRepository.save(Post);
+    public void 저장하기(PostSaveReqDto postSaveReqDto, PrincipalDetails principalDetails) {
+
+        log.info("내용" + postSaveReqDto.getContent());
+
+        if(postSaveReqDto.getContent().contains("<img src")){
+            log.info("파싱할 차례");
+
+        }
+
+        Post post = postSaveReqDto.toEntity("", principalDetails.getUser());
+        Post postEntity = postRepository.save(post);
+
+        List<Tag> tags = TagUtils.parsingToTagObject(postSaveReqDto.getTags(), postEntity);
+        tagRepository.saveAll(tags);
     }
 
     @Transactional(readOnly = true) //JPA 변경감지라는 내부 기능 활성화 X, update시의 정합성을 유지해줌. inset의 유령데이터현상(팬텀현상) 못막음
