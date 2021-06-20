@@ -42,7 +42,7 @@ public class PostService {
 
             BASE64Decoder base64Decoder = new BASE64Decoder();
             byte[] decodeSrc = base64Decoder.decodeBuffer(imgSrc);
-            log.info("decode" + decodeSrc);
+            log.info("decode" + decodeSrc.toString());
 
         }
 //
