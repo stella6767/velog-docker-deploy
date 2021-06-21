@@ -29,41 +29,6 @@ const AppHeader = memo((props) => {
 
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   console.log(loginDone, 'loginError', loginError);
-  //   console.log('header data ', data);
-
-  //   if (loginDone) {
-  //     alert('로그인 성공'); //매번 랜더링 될 때마다 실행되네.. home애서 실행하도록 해야겠다...
-  //     setLoginVisible(false);
-  //     //console.log('쿠키는?', document.cookie);
-  //   }
-
-  //   if (loginError) {
-  //     alert('로그인 실패');
-  //     return;
-  //   }
-  // }, [loginDone, loginError]);
-
-  //오직 state만 변경될 때만 실행되게끔.
-  // const mounted = useRef(false);
-  // useEffect(() => {
-  //   if (!mounted.current) {
-  //     mounted.current = true;
-  //   } else {
-  //     if (loginDone) {
-  //       alert('로그인 성공'); //매번 랜더링 될 때마다 실행되네.. home애서 실행하도록 해야겠다...
-  //       setLoginVisible(false);
-  //       //console.log('쿠키는?', document.cookie);
-  //     }
-
-  //     if (loginError) {
-  //       alert('로그인 실패');
-  //       return;
-  //     }
-  //   }
-  // }, [loginDone, loginError]); //componentDidMount에서는 실행 안함
-
   useUpdateEffect(() => {
     console.log(loginDone, 'loginError', loginError);
 

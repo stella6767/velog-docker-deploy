@@ -7,34 +7,34 @@ import * as postAPI from '../lib/api/post';
 const TextEditor = (props) => {
   const { value, onChange } = props;
 
-  function imageHandler() {
-    // input file tag 생성
-    console.log('이미지 업로드 실행');
+  // function imageHandler() {
+  //   // input file tag 생성
+  //   console.log('이미지 업로드 실행');
 
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', '.png,.jpg,.jpeg');
-    input.click();
-    // input change
-    input.onchange = (e) => {
-      const files = e.target.files;
-      console.log('files', files);
+  //   const input = document.createElement('input');
+  //   input.setAttribute('type', 'file');
+  //   input.setAttribute('accept', '.png,.jpg,.jpeg');
+  //   input.click();
+  //   // input change
+  //   input.onchange = (e) => {
+  //     const files = e.target.files;
+  //     console.log('files', files);
 
-      const formData = new FormData();
-      formData.append('files', files[0]); //키와 값 쌍으로 담아줌.
+  //     const formData = new FormData();
+  //     formData.append('files', files[0]); //키와 값 쌍으로 담아줌.
 
-      console.log('formData', formData);
+  //     console.log('formData', formData);
 
-      // file 등록
-      const tempFile = postAPI.imgUpload(formData);
-      // tempFile.then((response) => {
-      //   // 커서위치 및 fileSrno 얻기
-      //   const fileSrno = response.fileSrno;
-      //   const range = this.quill.getSelection();
-      //   this.quill.insertEmbed(range.index, 'image', 'http://localhost:8002/master/api/v1/upload/img/' + fileSrno);
-      // });
-    };
-  }
+  //     // file 등록
+  //     const tempFile = postAPI.imgUpload(formData);
+  //     // tempFile.then((response) => {
+  //     //   // 커서위치 및 fileSrno 얻기
+  //     //   const fileSrno = response.fileSrno;
+  //     //   const range = this.quill.getSelection();
+  //     //   this.quill.insertEmbed(range.index, 'image', 'http://localhost:8002/master/api/v1/upload/img/' + fileSrno);
+  //     // });
+  //   };
+  // }
 
   const modules = useMemo(
     () => ({
@@ -47,9 +47,9 @@ const TextEditor = (props) => {
           [{ align: [] }, { color: [] }, { background: [] }], // dropdown with defaults from theme
           ['clean'],
         ],
-        handlers: {
-          image: imageHandler,
-        },
+        // handlers: {
+        //   image: imageHandler,
+        // },
       },
     }),
     [],
@@ -74,9 +74,9 @@ const TextEditor = (props) => {
   ];
 
   return (
-    <div style={{ height: '650px' }}>
+    <div style={{ height: '500px' }}>
       <ReactQuill
-        style={{ height: '600px' }}
+        style={{ height: '450px' }}
         theme="snow"
         modules={modules}
         formats={formats}

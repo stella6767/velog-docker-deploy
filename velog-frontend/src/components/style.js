@@ -1,4 +1,5 @@
 import styled, { createGlobalStyle } from 'styled-components';
+import { Form } from 'antd';
 
 export const Global = createGlobalStyle`
   .loginButtonDiv{
@@ -36,6 +37,8 @@ export const Global = createGlobalStyle`
         color:black;
     } */
   }
+
+
 
   }
 
@@ -120,4 +123,8 @@ export const StyledAppHeader = styled.header`
     padding-right: 10rem;
     //900px 이상이면 적용
   }
+`;
+
+export const StyledAntForm = styled(Form)`
+  flex-wrap: nowrap;
 `;

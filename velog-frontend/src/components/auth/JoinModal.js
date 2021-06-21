@@ -1,6 +1,7 @@
 import { Button, Divider, Form, Input, Modal } from 'antd';
 import React, { memo } from 'react';
 import { UserOutlined } from '@ant-design/icons';
+import { StyledAntForm } from '../style';
 
 const JoinModal = memo((props) => {
   const { joinVisible, joinForm, handleCancel, toggleModal, onJoinFinish, loading } = props;
@@ -12,6 +13,7 @@ const JoinModal = memo((props) => {
         title="회원가입"
         visible={joinVisible}
         onCancel={handleCancel}
+        width={550}
         footer={[
           <div
             style={{
@@ -28,7 +30,7 @@ const JoinModal = memo((props) => {
           </div>,
         ]}
       >
-        <Form form={joinForm} name="horizontal_login" layout="inline" onFinish={onJoinFinish}>
+        <StyledAntForm form={joinForm} name="horizontal_login" layout="inline" onFinish={onJoinFinish}>
           <Form.Item
             name="username"
             rules={[
@@ -63,7 +65,7 @@ const JoinModal = memo((props) => {
               </Button>
             )}
           </Form.Item>
-        </Form>
+        </StyledAntForm>
       </Modal>
     </div>
   );

@@ -3,20 +3,17 @@ import Meta from 'antd/lib/card/Meta';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AppLayout from '../../components/AppLayout';
-import { loadUserAction } from '../../reducers/auth';
 import { loadPostsAction } from '../../reducers/post';
 import { StyledMainDiv } from './style';
 
 const Home = () => {
   const [isHome] = useState(true);
 
-  const { mainPosts, hasMorePosts, loadPostLoading, loadPostsDone, authData } = useSelector(({ post, loading, auth }) => ({
+  const { mainPosts, hasMorePosts, loadPostLoading, loadPostsDone } = useSelector(({ post, loading, auth }) => ({
     mainPosts: post.mainPosts,
     hasMorePosts: post.hasMorePosts,
     loadPostLoading: loading['LOAD_POSTS_REQUEST'],
     loadPostsDone: post.loadPostsDone,
-
-    authData: auth.cmRespDto,
   }));
 
   const dispatch = useDispatch();
@@ -42,16 +39,9 @@ const Home = () => {
     };
   }, [mainPosts, hasMorePosts, loadPostLoading, loadPostsDone]);
 
-  const showMainposts = () => {
-    console.log(mainPosts.length);
-    console.log('hasmorePost', hasMorePosts);
-    console.log('loading', loadPostLoading);
-  };
-
   return (
     <>
       <AppLayout isHome={isHome}>
-        <div onClick={showMainposts}>버튼</div>
         <StyledMainDiv>
           {mainPosts.map((c) => (
             <Card hoverable cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" key={c.id} />}>
