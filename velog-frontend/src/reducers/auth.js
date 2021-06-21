@@ -48,14 +48,15 @@ const initialState = {
   logoutDone: false,
   logoutError: null,
 
-  cmRespDto: {},
-  error: {},
-  principal: {},
+  cmRespDto: null,
+  error: null,
+  principal: null,
 };
 
 //리듀서
 const auth = handleActions(
   {
+    //회원가입 시도
     [JOIN_REQUEST]: (state, { payload: data }) =>
       produce(state, (draft) => {
         draft.cmRespDto = data;
@@ -74,12 +75,14 @@ const auth = handleActions(
       ...state,
       joinError: error,
     }),
+    //로그인 시도
     [LOGIN_REQUEST]: (state, { payload: data }) =>
       produce(state, (draft) => {
         draft.cmRespDto = data;
         draft.loginDone = false;
         draft.loginError = null;
       }),
+    //로그인 성공
     [LOGIN_SUCCESS]: (state, { payload: data }) =>
       produce(state, (draft) => {
         draft.cmRespDto = data;
@@ -87,18 +90,19 @@ const auth = handleActions(
         draft.loginError = null;
         draft.principal = data.data;
       }),
-
+    //로그인 실패
     [LOGIN_FAILURE]: (state, { payload: error }) => ({
       ...state,
       loginError: error,
     }),
-
+    //로그아웃 시도
     [LOGOUT_REQUEST]: (state, { payload: data }) =>
       produce(state, (draft) => {
         draft.cmRespDto = data;
         draft.logoutDone = false;
         draft.logoutError = null;
       }),
+    //로그아웃 성공
     [LOGOUT_SUCCESS]: (state, { payload: data }) => ({
       ...state,
       cmRespDto: data,
@@ -106,6 +110,7 @@ const auth = handleActions(
       logoutError: null,
       loginDone: false,
     }),
+    //로그아웃 실패
     [LOGOUT_FAILURE]: (state, { payload: error }) => ({
       ...state,
       logoutError: error,
@@ -113,17 +118,10 @@ const auth = handleActions(
 
     [LOAD_USER_REQUEST]: (state, { payload: data }) =>
       produce(state, (draft) => {
-        // draft.cmRespDto = data;
-        // draft.logoutDone = false;
-        // draft.logoutError = null;
         draft.loginDone = false;
       }),
     [LOAD_USER_SUCCESS]: (state, { payload: data }) => ({
       ...state,
-      // cmRespDto: data,
-      // logoutDone: true,
-      // logoutError: null,
-      // loginDone: false,
       loginDone: true,
     }),
     [LOAD_USER_FAILURE]: (state, { payload: error }) => ({

@@ -10,17 +10,19 @@ import { StyledMainDiv } from './style';
 const Home = () => {
   const [isHome] = useState(true);
 
-  const { mainPosts, hasMorePosts, loadPostLoading, loadPostsDone } = useSelector(({ post, loading }) => ({
+  const { mainPosts, hasMorePosts, loadPostLoading, loadPostsDone, authData } = useSelector(({ post, loading, auth }) => ({
     mainPosts: post.mainPosts,
     hasMorePosts: post.hasMorePosts,
     loadPostLoading: loading['LOAD_POSTS_REQUEST'],
     loadPostsDone: post.loadPostsDone,
+
+    authData: auth.cmRespDto,
   }));
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadUserAction());
+    //dispatch(loadUserAction());
     console.log('더미데이터 최초 한번 받아옴');
     dispatch(loadPostsAction(10));
   }, []);

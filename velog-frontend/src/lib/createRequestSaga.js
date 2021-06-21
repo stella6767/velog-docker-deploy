@@ -73,10 +73,10 @@ export default function createFakeRequestSaga(type, request) {
 
     try {
       //const response = yield call(request, action.payload); //api 호출
-      console.log('api 호출 성공: ', type, action);
+      //console.log('api 호출 성공: ', type, action);
       yield delay(100);
 
-      console.log('fake Data:', generateDummyPost(action.payload));
+      //console.log('fake Data:', generateDummyPost(action.payload));
 
       yield put({
         type: SUCCESS,

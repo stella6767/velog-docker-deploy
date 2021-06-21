@@ -1,6 +1,7 @@
 import { CaretDownOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Menu } from 'antd';
 import React, { memo, useEffect, useState } from 'react';
+import { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import logo_img from '../logo.svg';
@@ -10,17 +11,17 @@ import AuthModal from './auth/ModalContainer';
 import HomeHeader from './HomeHeader';
 import './MyHeader.scss';
 import { Global, HeaderTopDiv, LoginBox, StyledAppHeader, StyledLoginSuccessDiv, StyledUserImg } from './style';
+import useUpdateEffect from '../lib/hooks/useUpdateEffect';
 
 const AppHeader = memo((props) => {
   //랜더링 되는 부분
 
   const { isHome } = props;
 
-  const { loginDone, loginError, joinDone, joinError } = useSelector(({ auth, test, loading }) => ({
+  const { loginDone, loginError, joinDone, joinError, data } = useSelector(({ auth, test, loading }) => ({
     loginDone: auth.loginDone,
     loginError: auth.loginError,
-    //testError: test.error,
-    //data: auth.cmRespDto,
+    data: auth.cmRespDto,
     joinDone: auth.joinDone,
     joinError: auth.joinError,
     //loading: loading['LOGOUT_REQUEST'], //그때 그때 순간순간적으로 키 값이 바뀌는데 맞춰서 loading 값을 가져오면 된다.
@@ -28,12 +29,46 @@ const AppHeader = memo((props) => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   console.log(loginDone, 'loginError', loginError);
+  //   console.log('header data ', data);
+
+  //   if (loginDone) {
+  //     alert('로그인 성공'); //매번 랜더링 될 때마다 실행되네.. home애서 실행하도록 해야겠다...
+  //     setLoginVisible(false);
+  //     //console.log('쿠키는?', document.cookie);
+  //   }
+
+  //   if (loginError) {
+  //     alert('로그인 실패');
+  //     return;
+  //   }
+  // }, [loginDone, loginError]);
+
+  //오직 state만 변경될 때만 실행되게끔.
+  // const mounted = useRef(false);
+  // useEffect(() => {
+  //   if (!mounted.current) {
+  //     mounted.current = true;
+  //   } else {
+  //     if (loginDone) {
+  //       alert('로그인 성공'); //매번 랜더링 될 때마다 실행되네.. home애서 실행하도록 해야겠다...
+  //       setLoginVisible(false);
+  //       //console.log('쿠키는?', document.cookie);
+  //     }
+
+  //     if (loginError) {
+  //       alert('로그인 실패');
+  //       return;
+  //     }
+  //   }
+  // }, [loginDone, loginError]); //componentDidMount에서는 실행 안함
+
+  useUpdateEffect(() => {
     console.log(loginDone, 'loginError', loginError);
 
     if (loginDone) {
-      console.log('why 계속 실행??');
-      //alert('로그인 성공');
+      alert('로그인 성공'); //매번 랜더링 될 때마다 실행되네.. home애서 실행하도록 해야겠다...
       setLoginVisible(false);
       //console.log('쿠키는?', document.cookie);
     }
@@ -108,7 +143,7 @@ const AppHeader = memo((props) => {
             <div style={{ marginLeft: '1rem' }} className="loginButtonDiv">
               <Button onClick={showLoginModal}>로그인</Button>
               {/* 모달 컨테이너 */}
-              <AuthModal loginVisible={loginVisible} setLoginVisible={setLoginVisible} joinDone={joinDone} joinError={joinError} />
+              <AuthModal data={data} loginVisible={loginVisible} setLoginVisible={setLoginVisible} joinDone={joinDone} joinError={joinError} />
             </div>
           ) : (
             <StyledLoginSuccessDiv>

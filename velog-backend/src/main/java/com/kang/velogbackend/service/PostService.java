@@ -3,7 +3,9 @@ package com.kang.velogbackend.service;
 import com.kang.velogbackend.congfig.auth.PrincipalDetails;
 import com.kang.velogbackend.domain.post.Post;
 import com.kang.velogbackend.domain.post.PostRepository;
+import com.kang.velogbackend.domain.tag.Tag;
 import com.kang.velogbackend.domain.tag.TagRepository;
+import com.kang.velogbackend.utils.TagUtils;
 import com.kang.velogbackend.web.dto.post.PostSaveReqDto;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
@@ -13,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.misc.BASE64Decoder;
 
 import java.io.IOException;
 import java.util.List;
@@ -40,17 +41,17 @@ public class PostService {
             imgSrc = imgs.get(0).attr("src"); //첫번째 이미지 썸네일
             //log.info("thunnail 추출: " + src);
 
-            BASE64Decoder base64Decoder = new BASE64Decoder();
-            byte[] decodeSrc = base64Decoder.decodeBuffer(imgSrc);
-            log.info("decode" + decodeSrc.toString());
+//            BASE64Decoder base64Decoder = new BASE64Decoder();
+//            byte[] decodeSrc = base64Decoder.decodeBuffer(imgSrc);
+//            log.info("decode" + decodeSrc.toString());
 
         }
-//
-//        Post post = postSaveReqDto.toEntity(imgSrc, principalDetails.getUser());
-//        Post postEntity = postRepository.save(post);
-//
-//        List<Tag> tags = TagUtils.parsingToTagObject(postSaveReqDto.getTags(), postEntity);
-//        tagRepository.saveAll(tags);
+
+        Post post = postSaveReqDto.toEntity(imgSrc, principalDetails.getUser());
+        Post postEntity = postRepository.save(post);
+
+        List<Tag> tags = TagUtils.parsingToTagObject(postSaveReqDto.getTags(), postEntity);
+        tagRepository.saveAll(tags);
     }
 
     @Transactional(readOnly = true) //JPA 변경감지라는 내부 기능 활성화 X, update시의 정합성을 유지해줌. inset의 유령데이터현상(팬텀현상) 못막음

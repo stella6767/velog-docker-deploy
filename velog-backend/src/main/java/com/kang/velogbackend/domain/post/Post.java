@@ -31,9 +31,8 @@ public class Post extends BaseTimeEntity {
     @Lob
     private String content;
 
+    @Lob //일단은 이렇게
     private String thumnail;
-
-
 
     @JsonIgnoreProperties({"posts"})
     @ManyToOne

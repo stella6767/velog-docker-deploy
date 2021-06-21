@@ -6,13 +6,14 @@ import JoinModal from './JoinModal';
 import LoginModal from './LoginModal';
 
 const AuthModal = memo((props) => {
-  const { loginLoading, joinLoading } = useSelector(({ loading }) => ({
+  const { loginLoading, joinLoading } = useSelector(({ loading, auth }) => ({
     loginLoading: loading['LOGIN_REQUEST'],
     joinLoading: loading['JOIN_REQUEST'],
+    //data: auth.cmRespDto,
   }));
 
-  //로그인 모달창과 회원가입 모달창, 함수들은 나중에 다 useMemo로 바꿔주자.. 로그인 모달과 회원가입 모달도 나중에 분리시키자..
-  const { loginVisible, setLoginVisible, joinDone, joinError } = props;
+  //로그인 모달창과 회원가입 모달창, 함수들은 나중에 다 usecCallback로 바꿔주자.. 로그인 모달과 회원가입 모달도 나중에 분리시키자..
+  const { loginVisible, setLoginVisible, joinDone, joinError, data } = props;
   const [joinVisible, setJoinVisible] = useState(false);
   const [loginForm] = Form.useForm();
   const [joinForm] = Form.useForm();
@@ -27,11 +28,17 @@ const AuthModal = memo((props) => {
   }, []);
 
   useEffect(() => {
-    console.log('loginLoading: ', loginLoading, 'joinLoaing', joinLoading);
+    //console.log('loginLoading: ', loginLoading, 'joinLoaing', joinLoading);
     //console.log('loginDone', loginDone, 'trigger 안 되는디..');
     //console.log('joinDone', joinDone, 'trigger 안 되는디..');
     //왜 여기서 바로 반영이 안 되는 거지...진짜 짜증나네...이유를 모르겠으니까 답답해 뒤지겄네..
-  }, [loginLoading, joinLoading]);
+    //당연히 랜더링 자체가 되지 않으니 실행이 안 되는 거네... 바보였는가...
+    console.log('data', data);
+
+    if (data) {
+      console.log('null이 아니라면', data.msg);
+    }
+  }, [loginLoading, joinLoading, data]);
 
   useEffect(() => {
     if (joinError) {

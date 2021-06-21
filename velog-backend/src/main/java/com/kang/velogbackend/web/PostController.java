@@ -45,6 +45,16 @@ public class PostController {
 
 
 
+//    @PostMapping("/post/{id}/thumbnail")
+//    public CMRespDto<?> postThumbnail(@PathVariable int id, MultipartFile postThumbnail, @AuthenticationPrincipal PrincipalDetails principalDetails){
+//        log.info("들어옴 " + id);
+//        log.info("파일 받기 : "+postThumbnail.getOriginalFilename());
+//        return null;
+//    }
+
+
+
+
 
 
 }
