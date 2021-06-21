@@ -1,15 +1,14 @@
-import { Card } from 'antd';
-import Meta from 'antd/lib/card/Meta';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AppLayout from '../../components/AppLayout';
+import PostCard from '../../components/PostCard';
 import { loadPostsAction } from '../../reducers/post';
 import { StyledMainDiv } from './style';
 
 const Home = () => {
   const [isHome] = useState(true);
 
-  const { mainPosts, hasMorePosts, loadPostLoading, loadPostsDone } = useSelector(({ post, loading, auth }) => ({
+  const { mainPosts, hasMorePosts, loadPostLoading, loadPostsDone } = useSelector(({ post, loading }) => ({
     mainPosts: post.mainPosts,
     hasMorePosts: post.hasMorePosts,
     loadPostLoading: loading['LOAD_POSTS_REQUEST'],
@@ -37,16 +36,14 @@ const Home = () => {
     return () => {
       window.removeEventListener('scroll', onScroll);
     };
-  }, [mainPosts, hasMorePosts, loadPostLoading, loadPostsDone]);
+  }, [mainPosts, hasMorePosts, loadPostLoading, loadPostsDone, dispatch]);
 
   return (
     <>
       <AppLayout isHome={isHome}>
         <StyledMainDiv>
-          {mainPosts.map((c) => (
-            <Card hoverable cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" key={c.id} />}>
-              <Meta title="Europe Street beat" description="www.instagram.com" />
-            </Card>
+          {mainPosts.map((post) => (
+            <PostCard key={post.id} post={post} />
           ))}
         </StyledMainDiv>
       </AppLayout>

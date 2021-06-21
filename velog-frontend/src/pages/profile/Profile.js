@@ -26,7 +26,7 @@ const Profile = () => {
           <StyledUserInfoDiv>
             <h2>강민규</h2>
             <p>개발자 지망생~~ 여기 적는 글들은 신뢰성 0%이므로 믿지 마세요!</p>
-            <button class="sc-fcdeBU eZBjgD">수정</button>
+            <button className="sc-fcdeBU eZBjgD">수정</button>
           </StyledUserInfoDiv>
         </StyledUserDescTopSection>
 
@@ -51,7 +51,7 @@ const Profile = () => {
               </div>
               <div className="block-for-mobile">
                 <div className="contents">
-                  <ul class="sc-fZwumE gvdRTK">
+                  <ul className="sc-fZwumE gvdRTK">
                     <li>
                       <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
                         <mask id="github" width="20" height="20" x="0" y="0" maskUnits="userSpaceOnUse">
@@ -105,7 +105,7 @@ const Profile = () => {
                 <h3>회원 탈퇴</h3>
               </div>
               <div className="block-for-mobile">
-                <button color="red" class="sc-dnqmqq dGwAmB">
+                <button color="red" className="sc-dnqmqq dGwAmB">
                   회원 탈퇴
                 </button>
               </div>

@@ -8,7 +8,11 @@ import com.kang.velogbackend.web.dto.post.PostSaveReqDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +25,18 @@ public class PostController {
 
     private static final Logger log = LoggerFactory.getLogger(PostController.class);
     private final PostService postService;
+
+
+    @GetMapping("/")
+    public CMRespDto<?> findAll(@AuthenticationPrincipal PrincipalDetails details, @PageableDefault(sort = "id",direction = Sort.Direction.DESC, size = 10) Pageable pageable){
+
+        log.info("메인 페이지.");
+        
+
+        return null;
+    }
+
+
 
 
     @PostMapping("/post")

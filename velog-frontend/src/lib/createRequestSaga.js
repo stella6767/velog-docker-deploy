@@ -76,7 +76,7 @@ export default function createFakeRequestSaga(type, request) {
       //console.log('api 호출 성공: ', type, action);
       yield delay(100);
 
-      //console.log('fake Data:', generateDummyPost(action.payload));
+      console.log('fake Data:', generateDummyPost(action.payload));
 
       yield put({
         type: SUCCESS,
@@ -105,19 +105,9 @@ const generateDummyPost = (number) =>
         id: shortId.generate(),
         nickname: faker.name.findName(),
       },
+      title: faker.name.title(),
       content: faker.lorem.paragraph(),
-      Images: [
-        {
-          src: faker.image.image(),
-        },
-      ],
-      Comments: [
-        {
-          User: {
-            id: shortId.generate(),
-            nickname: faker.name.findName(),
-          },
-          content: faker.lorem.sentence(),
-        },
-      ],
+      thumbnail: faker.image.image(),
+      createDate: new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
+      likeCount: Math.floor(Math.random() * 100),
     }));

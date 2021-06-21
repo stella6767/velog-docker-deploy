@@ -6,17 +6,28 @@ import { Global, StyledButtonDiv } from './style';
 import { Input, Form, Button } from 'antd';
 import { useDispatch } from 'react-redux';
 import { addPostAction } from '../../reducers/post';
-import { useCallback } from 'react';
+import useUpdateEffect from '../../lib/hooks/useUpdateEffect';
+import { useSelector } from 'react-redux';
 
 const StyledPostDiv = styled.div`
   padding: 2rem;
 `;
 
 const writeForm = memo((props) => {
+  const { addPostDone } = useSelector(({ post }) => ({
+    addPostDone: post.addPostDone,
+  }));
+
   const [value, setvalue] = useState('');
   const [form] = Form.useForm();
 
   const dispatch = useDispatch();
+
+  useUpdateEffect(() => {
+    if (addPostDone) {
+      //history go postdetail
+    }
+  }, [addPostDone]);
 
   const onPostFinish = (values) => {
     console.log('post 제출함', values);
@@ -61,7 +72,7 @@ const writeForm = memo((props) => {
         </Form.Item>
         <Form.Item>
           <StyledButtonDiv>
-            <Button onClick={exitForm}>나가기</Button>
+            <Button onClick={exitForm}>뒤로가기</Button>
             <Button type="primary" htmlType="submit">
               출간하기
             </Button>

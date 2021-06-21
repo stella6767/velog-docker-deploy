@@ -13,9 +13,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -60,9 +63,26 @@ public class PostService {
                 .orElseThrow(()->new IllegalArgumentException("id를 확인해주세요!"));
     }
 
+
     @Transactional(readOnly = true)
-    public List<Post> 모두가져오기() {
-        return postRepository.findAll();
+    public Page<Post> 전체게시글가져오기(Pageable pageable){
+
+        Page<Post> posts = imageRepository.mfeed(principalId, pageable);
+
+        //좋아요 하트 색깔 로직
+        images.forEach((image)->{
+
+            int likeCount = image.getLikes().size();
+            image.setLikeCount(likeCount);
+
+            image.getLikes().forEach((like)->{
+                if(like.getUser().getId() == principalId) {
+                    image.setLikeState(true);
+                }
+            });
+        });
+
+        return images;
     }
 
 //    @Transactional

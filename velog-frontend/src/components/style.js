@@ -36,11 +36,37 @@ export const Global = createGlobalStyle`
     /* span {
         color:black;
     } */
+   }
   }
 
-
-
+  .ant-card {
+    border-radius: 4px;
+    width: 20rem;
+    box-shadow: 1px 1px 3px 1px #dadce0;
+    transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
+    /* height: 25rem; */
   }
+
+  .ant-card-cover > img {
+    height: auto;
+    object-fit: cover;
+}
+
+.ant-card-body {
+    padding: 15px;
+}
+
+.ant-card-meta-description {
+  display:-webkit-box;
+  overflow: hidden;
+  height: 3.6rem;
+  text-overflow: ellipsis;
+  word-wrap:break-word; 
+  line-height: 1.2rem;
+  -webkit-box-orient: vertical;
+
+}
+
 
 `;
 
@@ -127,4 +153,21 @@ export const StyledAppHeader = styled.header`
 
 export const StyledAntForm = styled(Form)`
   flex-wrap: nowrap;
+`;
+
+export const StyledPostCardDateDiv = styled.div`
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: rgb(134, 142, 150);
+  margin-top: 1rem;
+`;
+
+export const StyledPostCardFootDiv = styled.div`
+  border-top: 1px solid rgb(248, 249, 250);
+  display: flex;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  margin-top: 0.2rem;
+  justify-content: space-between;
+  padding-top: 0.2rem;
 `;
