@@ -16,6 +16,11 @@ export const Global = createGlobalStyle`
   padding-top: 0.5rem;
 } 
 
+.hideHeader { 
+  position: fixed;
+  background-color: #F2F5F7;
+  z-index: 100;
+}
 
 
 .ant-card-cover > img{

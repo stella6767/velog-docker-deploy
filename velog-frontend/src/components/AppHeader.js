@@ -1,20 +1,53 @@
 import { CaretDownOutlined } from '@ant-design/icons';
-import { Button, Dropdown, Menu } from 'antd';
-import React, { memo, useEffect, useState } from 'react';
-import { useRef } from 'react';
+import { Button, Menu } from 'antd';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import useUpdateEffect from '../lib/hooks/useUpdateEffect';
 import logo_img from '../logo.svg';
 import { logoutAction } from '../reducers/auth';
 import { adminTestAction, testAction } from '../reducers/test';
 import AuthModal from './auth/ModalContainer';
 import HomeHeader from './HomeHeader';
 import './MyHeader.scss';
-import { Global, HeaderTopDiv, LoginBox, StyledAppHeader, StyledLoginSuccessDiv, StyledUserImg } from './style';
-import useUpdateEffect from '../lib/hooks/useUpdateEffect';
+import { Global, HeaderTopDiv, LoginBox, StyledAppHeader, StyledDropdown, StyledLoginSuccessDiv, StyledUserImg } from './style';
+
+const throttle = function (callback, waitTime) {
+  let timerId = null;
+  return (e) => {
+    if (timerId) return;
+    timerId = setTimeout(() => {
+      callback.call(this, e);
+      timerId = null;
+    }, waitTime);
+  };
+};
 
 const AppHeader = memo((props) => {
   //랜더링 되는 부분
+  const [hide, setHide] = useState(true);
+  const [pageY, setPageY] = useState(0);
+  const documentRef = useRef(document);
+
+  const handleScroll = () => {
+    const { pageYOffset } = window;
+    const deltaY = pageYOffset - pageY;
+    const hide = pageYOffset !== 0 && deltaY >= 0; //시작점이거나 deltaY 양수이면 true
+
+    //console.log('hide', hide, 'pageTOffset', pageYOffset, 'deltaY', deltaY);
+    setHide(hide); //false
+
+    setPageY(pageYOffset); //pageY는 현재 스크롤 위치를 계속 저장한다.
+  };
+
+  const throttleScroll = throttle(handleScroll, 50); //()넣으먄 바로 함수 실행, 잊지말자.
+
+  useEffect(() => {
+    documentRef.current.addEventListener('scroll', throttleScroll); //스크롤 이벤트 등록
+    return () => {
+      documentRef.current.removeEventListener('scroll', throttleScroll);
+    };
+  }, [pageY]);
 
   const { isHome } = props;
 
@@ -69,9 +102,7 @@ const AppHeader = memo((props) => {
   const menu = (
     <Menu>
       <Menu.Item>
-        <Link to="/aaa" target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-          내 벨로그
-        </Link>
+        <Link to="/user">내 벨로그</Link>
       </Menu.Item>
       <Menu.Item>
         <Link to="/write">새 글 작성</Link>
@@ -97,7 +128,7 @@ const AppHeader = memo((props) => {
   return (
     <>
       <Global />
-      <StyledAppHeader>
+      <StyledAppHeader className={!hide && 'hideHeader'}>
         <HeaderTopDiv>
           <Link to="/">
             <img src={logo_img} alt="logo" />
@@ -116,10 +147,8 @@ const AppHeader = memo((props) => {
               </div>
             ) : (
               <>
-                <Global />
-
                 <StyledLoginSuccessDiv>
-                  <Dropdown overlay={menu} trigger={['click']} overlayStyle={{ width: '200px' }}>
+                  <StyledDropdown overlay={menu} trigger={['click']}>
                     <div className="ant-dropdown-link" onClick={(e) => e.preventDefault()} style={{ display: 'flex', marginTop: '0.3rem' }}>
                       <div>
                         <StyledUserImg />
@@ -128,7 +157,7 @@ const AppHeader = memo((props) => {
                         <CaretDownOutlined style={{ fontSize: '1rem', cursor: 'pointer' }} />
                       </div>
                     </div>
-                  </Dropdown>
+                  </StyledDropdown>
                 </StyledLoginSuccessDiv>
               </>
             )}

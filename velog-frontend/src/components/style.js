@@ -1,5 +1,5 @@
 import styled, { createGlobalStyle } from 'styled-components';
-import { Form } from 'antd';
+import { Dropdown, Form } from 'antd';
 
 export const Global = createGlobalStyle`
   .loginButtonDiv{
@@ -68,11 +68,10 @@ export const Global = createGlobalStyle`
   }
 
 .ant-layout-content {
-    padding-top: 10rem; // 헤더 높이만큼 여백부여
+    //padding-top: 10rem; // 헤더 높이만큼 여백부여
 }
 
 // 자바스크립트로 추가될 클래스 .
-.header-up { top: -10rem;  }
 
 /* .ant-dropdown {
     width: 200px; 
@@ -150,7 +149,6 @@ export const HeaderDateDiv = styled.div`
 `;
 
 export const StyledAppHeader = styled.header`
-  position: fixed;
   align-items: center;
   width: 100%;
   z-index: 10;
@@ -186,4 +184,46 @@ export const StyledPostCardFootDiv = styled.div`
   margin-top: 0.2rem;
   justify-content: space-between;
   padding-top: 0.2rem;
+`;
+
+export const StyledPostBoxDiv = styled.div`
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  line-height: 1.5;
+
+  h2 {
+    font-size: 1.5rem;
+    margin: 0px;
+    color: rgb(33, 37, 41);
+    word-break: keep-all;
+  }
+
+  p {
+    margin-bottom: 2rem;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    color: rgb(73, 80, 87);
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
+  .tags-wrapper {
+    margin-bottom: -0.875rem;
+  }
+
+  .subinfo {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    margin-top: 1rem;
+    color: rgb(134, 142, 150);
+    font-size: 0.875rem;
+  }
+`;
+
+export const StyledDropdown = styled(Dropdown)`
+  //이거 적용을 어떻게 하지.
+  .ant-dropdown {
+    width: 200px;
+  }
 `;
