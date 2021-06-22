@@ -8,8 +8,6 @@ export const Global = createGlobalStyle`
   .ant-layout-header {
     //display:block;
     //position:fixed;
-
-
     z-index: 100;
   }
 

@@ -31,7 +31,7 @@ public class PostController {
     public CMRespDto<?> findAll(@AuthenticationPrincipal PrincipalDetails details, @PageableDefault(sort = "id",direction = Sort.Direction.DESC, size = 10) Pageable pageable){
 
         log.info("메인 페이지.");
-        
+
 
         return null;
     }

@@ -8,6 +8,7 @@ import writeForm from './pages/post/writeForm';
 import Profile from './pages/profile/Profile';
 import Search from './pages/search/Search';
 import useUpdateEffect from './lib/hooks/useUpdateEffect';
+import Header from './pages/Header';
 
 function App() {
   const { cmRespDto, logoutDone } = useSelector(({ auth }) => ({
@@ -27,6 +28,7 @@ function App() {
       <Route path="/write" exact={true} component={writeForm} />
       <Route path="/search" exact={true} component={Search} />
       <Route path="/setting" exact={true} component={Profile} />
+      <Route path="/header" exact={true} component={Header} />
     </>
   );
 }

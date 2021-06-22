@@ -18,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -65,24 +64,25 @@ public class PostService {
 
 
     @Transactional(readOnly = true)
-    public Page<Post> 전체게시글가져오기(Pageable pageable){
+    public Page<Post> 전체찾기(Pageable pageable){
 
-        Page<Post> posts = imageRepository.mfeed(principalId, pageable);
+        Page<Post> posts = postRepository.findAll(pageable);
 
         //좋아요 하트 색깔 로직
-        images.forEach((image)->{
-
-            int likeCount = image.getLikes().size();
-            image.setLikeCount(likeCount);
-
-            image.getLikes().forEach((like)->{
-                if(like.getUser().getId() == principalId) {
-                    image.setLikeState(true);
-                }
-            });
-        });
-
-        return images;
+//        posts.forEach((post)->{
+//
+//            int likeCount = post.getLikes().size();
+//            image.setLikeCount(likeCount);
+//
+//            image.getLikes().forEach((like)->{
+//                if(like.getUser().getId() == principalId) {
+//                    image.setLikeState(true);
+//                }
+//            });
+//        });
+//
+//        return images;
+        return null;
     }
 
 //    @Transactional

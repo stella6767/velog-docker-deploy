@@ -50,11 +50,11 @@ export const Global = createGlobalStyle`
   .ant-card-cover > img {
     height: auto;
     object-fit: cover;
-}
+  }
 
 .ant-card-body {
     padding: 15px;
-}
+  }
 
 .ant-card-meta-description {
   display:-webkit-box;
@@ -65,7 +65,21 @@ export const Global = createGlobalStyle`
   line-height: 1.2rem;
   -webkit-box-orient: vertical;
 
+  }
+
+.ant-layout-content {
+    padding-top: 10rem; // 헤더 높이만큼 여백부여
 }
+
+// 자바스크립트로 추가될 클래스 .
+.header-up { top: -10rem;  }
+
+/* .ant-dropdown {
+    width: 200px; 
+}
+.ant-dropdown-menu-item{
+  margin: 1em auto 2em;
+}  */
 
 
 `;
@@ -136,13 +150,15 @@ export const HeaderDateDiv = styled.div`
 `;
 
 export const StyledAppHeader = styled.header`
-  //position: fixed;
+  position: fixed;
   align-items: center;
   width: 100%;
   z-index: 10;
   box-shadow: #f8f9fa 0px 0px 8px;
   padding-left: 2rem;
   padding-right: 2rem;
+  top: 0;
+  left: 0;
 
   @media only screen and (min-width: 900px) {
     padding-left: 10rem;

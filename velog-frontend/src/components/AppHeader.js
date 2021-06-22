@@ -88,47 +88,56 @@ const AppHeader = memo((props) => {
       <Menu.Item>
         <Link to="/setting">설정</Link>
       </Menu.Item>
+      <Menu.Item>
+        <Link to="/header">테스트헤더</Link>
+      </Menu.Item>
     </Menu>
   );
 
   return (
-    <StyledAppHeader>
+    <>
       <Global />
-      <HeaderTopDiv>
-        <Link to="/">
-          <img src={logo_img} alt="logo" />
-        </Link>
-
-        <LoginBox>
-          <Link to="/search">
-            <img src="/images/search.svg" alt="search" />
+      <StyledAppHeader>
+        <HeaderTopDiv>
+          <Link to="/">
+            <img src={logo_img} alt="logo" />
           </Link>
 
-          {loginDone === false ? (
-            <div style={{ marginLeft: '1rem' }} className="loginButtonDiv">
-              <Button onClick={showLoginModal}>로그인</Button>
-              {/* 모달 컨테이너 */}
-              <AuthModal data={data} loginVisible={loginVisible} setLoginVisible={setLoginVisible} joinDone={joinDone} joinError={joinError} />
-            </div>
-          ) : (
-            <StyledLoginSuccessDiv>
-              <Dropdown overlay={menu} trigger={['click']} overlayStyle={{ fontSize: '1rem' }}>
-                <div className="ant-dropdown-link" onClick={(e) => e.preventDefault()} style={{ display: 'flex', marginTop: '0.3rem' }}>
-                  <div>
-                    <StyledUserImg />
-                  </div>
-                  <div style={{ marginTop: '3px', marginLeft: '3px' }}>
-                    <CaretDownOutlined style={{ fontSize: '1rem', cursor: 'pointer' }} />
-                  </div>
-                </div>
-              </Dropdown>
-            </StyledLoginSuccessDiv>
-          )}
-        </LoginBox>
-      </HeaderTopDiv>
+          <LoginBox>
+            <Link to="/search">
+              <img src="/images/search.svg" alt="search" />
+            </Link>
 
-      {isHome && <HomeHeader />}
-    </StyledAppHeader>
+            {loginDone === false ? (
+              <div style={{ marginLeft: '1rem' }} className="loginButtonDiv">
+                <Button onClick={showLoginModal}>로그인</Button>
+                {/* 모달 컨테이너 */}
+                <AuthModal data={data} loginVisible={loginVisible} setLoginVisible={setLoginVisible} joinDone={joinDone} joinError={joinError} />
+              </div>
+            ) : (
+              <>
+                <Global />
+
+                <StyledLoginSuccessDiv>
+                  <Dropdown overlay={menu} trigger={['click']} overlayStyle={{ width: '200px' }}>
+                    <div className="ant-dropdown-link" onClick={(e) => e.preventDefault()} style={{ display: 'flex', marginTop: '0.3rem' }}>
+                      <div>
+                        <StyledUserImg />
+                      </div>
+                      <div style={{ marginTop: '3px', marginLeft: '3px' }}>
+                        <CaretDownOutlined style={{ fontSize: '1rem', cursor: 'pointer' }} />
+                      </div>
+                    </div>
+                  </Dropdown>
+                </StyledLoginSuccessDiv>
+              </>
+            )}
+          </LoginBox>
+        </HeaderTopDiv>
+
+        {isHome && <HomeHeader />}
+      </StyledAppHeader>
+    </>
   );
 });
 

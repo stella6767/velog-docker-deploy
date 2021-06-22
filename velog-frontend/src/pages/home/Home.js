@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AppLayout from '../../components/AppLayout';
 import PostCard from '../../components/PostCard';
+import { loadUserAction } from '../../reducers/auth';
 import { loadPostsAction } from '../../reducers/post';
 import { StyledMainDiv } from './style';
 
@@ -18,7 +19,7 @@ const Home = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    //dispatch(loadUserAction());
+    dispatch(loadUserAction());
     console.log('더미데이터 최초 한번 받아옴');
     dispatch(loadPostsAction(10));
   }, []);
