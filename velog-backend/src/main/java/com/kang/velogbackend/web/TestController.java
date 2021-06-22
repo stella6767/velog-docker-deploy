@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -60,6 +61,12 @@ public class TestController {
     }
 
 
+
+    @GetMapping("test/{username}/{id}")
+    public void testParam(@PathVariable String username, @PathVariable int id){
+
+        log.info("id는 " + id +" name은" + username);
+    }
 
 
 

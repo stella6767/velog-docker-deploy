@@ -28,6 +28,21 @@ export const Global = createGlobalStyle`
     margin-bottom: 1.5rem;
   }
 
+  .head-wrapper {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.head-wrapper h1 {
+    font-size: 2.25rem;
+    line-height: 1.5;
+    letter-spacing: -0.004em;
+    margin-top: 0px;
+    font-weight: 800;
+    color: rgb(52, 58, 64);
+    margin-bottom: 2rem;
+    word-break: keep-all;
+}
 
 
 
@@ -64,3 +79,26 @@ export const StyledUserProfileImg = styled.img`
   object-fit: cover;
   box-shadow: rgb(0 0 0 / 6%) 0px 0px 4px 0px;
 `;
+
+/////여기까지 User.js
+
+export const StyledPostDetailContainer = styled.div`
+  width: 768px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2rem;
+`;
+
+export const StyledHeadDescDiv = styled.div`
+  -webkit-box-align: center;
+  align-items: center;
+  font-size: 1rem;
+  color: rgb(73, 80, 87);
+  display: flex;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+`;
+
+export const StyledDetailContentDiv = styled.div``;
+
+export const StyledDetailCommentDiv = styled.div``;
