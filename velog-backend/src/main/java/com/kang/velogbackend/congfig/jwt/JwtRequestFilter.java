@@ -100,7 +100,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                         return new IllegalArgumentException("id를 찾을 수 없습니다.");
                     });
 
-                    log.info("세션에 다시 담는 과정에서 문제가 생긴다..");
+                    log.info("세션에 다시 담는다.");
 
                     PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
                     Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());

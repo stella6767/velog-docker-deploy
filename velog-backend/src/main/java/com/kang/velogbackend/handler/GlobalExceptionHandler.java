@@ -30,11 +30,12 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler(value = Exception.class)
-    public CMRespDto<?> Exception(Exception e){
-        log.warn(e.getMessage());
-        return new CMRespDto<>(-1, "에러터짐ㅠㅠ",null);
-    }
+//    @ExceptionHandler(value = Exception.class)
+//    public CMRespDto<?> Exception(Exception e){
+//        log.warn(e.getMessage());
+//
+//        return new CMRespDto<>(-1, "에러터짐ㅠㅠ",null);
+//    }
 
 
 

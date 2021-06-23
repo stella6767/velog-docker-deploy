@@ -1,5 +1,4 @@
 import { Col, Layout, Row } from 'antd';
-import 'antd/dist/antd.css';
 import { Global } from '../style';
 import AppHeader from './AppHeader';
 
@@ -12,7 +11,6 @@ const AppLayout = (props) => {
     <Layout>
       <Global />
       <AppHeader isHome={isHome} />
-
       <Content>
         <Row>
           <Col xs={1} sm={1} md={2} lg={2} xl={3}></Col>

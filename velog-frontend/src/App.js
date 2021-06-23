@@ -11,6 +11,7 @@ import useUpdateEffect from './lib/hooks/useUpdateEffect';
 import Header from './pages/Header';
 import User from './pages/user/User';
 import PostDetail from './pages/user/PostDetail';
+import 'antd/dist/antd.css';
 
 function App() {
   const { cmRespDto, logoutDone } = useSelector(({ auth }) => ({

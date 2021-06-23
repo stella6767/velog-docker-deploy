@@ -2,6 +2,8 @@ import React, { memo } from 'react';
 import AppHeader from '../../components/AppHeader';
 import { StyledPostDetailContainer, Global, StyledHeadDescDiv, StyledDetailContentDiv, StyledDetailCommentDiv } from './style';
 import { Link } from 'react-router-dom';
+import CommentForm from '../../components/CommentForm';
+import CommentCard from '../../components/CommentCard';
 
 const PostDetail = memo(() => {
   return (
@@ -28,9 +30,14 @@ const PostDetail = memo(() => {
               </button>
             </div>
           </StyledHeadDescDiv>
-          <StyledDetailContentDiv>content</StyledDetailContentDiv>
-          <StyledDetailCommentDiv></StyledDetailCommentDiv>
         </div>
+
+        <StyledDetailContentDiv>content</StyledDetailContentDiv>
+        <StyledDetailCommentDiv>
+          <h3>18개의 댓글</h3>
+          <CommentForm />
+          <CommentCard />
+        </StyledDetailCommentDiv>
       </StyledPostDetailContainer>
     </>
   );

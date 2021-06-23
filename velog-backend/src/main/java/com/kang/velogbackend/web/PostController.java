@@ -1,6 +1,7 @@
 package com.kang.velogbackend.web;
 
 import com.kang.velogbackend.congfig.auth.PrincipalDetails;
+import com.kang.velogbackend.domain.post.Post;
 import com.kang.velogbackend.handler.customexception.NoLoginException;
 import com.kang.velogbackend.service.PostService;
 import com.kang.velogbackend.web.dto.CMRespDto;
@@ -8,6 +9,7 @@ import com.kang.velogbackend.web.dto.post.PostSaveReqDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -27,13 +29,16 @@ public class PostController {
     private final PostService postService;
 
 
+    // 주소: /?page=0   자동으로 이렇게 먹음
     @GetMapping("/")
     public CMRespDto<?> findAll(@AuthenticationPrincipal PrincipalDetails details, @PageableDefault(sort = "id",direction = Sort.Direction.DESC, size = 10) Pageable pageable){
 
         log.info("메인 페이지.");
 
+        //Page<Post> posts = postService.전체찾기(details.getUser().getId(), pageable);
+        Page<Post> posts = postService.전체찾기(1L, pageable);
 
-        return null;
+        return new CMRespDto<>(1, "게시글 불러오기 성공", posts);
     }
 
 

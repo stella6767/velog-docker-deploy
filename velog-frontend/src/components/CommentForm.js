@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Comment, Avatar, Form, Button, List, Input } from 'antd';
 import moment from 'moment';
 
@@ -8,7 +9,7 @@ const CommentList = ({ comments }) => (
     dataSource={comments}
     header={`${comments.length} ${comments.length > 1 ? 'replies' : 'reply'}`}
     itemLayout="horizontal"
-    renderItem={props => <Comment {...props} />}
+    renderItem={(props) => <Comment {...props} />}
   />
 );
 
@@ -25,71 +26,31 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
   </>
 );
 
-const CommentForm = () =>  {
-  state = {
-    comments: [],
-    submitting: false,
-    value: '',
-  };
+const CommentForm = () => {
+  const [comments, setComments] = useState([]);
+  const [submitting, setSubmitting] = useState(false);
+  const [value, setValue] = useState('');
 
-  handleSubmit = () => {
-    if (!this.state.value) {
+  const handleSubmit = () => {
+    if (!value) {
       return;
     }
-
-    this.setState({
-      submitting: true,
-    });
-
-    setTimeout(() => {
-      this.setState({
-        submitting: false,
-        value: '',
-        comments: [
-          ...this.state.comments,
-          {
-            author: 'Han Solo',
-            avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-            content: <p>{this.state.value}</p>,
-            datetime: moment().fromNow(),
-          },
-        ],
-      });
-    }, 1000);
+    setTimeout(() => {}, 1000);
   };
 
-  handleChange = e => {
-    this.setState({
-      value: e.target.value,
-    });
+  const handleChange = (e) => {
+    setValue(e.target.value);
   };
 
-  return 
-  (
-    const { comments, submitting, value } = this.state;
+  return (
+    <>
+      {comments.length > 0 && <CommentList comments={comments} />}
+      <Comment
+        avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" alt="Han Solo" />}
+        content={<Editor onChange={handleChange} onSubmit={handleSubmit} submitting={submitting} value={value} />}
+      />
+    </>
+  );
+};
 
-    return (
-      <>
-        {comments.length > 0 && <CommentList comments={comments} />}
-        <Comment
-          avatar={
-            <Avatar
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-              alt="Han Solo"
-            />
-          }
-          content={
-            <Editor
-              onChange={this.handleChange}
-              onSubmit={this.handleSubmit}
-              submitting={submitting}
-              value={value}
-            />
-          }
-        />
-      </>
-    );
-  )
-}
-
-ReactDOM.render(<App />, mountNode);
+export default CommentForm;

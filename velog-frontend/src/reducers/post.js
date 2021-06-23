@@ -29,8 +29,8 @@ const initialState = {
   addPostError: null,
 
   hasMorePosts: true,
-  cmRespDto: {},
-  error: {},
+  cmRespDto: null,
+  error: null,
   mainPosts: [],
 };
 

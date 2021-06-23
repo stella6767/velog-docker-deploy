@@ -26,6 +26,8 @@ const writeForm = memo((props) => {
   useUpdateEffect(() => {
     if (addPostDone) {
       //history go postdetail
+      console.log('저장하기 성공');
+      props.history.replace('/user/1');
     }
   }, [addPostDone]);
 

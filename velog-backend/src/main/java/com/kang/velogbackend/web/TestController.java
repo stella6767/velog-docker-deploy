@@ -70,4 +70,10 @@ public class TestController {
 
 
 
+    @GetMapping("user/logout")
+    public void routerTest(@PathVariable String username, @PathVariable int id){
+
+        log.info("왜 이러냐..");
+    }
+
 }

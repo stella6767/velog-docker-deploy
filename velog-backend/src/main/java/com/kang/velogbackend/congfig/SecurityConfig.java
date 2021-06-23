@@ -1,9 +1,6 @@
 package com.kang.velogbackend.congfig;
 
-import com.kang.velogbackend.congfig.jwt.JwtAccessDeniedHandler;
-import com.kang.velogbackend.congfig.jwt.JwtAuthenticationEntryPoint;
-import com.kang.velogbackend.congfig.jwt.JwtRequestFilter;
-import com.kang.velogbackend.congfig.jwt.jwtLogoutSuccessHandler;
+import com.kang.velogbackend.congfig.jwt.*;
 import com.kang.velogbackend.service.RedisService;
 import com.kang.velogbackend.utils.CookieUtill;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final RedisService redisService;
     private final CookieUtill cookieUtill;
     private final JwtRequestFilter jwtRequestFilter;
+    private final JwtLogoutSuccessHandler jwtLogoutSuccessHandler;
+    private final JwtLogoutHandler jwtLogoutHandler;
 
 
     @Override
@@ -61,7 +60,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .logout()
-                .logoutSuccessHandler(new jwtLogoutSuccessHandler(redisService, cookieUtill))
+                //.logoutUrl("/logout")
+                //.addLogoutHandler(jwtLogoutHandler)
+
+                //.logoutSuccessHandler(new jwtLogoutSuccessHandler(redisService, cookieUtill))
+                .logoutSuccessHandler(jwtLogoutSuccessHandler)
 
         ;
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
@@ -74,10 +77,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true); //내서버가 응답을 할 때 json을 자바스크립트에서 처리할 수 있게 할지를 설정
-        config.addAllowedOrigin("*"); //모든 ip에 응답을 허용하겠다.
+        config.addAllowedOriginPattern("*"); //모든 ip에 응답을 허용하겠다.
         config.addAllowedMethod("*"); // 모든 post,get,put,delete, patch ..요청을 허용하겠다.
         config.addAllowedHeader("*"); //모든 header에 응답을 허용하겠다.
-        config.addExposedHeader("Authorization");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
@@ -102,8 +104,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 //    @Bean
-//    public JwtRequestFilter jwtRequestFilter() {
-//        return new JwtRequestFilter();
+//    public JwtLogoutSuccessHandler jwtLogoutSuccessHandler(){
+//        JwtLogoutSuccessHandler jwtLogoutSuccessHandler = new JwtLogoutSuccessHandler(redisService, cookieUtill);
+//
+//        return jwtLogoutSuccessHandler;
 //    }
 
 

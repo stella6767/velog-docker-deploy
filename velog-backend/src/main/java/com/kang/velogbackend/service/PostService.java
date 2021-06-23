@@ -33,8 +33,8 @@ public class PostService {
     @Transactional//서비스 함수가 종료될 때 commit할지 rollback할지 트랜잭션 관리하겠다.
     public void 저장하기(PostSaveReqDto postSaveReqDto, PrincipalDetails principalDetails) throws IOException {
 
-
-        String imgSrc = null;
+        log.info("저장하기 요청 옴.");
+        String imgSrc = "";
 
         //썸네일 추출
         Document doc = Jsoup.parseBodyFragment(postSaveReqDto.getContent());
@@ -52,8 +52,14 @@ public class PostService {
         Post post = postSaveReqDto.toEntity(imgSrc, principalDetails.getUser());
         Post postEntity = postRepository.save(post);
 
-        List<Tag> tags = TagUtils.parsingToTagObject(postSaveReqDto.getTags(), postEntity);
-        tagRepository.saveAll(tags);
+        log.info("null pointer? " + postSaveReqDto.getTags());
+
+        if(postSaveReqDto.getTags() != null){
+            List<Tag> tags = TagUtils.parsingToTagObject(postSaveReqDto.getTags(), postEntity);
+            tagRepository.saveAll(tags);
+
+        }
+
     }
 
     @Transactional(readOnly = true) //JPA 변경감지라는 내부 기능 활성화 X, update시의 정합성을 유지해줌. inset의 유령데이터현상(팬텀현상) 못막음
@@ -64,25 +70,25 @@ public class PostService {
 
 
     @Transactional(readOnly = true)
-    public Page<Post> 전체찾기(Pageable pageable){
+    public Page<Post> 전체찾기(Long principalId, Pageable pageable){
 
+        log.info("전체찾기");
         Page<Post> posts = postRepository.findAll(pageable);
 
         //좋아요 하트 색깔 로직
-//        posts.forEach((post)->{
-//
-//            int likeCount = post.getLikes().size();
-//            image.setLikeCount(likeCount);
-//
-//            image.getLikes().forEach((like)->{
-//                if(like.getUser().getId() == principalId) {
-//                    image.setLikeState(true);
-//                }
-//            });
-//        });
-//
-//        return images;
-        return null;
+        posts.forEach((post)->{
+
+            int likeCount = post.getLikes().size();
+            post.setLikeCount(likeCount);
+
+            post.getLikes().forEach((like)->{
+                if(like.getUser().getId() == principalId) {
+                    post.setLikeState(true);
+                }
+            });
+        });
+
+        return posts;
     }
 
 //    @Transactional
