@@ -120,7 +120,7 @@ const AppHeader = memo((props) => {
         <Link to="/setting">설정</Link>
       </Menu.Item>
       <Menu.Item>
-        <Link to="/1/1">게시글 상세보기</Link>
+        <Link to="/userId/postId">게시글 상세보기</Link>
       </Menu.Item>
     </Menu>
   );

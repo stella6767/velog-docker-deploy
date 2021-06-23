@@ -32,6 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CookieUtill cookieUtill;
     private final JwtRequestFilter jwtRequestFilter;
     private final JwtLogoutSuccessHandler jwtLogoutSuccessHandler;
+    private final JwtLogout2SuccessHandler jwtLogout2SuccessHandler;
     private final JwtLogoutHandler jwtLogoutHandler;
 
 
@@ -60,10 +61,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .logout()
+                //.invalidateHttpSession(true)
+                //.deleteCookies(JwtUtil.ACCESS_TOKEN_NAME, JwtUtil.REFRESH_TOKEN_NAME)
                 //.logoutUrl("/logout")
                 //.addLogoutHandler(jwtLogoutHandler)
 
                 //.logoutSuccessHandler(new jwtLogoutSuccessHandler(redisService, cookieUtill))
+                //.logoutSuccessHandler(jwtLogout2SuccessHandler)
                 .logoutSuccessHandler(jwtLogoutSuccessHandler)
 
         ;
@@ -80,6 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         config.addAllowedOriginPattern("*"); //모든 ip에 응답을 허용하겠다.
         config.addAllowedMethod("*"); // 모든 post,get,put,delete, patch ..요청을 허용하겠다.
         config.addAllowedHeader("*"); //모든 header에 응답을 허용하겠다.
+        //config.addAllowedOrigin("*");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

@@ -19,7 +19,7 @@ const Home = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    //dispatch(loadUserAction());
+    dispatch(loadUserAction());
     console.log('더미데이터 최초 한번 받아옴');
     dispatch(loadPostsAction(10));
   }, []);

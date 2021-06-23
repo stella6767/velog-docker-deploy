@@ -33,7 +33,7 @@ function App() {
       <Route path="/setting" exact={true} component={Profile} />
       <Route path="/header" exact={true} component={Header} />
       <Route path="/user/:id" exact={true} component={User} />
-      <Route path="/:userId/:postId" exact={true} component={PostDetail} />
+      <Route path="/userId/postId" exact={true} component={PostDetail} />
     </>
   );
 }

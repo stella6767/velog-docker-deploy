@@ -84,6 +84,7 @@ public class AuthController {
             log.info("refreshToken: " + refreshToken); //쿠키
 
             //이제 이 쿠키를 클라이언트 서버로
+            //response.setHeader("Set-Cookie", "key=value; HttpOnly; SameSite=strict");
             response.addCookie(accessToken);
             response.addCookie(refreshToken);
 

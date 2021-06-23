@@ -1,10 +1,10 @@
 import client from './client';
 
 //게시글 작성
-export const post = (data) => client.post('post', JSON.stringify(data));
+export const post = (data) => client.post('/post', JSON.stringify(data));
 
 //quil editor 이미지 업로드용도
-export const imgUpload = (data) => client.post('post/2/thumbnail', JSON.stringify(data), { headers });
+export const imgUpload = (data) => client.post('/post/2/thumbnail', JSON.stringify(data), { headers });
 
 const headers = {
   post: {
