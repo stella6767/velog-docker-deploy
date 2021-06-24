@@ -37,18 +37,19 @@ public class UserService {
             return new IllegalArgumentException();
         });
 
-        Long followState = followRepository.mFollowState(principalId, userId);
-        Long followCount = followRepository.mFollowCount(userId);
+        int followState = followRepository.mFollowState(principalId, userId);
+        int followCount = followRepository.mFollowCount(userId);
 
         System.out.println(followState == 1);
 
         userVelogRespDto.setFollowState(followState == 1);
-        userVelogRespDto.setFollowCount(followCount); // 내가 팔로우 하고 있는 카운트
+        userVelogRespDto.setFollowCount((long)followCount); // 내가 팔로우 하고 있는 카운트
         userVelogRespDto.setPostCount((long) userEntity.getPosts().size());
 
         userEntity.getPosts().forEach((post) ->{
             post.setLikeCount(post.getLikes().size());
         });//굳이 likeCount 집어넣을 필요없이 userEntity의 image의 likes 사이즈 들고오면 되지만, 뷰에서 연산을 최소화하기 위해 set해주는 작업을 거치자.
+
 
         userVelogRespDto.setUser(userEntity);
 

@@ -2,10 +2,7 @@ package com.kang.velogbackend.domain.user;
 
 import com.kang.velogbackend.domain.BaseTimeEntity;
 import com.kang.velogbackend.domain.post.Post;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
 public class User extends BaseTimeEntity {
 

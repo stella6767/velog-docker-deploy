@@ -49,39 +49,41 @@ const writeForm = memo((props) => {
   };
 
   return (
-    <StyledPostDiv>
-      <Global />
+    <>
+      <StyledPostDiv>
+        <Global />
 
-      <Form form={form} onFinish={onPostFinish}>
-        {/* <input type="text" className="form-control" placeholder="제목을 입력하세요" name="title" /> */}
-        <div className="titleDiv">
-          <Form.Item
-            name="title"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
-          >
-            <Input placeholder="제목을 입력하세요" />
+        <Form form={form} onFinish={onPostFinish}>
+          {/* <input type="text" className="form-control" placeholder="제목을 입력하세요" name="title" /> */}
+          <div className="titleDiv">
+            <Form.Item
+              name="title"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <Input placeholder="제목을 입력하세요" />
+            </Form.Item>
+          </div>
+          <Form.Item name="tags">
+            <Input placeholder="#태그" />
           </Form.Item>
-        </div>
-        <Form.Item name="tags">
-          <Input placeholder="#태그" />
-        </Form.Item>
-        <Form.Item name="content">
-          <TextEditor name="content" value={value} onChange={(value) => setvalue(value)} name="content" />
-        </Form.Item>
-        <Form.Item>
-          <StyledButtonDiv>
-            <Button onClick={exitForm}>뒤로가기</Button>
-            <Button type="primary" htmlType="submit">
-              출간하기
-            </Button>
-          </StyledButtonDiv>
-        </Form.Item>
-      </Form>
-    </StyledPostDiv>
+          <Form.Item name="content">
+            <TextEditor name="content" value={value} onChange={(value) => setvalue(value)} name="content" />
+          </Form.Item>
+          <Form.Item>
+            <StyledButtonDiv>
+              <Button onClick={exitForm}>뒤로가기</Button>
+              <Button type="primary" htmlType="submit">
+                출간하기
+              </Button>
+            </StyledButtonDiv>
+          </Form.Item>
+        </Form>
+      </StyledPostDiv>
+    </>
   );
 });
 

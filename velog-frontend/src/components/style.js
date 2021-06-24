@@ -1,5 +1,6 @@
 import styled, { createGlobalStyle } from 'styled-components';
 import { Dropdown, Form } from 'antd';
+import { Link } from 'react-router-dom';
 
 export const Global = createGlobalStyle`
   .loginButtonDiv{
@@ -218,6 +219,11 @@ export const StyledPostBoxDiv = styled.div`
     margin-top: 1rem;
     color: rgb(134, 142, 150);
     font-size: 0.875rem;
+
+    .separator {
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+    }
   }
 `;
 
@@ -226,4 +232,30 @@ export const StyledDropdown = styled(Dropdown)`
   .ant-dropdown {
     width: 200px;
   }
+`;
+
+export const StyledPostContentP = styled.p`
+  margin-bottom: 2rem;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  color: rgb(73, 80, 87);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+`;
+
+export const StyledTagLink = styled(Link)`
+  margin-bottom: 0.875rem;
+  background: rgb(241, 243, 245);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  height: 2rem;
+  border-radius: 1rem;
+  display: inline-flex;
+  -webkit-box-align: center;
+  align-items: center;
+  margin-right: 0.875rem;
+  color: rgb(12, 166, 120);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
 `;

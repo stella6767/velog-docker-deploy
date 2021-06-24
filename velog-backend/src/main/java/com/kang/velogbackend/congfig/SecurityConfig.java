@@ -1,8 +1,9 @@
 package com.kang.velogbackend.congfig;
 
-import com.kang.velogbackend.congfig.jwt.*;
-import com.kang.velogbackend.service.RedisService;
-import com.kang.velogbackend.utils.CookieUtill;
+import com.kang.velogbackend.congfig.jwt.JwtAccessDeniedHandler;
+import com.kang.velogbackend.congfig.jwt.JwtAuthenticationEntryPoint;
+import com.kang.velogbackend.congfig.jwt.JwtLogoutSuccessHandler;
+import com.kang.velogbackend.congfig.jwt.JwtRequestFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,12 +29,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    private final RedisService redisService;
-    private final CookieUtill cookieUtill;
+
     private final JwtRequestFilter jwtRequestFilter;
     private final JwtLogoutSuccessHandler jwtLogoutSuccessHandler;
-    private final JwtLogout2SuccessHandler jwtLogout2SuccessHandler;
-    private final JwtLogoutHandler jwtLogoutHandler;
+
 
 
     @Override
@@ -61,13 +60,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .logout()
-                //.invalidateHttpSession(true)
-                //.deleteCookies(JwtUtil.ACCESS_TOKEN_NAME, JwtUtil.REFRESH_TOKEN_NAME)
-                //.logoutUrl("/logout")
-                //.addLogoutHandler(jwtLogoutHandler)
-
-                //.logoutSuccessHandler(new jwtLogoutSuccessHandler(redisService, cookieUtill))
-                //.logoutSuccessHandler(jwtLogout2SuccessHandler)
                 .logoutSuccessHandler(jwtLogoutSuccessHandler)
 
         ;

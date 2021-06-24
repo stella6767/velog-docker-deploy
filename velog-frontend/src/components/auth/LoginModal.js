@@ -5,6 +5,7 @@ import GoogleLogin from 'react-google-login';
 import { useDispatch } from 'react-redux';
 import { googleClientId } from '../../lib/constants/auth';
 import { oauthAction } from '../../reducers/auth';
+import { StyledAntForm } from '../style';
 
 const LoginModal = memo((props) => {
   const { loginVisible, loginForm, handleCancel, toggleModal, onLoginFinish, loading } = props;
@@ -40,7 +41,7 @@ const LoginModal = memo((props) => {
           </div>,
         ]}
       >
-        <Form form={loginForm} name="horizontal_login" layout="inline" onFinish={onLoginFinish}>
+        <StyledAntForm form={loginForm} name="horizontal_login" layout="inline" onFinish={onLoginFinish}>
           <Form.Item
             name="username"
             rules={[
@@ -75,7 +76,7 @@ const LoginModal = memo((props) => {
               </Button>
             )}
           </Form.Item>
-        </Form>
+        </StyledAntForm>
         <Divider plain>소셜 계정으로 로그인</Divider>
 
         {/* <FcGoogle size="24" /> */}

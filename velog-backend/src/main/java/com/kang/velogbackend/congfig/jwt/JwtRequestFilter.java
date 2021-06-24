@@ -91,10 +91,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 log.info("refreshUserId: " + refreshUserId);
                 String claimId = (jwtUtil.getUserId(refreshJwt)).toString();
 
-                log.info("refresh검증"  + claimId);
+
+
+                if(claimId == null || refreshUserId == null){
+                    log.info("");
+                    filterChain.doFilter(request, response);
+                }
 
                 if(refreshUserId.equals(claimId)) {
                     log.info("2차 검증!");
+                    log.info("refresh검증"  + claimId);
 
                     User userEntity = userRepository.findById(Long.parseLong(refreshUserId)).orElseThrow(()->{
                         return new IllegalArgumentException("id를 찾을 수 없습니다.");

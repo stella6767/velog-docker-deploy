@@ -8,11 +8,11 @@ const [USER_REQUEST, USER_SUCCESS, USER_FAILURE] = createRequestActionTypes('USE
 
 export const userAction = createAction(USER_REQUEST);
 
-const userSaga = createRequestSaga(USER_REQUEST, userAPI.user);
+const userReqSaga = createRequestSaga(USER_REQUEST, userAPI.user);
 
-export function* postSaga() {
+export function* userSaga() {
   //이벤트 리스너!
-  yield takeLatest(USER_REQUEST, userSaga);
+  yield takeLatest(USER_REQUEST, userReqSaga);
 }
 
 const initialState = {
@@ -21,11 +21,13 @@ const initialState = {
   userError: null,
   userData: null,
 
+  user: null,
+  posts: [],
   cmRespDto: null,
   error: null,
 };
 
-const post = handleActions(
+const user = handleActions(
   {
     //게시글 작성
     [USER_REQUEST]: (state, { payload: data }) =>
@@ -40,6 +42,7 @@ const post = handleActions(
       userDone: true,
       cmRespDto: data,
       userData: data.data,
+      posts: data.data.user.posts,
     }),
     [USER_FAILURE]: (state, { payload: error }) => ({
       ...state,
@@ -49,4 +52,4 @@ const post = handleActions(
   initialState,
 );
 
-export default post;
+export default user;

@@ -9,16 +9,24 @@ import { userAction } from '../../reducers/user';
 import { StyledUserContainerDiv, StyledUserDescDiv, StyledUserProfileImg, StyledUserTopDiv, StyledUserVelogDiv, Global } from './style';
 
 const User = memo(() => {
-  const { mainPosts } = useSelector(({ post, loading }) => ({
-    mainPosts: post.mainPosts,
+  const { posts, userData, userLoading } = useSelector(({ user, loading }) => ({
+    userData: user.userData,
+    userLoading: loading['USER_REQUEST'],
+    posts: user.posts,
   }));
 
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log('userData: ', userData);
+  }, [userData]);
+
+  useEffect(() => {
     console.log('유저데이터 한번 받아옴 10개 기준, 일단은 다 받아오자..');
     dispatch(userAction());
   }, []);
+
+  // const postCount = userData.postCount;
 
   return (
     <>
@@ -38,7 +46,7 @@ const User = memo(() => {
         </StyledUserVelogDiv>
         <div>넣을 지 말지 고민중</div>
         <div>
-          {mainPosts.map((post) => (
+          {posts.map((post) => (
             <PostBox key={post.id} post={post} />
           ))}
         </div>

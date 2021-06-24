@@ -3,6 +3,7 @@ package com.kang.velogbackend.domain.follow;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface FollowRepository extends JpaRepository<Follow,Long> {
 
@@ -15,8 +16,8 @@ public interface FollowRepository extends JpaRepository<Follow,Long> {
     Long mUnfollow(Long fromUserId, Long toUserId); //prepareStatement updateQuery() => -1,1,0
 
     @Query(value = "select count(*) from Follow where fromUserId = :principalId AND toUserId = :userId", nativeQuery = true)
-    Long mFollowState(Long principalId, Long userId); //내가 팔로우하고 있는지의 여부
+    int mFollowState(@Param("principalId") Long principalId,@Param("userId")  Long userId); //내가 팔로우하고 있는지의 여부
 
     @Query(value = "select count(*) from Follow where fromUserId = :userId", nativeQuery = true)
-    long mFollowCount(Long userId); //페이지의 주인을 팔로우하고 있는 사람숫자
+    int mFollowCount(@Param("userId") Long userId); //페이지의 주인을 팔로우하고 있는 사람숫자
 }

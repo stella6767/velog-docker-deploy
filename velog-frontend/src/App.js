@@ -12,6 +12,7 @@ import Header from './pages/Header';
 import User from './pages/user/User';
 import PostDetail from './pages/user/PostDetail';
 import 'antd/dist/antd.css';
+import { Switch } from 'react-router-dom';
 
 function App() {
   const { cmRespDto, logoutDone } = useSelector(({ auth }) => ({
@@ -27,13 +28,15 @@ function App() {
 
   return (
     <>
-      <Route path="/" exact={true} component={Home} />
-      <Route path="/write" exact={true} component={writeForm} />
-      <Route path="/search" exact={true} component={Search} />
-      <Route path="/setting" exact={true} component={Profile} />
-      <Route path="/header" exact={true} component={Header} />
-      <Route path="/user/:id" exact={true} component={User} />
-      <Route path="/userId/postId" exact={true} component={PostDetail} />
+      <Switch>
+        <Route path="/" exact={true} component={Home} />
+        <Route path="/write" exact={true} component={writeForm} />
+        <Route path="/search" exact={true} component={Search} />
+        <Route path="/setting" exact={true} component={Profile} />
+        <Route path="/header" exact={true} component={Header} />
+        <Route path="/:userId" exact={true} component={User} />
+        <Route path="/:userId/:postId" exact={true} component={PostDetail} />
+      </Switch>
     </>
   );
 }
