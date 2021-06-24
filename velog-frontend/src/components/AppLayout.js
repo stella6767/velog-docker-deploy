@@ -7,6 +7,10 @@ const { Content } = Layout;
 const AppLayout = (props) => {
   const { isHome } = props;
 
+  // const { principal } = useSelector(({ auth }) => ({
+  //   principal: auth.principal,
+  // }));
+
   return (
     <Layout>
       <Global />

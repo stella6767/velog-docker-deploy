@@ -51,14 +51,19 @@ const AppHeader = memo((props) => {
 
   const { isHome } = props;
 
-  const { loginDone, loginError, joinDone, joinError, data } = useSelector(({ auth, test, loading }) => ({
+  const { loginDone, loginError, joinDone, joinError, data, principal } = useSelector(({ auth, test, loading }) => ({
     loginDone: auth.loginDone,
     loginError: auth.loginError,
     data: auth.cmRespDto,
     joinDone: auth.joinDone,
     joinError: auth.joinError,
+    principal: auth.principal,
     //loading: loading['LOGOUT_REQUEST'], //그때 그때 순간순간적으로 키 값이 바뀌는데 맞춰서 loading 값을 가져오면 된다.
   }));
+
+  useEffect(() => {
+    console.log('principal', principal);
+  }, [principal]);
 
   const dispatch = useDispatch();
 
@@ -99,31 +104,35 @@ const AppHeader = memo((props) => {
     dispatch(logoutAction());
   };
 
-  const menu = (
-    <Menu>
-      <Menu.Item>
-        <Link to="/1">내 벨로그</Link>
-      </Menu.Item>
-      <Menu.Item>
-        <Link to="/write">새 글 작성</Link>
-      </Menu.Item>
-      <Menu.Item>
-        <div onClick={logout}>로그아웃</div>
-      </Menu.Item>
-      <Menu.Item>
-        <div onClick={tokenTest}>user Test</div>
-      </Menu.Item>
-      <Menu.Item>
-        <div onClick={adminTeset}>admin Test</div>
-      </Menu.Item>
-      <Menu.Item>
-        <Link to="/setting">설정</Link>
-      </Menu.Item>
-      <Menu.Item>
-        <Link to="/1/1">게시글 상세보기</Link>
-      </Menu.Item>
-    </Menu>
-  );
+  const menu = (principalId) => {
+    console.log(principalId);
+
+    return (
+      <Menu>
+        <Menu.Item>
+          <Link to={`/${principalId}`}>내 벨로그</Link>
+        </Menu.Item>
+        <Menu.Item>
+          <Link to="/write">새 글 작성</Link>
+        </Menu.Item>
+        <Menu.Item>
+          <div onClick={logout}>로그아웃</div>
+        </Menu.Item>
+        <Menu.Item>
+          <div onClick={tokenTest}>user Test</div>
+        </Menu.Item>
+        <Menu.Item>
+          <div onClick={adminTeset}>admin Test</div>
+        </Menu.Item>
+        <Menu.Item>
+          <Link to="/setting">설정</Link>
+        </Menu.Item>
+        <Menu.Item>
+          <Link to="/1/1">게시글 상세보기</Link>
+        </Menu.Item>
+      </Menu>
+    );
+  };
 
   return (
     <>
@@ -139,16 +148,16 @@ const AppHeader = memo((props) => {
               <img src="/images/search.svg" alt="search" />
             </Link>
 
-            {loginDone === false ? (
+            {loginDone === false && principal == null ? (
               <div style={{ marginLeft: '1rem' }} className="loginButtonDiv">
-                <Button onClick={showLoginModal}>로그인</Button>
+                <Button onClick={showLoginModal}>로그인 </Button>
                 {/* 모달 컨테이너 */}
                 <AuthModal data={data} loginVisible={loginVisible} setLoginVisible={setLoginVisible} joinDone={joinDone} joinError={joinError} />
               </div>
             ) : (
               <>
                 <StyledLoginSuccessDiv>
-                  <StyledDropdown overlay={menu} trigger={['click']}>
+                  <StyledDropdown overlay={() => menu(principal.id)} trigger={['click']}>
                     <div className="ant-dropdown-link" onClick={(e) => e.preventDefault()} style={{ display: 'flex', marginTop: '0.3rem' }}>
                       <div>
                         <StyledUserImg />

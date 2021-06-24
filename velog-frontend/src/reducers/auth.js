@@ -81,6 +81,7 @@ const auth = handleActions(
         draft.cmRespDto = data;
         draft.loginDone = false;
         draft.loginError = null;
+        draft.principal = null;
       }),
     //로그인 성공
     [LOGIN_SUCCESS]: (state, { payload: data }) =>
@@ -109,6 +110,7 @@ const auth = handleActions(
       logoutDone: true,
       logoutError: null,
       loginDone: false,
+      principal: null,
     }),
     //로그아웃 실패
     [LOGOUT_FAILURE]: (state, { payload: error }) => ({

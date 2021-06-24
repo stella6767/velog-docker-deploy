@@ -8,7 +8,7 @@ import { loadPostsAction } from '../../reducers/post';
 import { userAction } from '../../reducers/user';
 import { StyledUserContainerDiv, StyledUserDescDiv, StyledUserProfileImg, StyledUserTopDiv, StyledUserVelogDiv, Global } from './style';
 
-const User = memo(() => {
+const User = memo((props) => {
   const { posts, userData, userLoading } = useSelector(({ user, loading }) => ({
     userData: user.userData,
     userLoading: loading['USER_REQUEST'],
@@ -22,8 +22,9 @@ const User = memo(() => {
   }, [userData]);
 
   useEffect(() => {
-    console.log('유저데이터 한번 받아옴 10개 기준, 일단은 다 받아오자..');
-    dispatch(userAction());
+    //console.log('유저데이터 한번 받아옴 10개 기준, 일단은 다 받아오자..');
+    console.log('url parame', props.match.params.userId);
+    dispatch(userAction(props.match.params.userId));
   }, []);
 
   // const postCount = userData.postCount;

@@ -6,7 +6,7 @@ import * as userAPI from '../lib/api/user';
 
 const [USER_REQUEST, USER_SUCCESS, USER_FAILURE] = createRequestActionTypes('USER');
 
-export const userAction = createAction(USER_REQUEST);
+export const userAction = createAction(USER_REQUEST, (urlParam) => urlParam);
 
 const userReqSaga = createRequestSaga(USER_REQUEST, userAPI.user);
 
