@@ -19,13 +19,6 @@ public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
 
-    @GetMapping("/user/{userId}/{postId}")
-    public CMRespDto<?> detail(@PathVariable Long userId, @PathVariable Long postId) {
-
-
-
-        return null;
-    }
 
 
     @GetMapping("/user/{id}") //개인 벨로그

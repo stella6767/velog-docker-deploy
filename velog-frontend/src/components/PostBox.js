@@ -6,11 +6,11 @@ import { Link } from 'react-router-dom';
 
 //트렌딩 페이지나 최신 페이지가 아닐 경우
 const PostBox = memo((props) => {
-  const { post } = props;
+  const { post, userId } = props;
 
   return (
     <>
-      <Link to="/">
+      <Link to={`/${userId}/${post.id}`}>
         <StyledPostBoxDiv>
           {/* <div></div>여기는 유저 info
         <div></div>여기는 image */}

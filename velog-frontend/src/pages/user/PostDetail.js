@@ -4,8 +4,24 @@ import { StyledPostDetailContainer, Global, StyledHeadDescDiv, StyledDetailConte
 import { Link } from 'react-router-dom';
 import CommentForm from '../../components/CommentForm';
 import CommentCard from '../../components/CommentCard';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { getPostAction } from '../../reducers/post';
 
-const PostDetail = memo(() => {
+const PostDetail = memo((props) => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log('props', props);
+    console.log('postId', props.match.params.postId);
+    console.log('userId', props.match.params.userId);
+    //dispatch(getPostAction(props.match.params.userId, props.match.params.postId));
+    const postId = props.match.params.postId;
+    const userId = props.match.params.userId;
+
+    dispatch(getPostAction({ userId, postId }));
+  }, []);
+
   return (
     <>
       <Global />

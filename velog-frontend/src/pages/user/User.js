@@ -48,7 +48,7 @@ const User = memo((props) => {
         <div>넣을 지 말지 고민중</div>
         <div>
           {posts.map((post) => (
-            <PostBox key={post.id} post={post} />
+            <PostBox key={post.id} post={post} userId={props.match.params.userId} />
           ))}
         </div>
       </StyledUserContainerDiv>

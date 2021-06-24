@@ -6,17 +6,21 @@ import * as postAPI from '../lib/api/post';
 
 const [LOAD_POSTS_REQUEST, LOAD_POSTS_SUCCESS, LOAD_POSTS_FAILURE] = createRequestActionTypes('LOAD_POSTS');
 const [ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE] = createRequestActionTypes('ADD_POST');
+const [GET_POST_REQUEST, GET_POST_SUCCESS, GET_POST_FAILURE] = createRequestActionTypes('GET_POST');
 
 export const loadPostsAction = createAction(LOAD_POSTS_REQUEST, (data) => data);
 export const addPostAction = createAction(ADD_POST_REQUEST, (data) => data);
+export const getPostAction = createAction(GET_POST_REQUEST, ({ userId, postId }) => ({ userId, postId }));
 
 const loadPostsSaga = createFakeRequestSaga(LOAD_POSTS_REQUEST, '');
 const addPostSaga = createRequestSaga(ADD_POST_REQUEST, postAPI.post);
+const getPostSaga = createRequestSaga(GET_POST_REQUEST, postAPI.detail);
 
 export function* postSaga() {
   //이벤트 리스너!
   yield throttle(3000, LOAD_POSTS_REQUEST, loadPostsSaga);
   yield takeLatest(ADD_POST_REQUEST, addPostSaga);
+  yield takeLatest(GET_POST_REQUEST, getPostSaga);
 }
 
 const initialState = {
@@ -27,6 +31,10 @@ const initialState = {
   //게시글 작성
   addPostDone: false,
   addPostError: null,
+
+  //게시글 상세보기
+  getPostDone: false,
+  getPostError: null,
 
   hasMorePosts: true,
   cmRespDto: null,
@@ -72,6 +80,24 @@ const post = handleActions(
     [ADD_POST_FAILURE]: (state, { payload: error }) => ({
       ...state,
       addPostError: error,
+    }),
+
+    //게시글 상세보기
+    [GET_POST_REQUEST]: (state, { payload: data }) =>
+      produce(state, (draft) => {
+        draft.cmRespDto = data;
+        draft.getPostDone = false;
+        draft.getPostError = null;
+      }),
+    [GET_POST_SUCCESS]: (state, { payload: data }) => ({
+      ...state,
+      getPostError: null,
+      getPostDone: true,
+      cmRespDto: data,
+    }),
+    [GET_POST_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      getPostError: error,
     }),
   },
   initialState,

@@ -37,6 +37,7 @@ public class User extends BaseTimeEntity {
     private Role role;
 
     //@JsonIgnore
+    @OrderBy("id DESC")
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY) //DTO 만들어서 LazyLoading issue 해결
     private List<Post> posts;
 

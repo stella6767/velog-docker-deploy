@@ -14,10 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -72,6 +69,18 @@ public class PostController {
 //        log.info("파일 받기 : "+postThumbnail.getOriginalFilename());
 //        return null;
 //    }
+
+
+
+    @GetMapping("/post/{userId}/{postId}")
+    public CMRespDto<?> detail(@PathVariable Long userId, @PathVariable Long postId) {
+
+        log.info("게시글 싱세보기.");
+
+
+
+        return null;
+    }
 
 
 
