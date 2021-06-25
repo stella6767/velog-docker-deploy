@@ -36,6 +36,7 @@ const initialState = {
   getPostDone: false,
   getPostError: null,
 
+  post: null,
   hasMorePosts: true,
   cmRespDto: null,
   error: null,
@@ -94,6 +95,7 @@ const post = handleActions(
       getPostError: null,
       getPostDone: true,
       cmRespDto: data,
+      post: data.data,
     }),
     [GET_POST_FAILURE]: (state, { payload: error }) => ({
       ...state,

@@ -41,30 +41,28 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("무조건 이 필터를 탄다. 인증이 안 되면 그냥 다음 필터를 타도록 설정.");
 
-        final Cookie jwtToken = cookieUtill.getCookie(request, JwtUtil.ACCESS_TOKEN_NAME);
+        Cookie accessCookie = cookieUtill.getCookie(request, JwtUtil.ACCESS_TOKEN_NAME);
         Long userId = null;
-        String jwt = null;
-        String refreshJwt = null;
+        String accessToken = null;
+        String refreshToken = null;
         String refreshUserId = null;
 
         try {
-            if(jwtToken != null){
-                log.info("accessCookie: "+jwtToken.toString());
-                jwt = jwtToken.getValue();
-                userId = jwtUtil.getUserId(jwt); //검증
-
-                log.info(userId + " jwtAccessToken: " + jwt);
-
-            }else{
-                //response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그인이 필요한 서비스입니다."); // /login 자체를 못탐
+            if(accessCookie != null){
+                log.info("accessCookie: "+accessCookie.toString());
+                accessToken = accessCookie.getValue();
+                userId = jwtUtil.getUserId(accessToken); //검증
+                log.info("why.." + userId +" " +accessToken);
             }
 
             if(userId!=null){
+
+                log.info(userId + " jwtAccessToken: " + accessToken);
                 User userEntity = userRepository.findById(userId).orElseThrow(()->{
                     return new IllegalArgumentException("id를 찾을 수 없습니다.");
                 });
 
-                if(jwtUtil.validateToken(jwt, userEntity)){
+                if(jwtUtil.validateToken(accessToken, userEntity)){
                     log.info("세션에 담고..");
                     PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
                     Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
@@ -73,25 +71,25 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }catch (ExpiredJwtException e){
 
-            log.info("accessToken 기간이 만료되었다면");
-            Cookie refreshToken = cookieUtill.getCookie(request,JwtUtil.REFRESH_TOKEN_NAME);
-            if(refreshToken!=null){
-                refreshJwt = refreshToken.getValue();
-                log.info("refreshToken: " + refreshJwt);
+            try {
+                log.info("accessToken 기간이 만료되었다면");
+                Cookie refresCookie = cookieUtill.getCookie(request,JwtUtil.REFRESH_TOKEN_NAME);
+                if(refresCookie != null){
+                    refreshToken = refresCookie.getValue();
+                    log.info("refreshToken: " + refreshToken);
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                response.sendError(-1, "refresh 토큰이 만료. 다시 로그인 필요");
             }
-        }catch(Exception e){
-            log.error(e.getMessage());
         }
 
-
         try{
-            if(refreshJwt != null){
+            if(refreshToken != null){
                 //재발급
-                refreshUserId = redisService.getData(refreshJwt);
+                refreshUserId = redisService.getData(refreshToken);
                 log.info("refreshUserId: " + refreshUserId);
-                String claimId = (jwtUtil.getUserId(refreshJwt)).toString();
-
-
+                String claimId = (jwtUtil.getUserId(refreshToken)).toString();
 
                 if(claimId == null || refreshUserId == null){
                     log.info("");
@@ -112,11 +110,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                     Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication); //세션에 다시 담고..
 
-                    String newToken =jwtUtil.generateAccessToken(userId);
-                    Cookie newAccessToken = cookieUtill.createCookie(JwtUtil.ACCESS_TOKEN_NAME,newToken);
-                    log.info("newToken: " + newToken);
 
-                    response.addCookie(newAccessToken); //새로 발급한다.
+                    String newAccessToken =jwtUtil.generateAccessToken(Long.parseLong(refreshUserId));
+                    Cookie newAccessCookie = cookieUtill.createCookie(JwtUtil.ACCESS_TOKEN_NAME,newAccessToken);
+
+                    log.info("newToken: " + newAccessToken);
+
+                    response.addCookie(newAccessCookie); //새로 발급한다.
                 }
             }
         }catch(ExpiredJwtException e){

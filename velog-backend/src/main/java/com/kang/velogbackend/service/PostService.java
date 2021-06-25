@@ -62,10 +62,29 @@ public class PostService {
 
     }
 
+
     @Transactional(readOnly = true) //JPA 변경감지라는 내부 기능 활성화 X, update시의 정합성을 유지해줌. inset의 유령데이터현상(팬텀현상) 못막음
-    public Post 한건가져오기(Long id) {
-        return postRepository.findById(id) //함수형으로 변환
+    public Post 한건가져오기(Long userId, Long postId, Long principalId) {
+
+        log.info("게시글 상세보기 서비스 " );
+
+        if(userId == principalId){
+            log.info("내 벨로그 글에 들어왔다고 판단");
+        }
+
+        Post postEntity = postRepository.findById(postId) //함수형으로 변환
                 .orElseThrow(()->new IllegalArgumentException("id를 확인해주세요!"));
+
+
+        int likeCount = postEntity.getLikes().size();
+        postEntity.setLikeCount(likeCount); //view에서 연산을 최소한 하기 위해
+        postEntity.getLikes().forEach((like -> {
+            if(like.getUser().getId() == principalId){
+                postEntity.setLikeState(true);
+            }
+        }));
+
+        return postEntity;
     }
 
 

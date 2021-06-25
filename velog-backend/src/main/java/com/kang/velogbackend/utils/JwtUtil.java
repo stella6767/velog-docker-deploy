@@ -22,7 +22,7 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    public final static int ACCESS_TOKEN_VALIDATION_SECOND = 1000*60*10; //10분
+    public final static int ACCESS_TOKEN_VALIDATION_SECOND = 1000*60*1; //10분
     public final static int REFRESH_TOKEN_VALIDATION_SECOND = 1000*60*60*24*7; //1주
 
     final static public String ACCESS_TOKEN_NAME = "accessToken";
@@ -72,6 +72,8 @@ public class JwtUtil {
     }
 
     public Long getUserId(String token) {
+
+
         return extractAllClaims(token).get("userId", Long.class);
     }
 
@@ -85,6 +87,8 @@ public class JwtUtil {
 
 
     public String generateAccessToken(Long userId) {
+
+        log.info("검증에 활용할 userId: " + userId);
         return doGenerateToken(userId, ACCESS_TOKEN_VALIDATION_SECOND);
     }
 
@@ -94,6 +98,7 @@ public class JwtUtil {
 
     public String doGenerateToken(Long userId, long expireTime) {
 
+        log.info("토큰을 만드는데 인증이 에러가 나네..");
         Claims claims = Jwts.claims();
         claims.put("userId", userId);
 

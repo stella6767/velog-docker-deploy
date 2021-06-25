@@ -73,13 +73,11 @@ public class PostController {
 
 
     @GetMapping("/post/{userId}/{postId}")
-    public CMRespDto<?> detail(@PathVariable Long userId, @PathVariable Long postId) {
+    public CMRespDto<?> detail(@PathVariable Long userId, @PathVariable Long postId, @AuthenticationPrincipal PrincipalDetails details) {
 
-        log.info("게시글 싱세보기.");
+        log.info("게시글 싱세보기." + userId+" " + postId);
 
-
-
-        return null;
+        return new CMRespDto<>(1,"게시글 상세보기", postService.한건가져오기(userId, postId, details.getUser().getId()));
     }
 
 

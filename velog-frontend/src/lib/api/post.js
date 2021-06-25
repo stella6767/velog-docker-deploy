@@ -4,10 +4,8 @@ import client from './client';
 export const post = (data) => client.post('/post', JSON.stringify(data));
 
 //게시글 상세보기
-//export const detail = ({ userId, postId }) => client.get(`/post/${userId}/${postId}`);
-
 export const detail = ({ userId, postId }) => {
-  console.log('이게 되냐?', userId, postId);
+  //console.log('이게 되냐?', userId, postId);
   return client.get(`/post/${userId}/${postId}`);
 };
 

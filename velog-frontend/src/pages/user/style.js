@@ -44,6 +44,32 @@ export const Global = createGlobalStyle`
     word-break: keep-all;
 }
 
+.like-btn{
+  background: white;
+    border: 1px solid rgb(173, 181, 189);
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    height: 1.5rem;
+    border-radius: 0.75rem;
+    outline: none;
+
+    svg {
+      width: 0.75rem;
+      height: 0.75rem;
+      margin-right: 0.75rem;
+      color: rgb(173, 181, 189);
+    }
+
+    span{
+      font-size: 0.75rem;
+      font-weight: bold;
+      color: rgb(173, 181, 189);
+    }
+}
+
 
 
 `;
@@ -99,6 +125,17 @@ export const StyledHeadDescDiv = styled.div`
   justify-content: space-between;
 `;
 
-export const StyledDetailContentDiv = styled.div``;
+export const StyledDetailContentDiv = styled.div`
+  /* display: table-cell;
+  vertical-align: middle; */
+  margin-top: 2rem;
+
+  img {
+    max-width: 100%;
+    max-height: 500px;
+    margin: 3rem auto;
+    /* object-fit: fill; */
+  }
+`;
 
 export const StyledDetailCommentDiv = styled.div``;
