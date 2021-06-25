@@ -12,7 +12,8 @@ export const loadPostsAction = createAction(LOAD_POSTS_REQUEST, (data) => data);
 export const addPostAction = createAction(ADD_POST_REQUEST, (data) => data);
 export const getPostAction = createAction(GET_POST_REQUEST, ({ userId, postId }) => ({ userId, postId }));
 
-const loadPostsSaga = createFakeRequestSaga(LOAD_POSTS_REQUEST, '');
+//const loadPostsSaga = createFakeRequestSaga(LOAD_POSTS_REQUEST, '');
+const loadPostsSaga = createRequestSaga(LOAD_POSTS_REQUEST, postAPI.allList);
 const addPostSaga = createRequestSaga(ADD_POST_REQUEST, postAPI.post);
 const getPostSaga = createRequestSaga(GET_POST_REQUEST, postAPI.detail);
 
@@ -31,11 +32,13 @@ const initialState = {
   //게시글 작성
   addPostDone: false,
   addPostError: null,
+  addPostId: null,
 
   //게시글 상세보기
   getPostDone: false,
   getPostError: null,
 
+  page: 0, //10개 단위,
   post: null,
   hasMorePosts: true,
   cmRespDto: null,
@@ -56,8 +59,9 @@ const post = handleActions(
       ...state,
       loadPostsError: null,
       loadPostsDone: true,
-      mainPosts: state.mainPosts.concat(data),
+      mainPosts: state.mainPosts.concat(data.data.content),
       cmRespDto: data,
+      page: state.page + 1,
       hasMorePosts: state.mainPosts.length < 100,
     }),
     [LOAD_POSTS_FAILURE]: (state, { payload: error }) => ({
@@ -77,6 +81,7 @@ const post = handleActions(
       addPostError: null,
       addPostDone: true,
       cmRespDto: data,
+      addPostId: data.data,
     }),
     [ADD_POST_FAILURE]: (state, { payload: error }) => ({
       ...state,

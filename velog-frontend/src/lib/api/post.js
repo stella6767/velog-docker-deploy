@@ -9,6 +9,11 @@ export const detail = ({ userId, postId }) => {
   return client.get(`/post/${userId}/${postId}`);
 };
 
+export const allList = (page) => {
+  console.log('page: ', page);
+  return client.get(`/post/all?page=${page}`);
+};
+
 //quil editor 이미지 업로드용도
 export const imgUpload = (data) => client.post('/post/2/thumbnail', JSON.stringify(data), { headers });
 

@@ -3,33 +3,37 @@ import PropTypes from 'prop-types';
 import { Card } from 'antd';
 import { Global, StyledPostCardDateDiv, StyledPostCardFootDiv } from './style';
 import { Link } from 'react-router-dom';
+import { HeartOutlined, HeartFilled } from '@ant-design/icons';
+import moment from 'moment';
 
+// const StyledDefaultImg = styled.img`
+//   background-image: url(/images/search.svg);
+// `;
+//dangerouslySetInnerHTML={{ __html: post.content }}
 const PostCard = (props) => {
   const { post, key } = props;
 
   return (
     <>
       <Global />
-      <Card cover={<img alt="example" src={post.thumbnail} />}>
-        <Card.Meta title={post.title} description={post.content} />
-
+      <Card cover={post.thumbnail != null ? <img alt="example" src={post.thumbnail} /> : null}>
+        <Link to={`/${post.user.id}/${post.id}`}>
+          <Card.Meta title={post.title} description={<div dangerouslySetInnerHTML={{ __html: post.content }} />} />
+        </Link>
         <StyledPostCardDateDiv>
-          <span>5일 전</span>
+          <span>{moment(post.createDate, 'DD일 전').fromNow()}</span>
           <span className="separator">·</span>
-          <span>18개의 댓글</span>
+          <span>{post.comments.length}개의 댓글</span>
         </StyledPostCardDateDiv>
         <StyledPostCardFootDiv>
           <Link to="" className="userinfo" href="/@eungyeole">
-            이미지
             <span>
-              by <b>eungyeole</b>
+              by <b>{post.user.username}</b>
             </span>
           </Link>
           <div className="likes">
-            <svg width="5" height="5" viewBox="0 0 24 24">
-              <path fill="currentColor" d="M18 1l-6 4-6-4-6 5v7l12 10 12-10v-7z"></path>
-            </svg>
-            128
+            {post.likeState ? <HeartFilled /> : <HeartOutlined />}
+            <span style={{ marginLeft: '0.5rem' }}>{post.likeCount}</span>
           </div>
         </StyledPostCardFootDiv>
       </Card>

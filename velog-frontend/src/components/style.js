@@ -175,6 +175,11 @@ export const StyledPostCardDateDiv = styled.div`
   line-height: 1.5;
   color: rgb(134, 142, 150);
   margin-top: 1rem;
+
+  .separator {
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+  }
 `;
 
 export const StyledPostCardFootDiv = styled.div`

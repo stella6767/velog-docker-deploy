@@ -18,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -31,10 +30,10 @@ public class PostService {
     private final TagRepository tagRepository;
 
     @Transactional//서비스 함수가 종료될 때 commit할지 rollback할지 트랜잭션 관리하겠다.
-    public void 저장하기(PostSaveReqDto postSaveReqDto, PrincipalDetails principalDetails) throws IOException {
+    public Long 저장하기(PostSaveReqDto postSaveReqDto, PrincipalDetails principalDetails)  {
 
         log.info("저장하기 요청 옴.");
-        String imgSrc = "";
+        String imgSrc = null;
 
         //썸네일 추출
         Document doc = Jsoup.parseBodyFragment(postSaveReqDto.getContent());
@@ -60,6 +59,7 @@ public class PostService {
 
         }
 
+        return postEntity.getId();
     }
 
 
@@ -94,18 +94,21 @@ public class PostService {
         log.info("전체찾기");
         Page<Post> posts = postRepository.findAll(pageable);
 
-        //좋아요 하트 색깔 로직
-        posts.forEach((post)->{
 
-            int likeCount = post.getLikes().size();
-            post.setLikeCount(likeCount);
+        if(principalId != 0L){
+            //좋아요 하트 색깔 로직
+            posts.forEach((post)->{
 
-            post.getLikes().forEach((like)->{
-                if(like.getUser().getId() == principalId) {
-                    post.setLikeState(true);
-                }
+                int likeCount = post.getLikes().size();
+                post.setLikeCount(likeCount);
+
+                post.getLikes().forEach((like)->{
+                    if(like.getUser().getId() == principalId) {
+                        post.setLikeState(true);
+                    }
+                });
             });
-        });
+        }
 
         return posts;
     }

@@ -9,11 +9,12 @@ import { StyledMainDiv } from './style';
 const Home = () => {
   const [isHome] = useState(true);
 
-  const { mainPosts, hasMorePosts, loadPostLoading, loadPostsDone } = useSelector(({ post, loading }) => ({
+  const { mainPosts, hasMorePosts, loadPostLoading, loadPostsDone, page } = useSelector(({ post, loading }) => ({
     mainPosts: post.mainPosts,
     hasMorePosts: post.hasMorePosts,
     loadPostLoading: loading['LOAD_POSTS_REQUEST'],
     loadPostsDone: post.loadPostsDone,
+    page: post.page,
   }));
 
   const dispatch = useDispatch();
@@ -21,15 +22,18 @@ const Home = () => {
   useEffect(() => {
     //dispatch(loadUserAction());
     console.log('더미데이터 최초 한번 받아옴');
-    dispatch(loadPostsAction(10));
+    dispatch(loadPostsAction(page));
   }, []);
 
   useEffect(() => {
+    console.log(mainPosts);
+
     function onScroll() {
       if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
         if (hasMorePosts && !loadPostLoading && loadPostsDone) {
           //console.log('요청함', loadPostLoading);
-          dispatch(loadPostsAction(10));
+          //console.log('이게 될까?', page);
+          dispatch(loadPostsAction(page));
         }
       }
     }
@@ -37,16 +41,18 @@ const Home = () => {
     return () => {
       window.removeEventListener('scroll', onScroll);
     };
-  }, [mainPosts, hasMorePosts, loadPostLoading, loadPostsDone, dispatch]);
+  }, [mainPosts, hasMorePosts, loadPostLoading, loadPostsDone, dispatch, page]);
 
   return (
     <>
       <AppLayout isHome={isHome}>
-        <StyledMainDiv>
-          {mainPosts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
-        </StyledMainDiv>
+        {mainPosts.length != 1 && (
+          <StyledMainDiv>
+            {mainPosts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </StyledMainDiv>
+        )}
       </AppLayout>
     </>
   );

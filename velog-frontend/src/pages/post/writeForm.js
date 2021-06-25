@@ -14,8 +14,10 @@ const StyledPostDiv = styled.div`
 `;
 
 const writeForm = memo((props) => {
-  const { addPostDone } = useSelector(({ post }) => ({
+  const { addPostDone, principal, postId } = useSelector(({ post, auth }) => ({
     addPostDone: post.addPostDone,
+    principal: auth.principal,
+    postId: post.addPostId,
   }));
 
   const [value, setvalue] = useState('');
@@ -27,9 +29,9 @@ const writeForm = memo((props) => {
     if (addPostDone) {
       //history go postdetail
       console.log('저장하기 성공');
-      props.history.replace('/user/1');
+      props.history.replace(`/${principal.id}/${postId}`);
     }
-  }, [addPostDone]);
+  }, [addPostDone, postId]);
 
   const onPostFinish = (values) => {
     console.log('post 제출함', values);

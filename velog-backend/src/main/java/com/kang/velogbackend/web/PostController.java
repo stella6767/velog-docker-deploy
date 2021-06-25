@@ -16,8 +16,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
 @RequiredArgsConstructor
 @RestController
 public class PostController {
@@ -26,16 +24,20 @@ public class PostController {
     private final PostService postService;
 
 
-    // 주소: /?page=0   자동으로 이렇게 먹음
-    @GetMapping("/")
+    // 주소: /post/all?page=0   자동으로 이렇게 먹음
+    @GetMapping("/post/all")
     public CMRespDto<?> findAll(@AuthenticationPrincipal PrincipalDetails details, @PageableDefault(sort = "id",direction = Sort.Direction.DESC, size = 10) Pageable pageable){
 
         log.info("메인 페이지.");
+        Long id = 0L;
 
-        //Page<Post> posts = postService.전체찾기(details.getUser().getId(), pageable);
-        Page<Post> posts = postService.전체찾기(1L, pageable);
+        if(details != null){
+            id = details.getUser().getId();
+        }
 
-        return new CMRespDto<>(1, "게시글 불러오기 성공", posts);
+        Page<Post> posts = postService.전체찾기(id, pageable);
+
+        return new CMRespDto<>(1, "게시글리스트 불러오기", posts);
     }
 
 
@@ -50,15 +52,8 @@ public class PostController {
             throw new NoLoginException("로그인이 필요한 서비스입니다.");
         }
 
-
-        try {
-            postService.저장하기(postSaveReqDto, principalDetails);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //return "redirect:/user/"+principalDetails.getUser().getId();
-        return null;
+        Long postId = postService.저장하기(postSaveReqDto, principalDetails);
+        return new CMRespDto<>(1,"게시글 저장 성공",postId );
     }
 
 
