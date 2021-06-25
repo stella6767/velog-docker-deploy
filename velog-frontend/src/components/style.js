@@ -1,5 +1,5 @@
 import styled, { createGlobalStyle } from 'styled-components';
-import { Dropdown, Form } from 'antd';
+import { Dropdown, Form, Comment } from 'antd';
 import { Link } from 'react-router-dom';
 
 export const Global = createGlobalStyle`
@@ -258,4 +258,45 @@ export const StyledTagLink = styled(Link)`
   text-decoration: none;
   font-weight: 500;
   font-size: 1rem;
+`;
+
+export const StyledCommentForm = styled.div`
+  .ant-form-item-control-input-content {
+    flex: auto;
+    max-width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  button {
+    display: inline-flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background: rgb(18, 184, 134);
+    color: white;
+    border-radius: 4px;
+    padding: 0px 1.25rem;
+    height: 2rem;
+    font-size: 1rem;
+  }
+
+  textarea {
+    resize: none;
+    padding: 1rem 1rem 1.5rem;
+    outline: none;
+    border: 1px solid rgb(233, 236, 239);
+    margin-bottom: 1.5rem;
+    width: 100%;
+    border-radius: 4px;
+    min-height: 6.125rem;
+    font-size: 1rem;
+    color: rgb(33, 37, 41);
+    line-height: 1.75;
+  }
 `;

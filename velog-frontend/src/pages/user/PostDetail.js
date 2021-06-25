@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { getPostAction } from '../../reducers/post';
 import { useSelector } from 'react-redux';
-import { HeartOutlined } from '@ant-design/icons';
+import { HeartOutlined, HeartFilled } from '@ant-design/icons';
 
 const PostDetail = memo((props) => {
   const { post, getPostDone } = useSelector(({ post, loading }) => ({
@@ -50,8 +50,8 @@ const PostDetail = memo((props) => {
                 </div>
                 <div>
                   <button className="like-btn">
-                    <HeartOutlined />
-                    <span>138</span>
+                    {post.likeState ? <HeartFilled /> : <HeartOutlined />}
+                    <span>{post.likeCount}</span>
                   </button>
                 </div>
               </StyledHeadDescDiv>
@@ -60,7 +60,10 @@ const PostDetail = memo((props) => {
             <StyledDetailContentDiv dangerouslySetInnerHTML={{ __html: post.content }} />
             <StyledDetailCommentDiv>
               <h3>{post.comments.length}개의 댓글</h3>
-              <CommentForm />
+              <CommentForm postId={post.id} />
+              {/* {post.comments.map((comment) => (
+                <CommentCard key={comment.id} comment={comment} />
+              ))} */}
               <CommentCard />
             </StyledDetailCommentDiv>
           </StyledPostDetailContainer>

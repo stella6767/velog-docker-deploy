@@ -1,41 +1,51 @@
 import React, { useState } from 'react';
 import { Comment, Avatar, Form, Button, List, Input } from 'antd';
 import moment from 'moment';
+import { StyledCommentForm } from './style';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { commentPostsAction } from '../reducers/comment';
+import useUpdateEffect from '../lib/hooks/useUpdateEffect';
 
 const { TextArea } = Input;
 
-const CommentList = ({ comments }) => (
-  <List
-    dataSource={comments}
-    header={`${comments.length} ${comments.length > 1 ? 'replies' : 'reply'}`}
-    itemLayout="horizontal"
-    renderItem={(props) => <Comment {...props} />}
-  />
-);
-
-const Editor = ({ onChange, onSubmit, submitting, value }) => (
-  <>
+const Editor = ({ onChange, onSubmit, loading, value }) => (
+  <StyledCommentForm>
     <Form.Item>
-      <TextArea rows={4} onChange={onChange} value={value} />
+      <TextArea rows={4} onChange={onChange} value={value} placeholder="댓글을 작성하세요" />
     </Form.Item>
     <Form.Item>
-      <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
-        Add Comment
+      <Button htmlType="submit" loading={loading} onClick={onSubmit}>
+        댓글 쓰기
       </Button>
     </Form.Item>
-  </>
+  </StyledCommentForm>
 );
 
-const CommentForm = () => {
-  const [comments, setComments] = useState([]);
-  const [submitting, setSubmitting] = useState(false);
+const CommentForm = (props) => {
+  const { postId } = props;
+
+  const { commentLoading, commentPostDone } = useSelector(({ loading, comment }) => ({
+    commentLoading: loading['COMMENT_POST_REQUEST'],
+    commentPostDone: comment.commentPostDone,
+  }));
+  const dispatch = useDispatch();
+
   const [value, setValue] = useState('');
+
+  useUpdateEffect(() => {
+    if (commentPostDone) {
+      setValue('');
+    }
+  }, [commentPostDone]);
 
   const handleSubmit = () => {
     if (!value) {
       return;
     }
-    setTimeout(() => {}, 1000);
+    console.log(value);
+    const content = value; //이름을 일치시켜야 된다..
+    dispatch(commentPostsAction({ content, postId }));
   };
 
   const handleChange = (e) => {
@@ -44,11 +54,7 @@ const CommentForm = () => {
 
   return (
     <>
-      {comments.length > 0 && <CommentList comments={comments} />}
-      <Comment
-        avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" alt="Han Solo" />}
-        content={<Editor onChange={handleChange} onSubmit={handleSubmit} submitting={submitting} value={value} />}
-      />
+      <Comment content={<Editor onChange={handleChange} onSubmit={handleSubmit} loading={commentLoading} value={value} />} />
     </>
   );
 };

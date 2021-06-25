@@ -57,7 +57,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             if(userId!=null){
 
-                log.info(userId + " jwtAccessToken: " + accessToken);
                 User userEntity = userRepository.findById(userId).orElseThrow(()->{
                     return new IllegalArgumentException("id를 찾을 수 없습니다.");
                 });
@@ -80,7 +79,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 }
             } catch (Exception exception) {
                 exception.printStackTrace();
-                response.sendError(-1, "refresh 토큰이 만료. 다시 로그인 필요");
+                response.sendError(-1, "예상치 못한 에러");
             }
         }
 
