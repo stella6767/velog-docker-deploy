@@ -11,22 +11,23 @@ import moment from 'moment';
 // `;
 //dangerouslySetInnerHTML={{ __html: post.content }}
 const PostCard = (props) => {
-  const { post, key } = props;
+  const { post, loading } = props;
 
   return (
     <>
       <Global />
-      <Card cover={post.thumbnail != null ? <img alt="example" src={post.thumbnail} /> : null}>
+      <Card cover={post.thumbnail != null ? <img alt="example" src={post.thumbnail} /> : null} loading={loading}>
+        {/* <Card cover={<img alt="" src={`${post.thumnail}`} />}> */}
         <Link to={`/${post.user.id}/${post.id}`}>
           <Card.Meta title={post.title} description={<div dangerouslySetInnerHTML={{ __html: post.content }} />} />
         </Link>
         <StyledPostCardDateDiv>
-          <span>{moment(post.createDate, 'DD일 전').fromNow()}</span>
+          <span>{moment(post.createDate).format('YYYY년 MM월 DD일')}</span>
           <span className="separator">·</span>
           <span>{post.comments.length}개의 댓글</span>
         </StyledPostCardDateDiv>
         <StyledPostCardFootDiv>
-          <Link to="" className="userinfo" href="/@eungyeole">
+          <Link to={`/${post.user.id}`} className="userinfo" href="/@eungyeole">
             <span>
               by <b>{post.user.username}</b>
             </span>

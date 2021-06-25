@@ -62,7 +62,7 @@ const post = handleActions(
       mainPosts: state.mainPosts.concat(data.data.content),
       cmRespDto: data,
       page: state.page + 1,
-      hasMorePosts: state.mainPosts.length < 100,
+      hasMorePosts: !data.data.last,
     }),
     [LOAD_POSTS_FAILURE]: (state, { payload: error }) => ({
       ...state,

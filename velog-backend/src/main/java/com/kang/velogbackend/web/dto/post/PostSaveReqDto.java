@@ -11,12 +11,12 @@ public class PostSaveReqDto {
     private String content;
     private String tags;
 
-    public Post toEntity(String thumnail, User userEntity){
+    public Post toEntity(String thumbnail, User userEntity){
 
         return Post.builder()
                 .title(title)
                 .content(content)
-                .thumnail(thumnail)
+                .thumbnail(thumbnail)
                 .user(userEntity)
                 .build();
     }

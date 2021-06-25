@@ -15,6 +15,7 @@ import com.kang.velogbackend.web.dto.auth.AuthReqDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -91,10 +92,11 @@ public class AuthController {
             return new CMRespDto<>(1,"로그인성공",jwtUtil.makeLoginRespDto(principal));
 
         }else{
-            //response.sendError(HttpStatus.UNAUTHORIZED.value(),"유저정보를 찾을 수 없습니다.");
-            return new CMRespDto<>(-1,"로그인에러",null);
+            response.sendError(HttpStatus.UNAUTHORIZED.value(),"유저정보를 찾을 수 없습니다.");
+            //return new CMRespDto<>(-1,"로그인에러",null);
         }
 
+        return null;
     }
 
 

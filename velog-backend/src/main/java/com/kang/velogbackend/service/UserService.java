@@ -30,20 +30,15 @@ public class UserService {
 
 
     @Transactional(readOnly = true)
-    public UserVelogRespDto 회원블로그(Long userId, Long principalId) {
+    public UserVelogRespDto 회원블로그(Long userId) {
         UserVelogRespDto userVelogRespDto = new UserVelogRespDto();
 
         User userEntity = userRepository.findById(userId).orElseThrow(()-> {
             return new IllegalArgumentException();
         });
 
-        int followState = followRepository.mFollowState(principalId, userId);
-        int followCount = followRepository.mFollowCount(userId);
 
-        System.out.println(followState == 1);
 
-        userVelogRespDto.setFollowState(followState == 1);
-        userVelogRespDto.setFollowCount((long)followCount); // 내가 팔로우 하고 있는 카운트
         userVelogRespDto.setPostCount((long) userEntity.getPosts().size());
 
         userEntity.getPosts().forEach((post) ->{

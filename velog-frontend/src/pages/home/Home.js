@@ -21,7 +21,6 @@ const Home = () => {
 
   useEffect(() => {
     //dispatch(loadUserAction());
-    console.log('더미데이터 최초 한번 받아옴');
     dispatch(loadPostsAction(page));
   }, []);
 
@@ -49,7 +48,7 @@ const Home = () => {
         {mainPosts.length != 1 && (
           <StyledMainDiv>
             {mainPosts.map((post) => (
-              <PostCard key={post.id} post={post} />
+              <PostCard key={post.id} post={post} loading={loadPostLoading} />
             ))}
           </StyledMainDiv>
         )}

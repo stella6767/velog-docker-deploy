@@ -78,11 +78,14 @@ public class PostService {
 
         int likeCount = postEntity.getLikes().size();
         postEntity.setLikeCount(likeCount); //view에서 연산을 최소한 하기 위해
-        postEntity.getLikes().forEach((like -> {
-            if(like.getUser().getId() == principalId){
-                postEntity.setLikeState(true);
-            }
-        }));
+
+        if(principalId != 0L){
+            postEntity.getLikes().forEach((like -> {
+                if(like.getUser().getId() == principalId){
+                    postEntity.setLikeState(true);
+                }
+            }));
+        }
 
         return postEntity;
     }

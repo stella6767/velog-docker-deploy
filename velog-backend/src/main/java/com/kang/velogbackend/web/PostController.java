@@ -22,14 +22,14 @@ public class PostController {
 
     private static final Logger log = LoggerFactory.getLogger(PostController.class);
     private final PostService postService;
-
+    private Long id = 0L;
 
     // 주소: /post/all?page=0   자동으로 이렇게 먹음
     @GetMapping("/post/all")
     public CMRespDto<?> findAll(@AuthenticationPrincipal PrincipalDetails details, @PageableDefault(sort = "id",direction = Sort.Direction.DESC, size = 10) Pageable pageable){
 
         log.info("메인 페이지.");
-        Long id = 0L;
+
 
         if(details != null){
             id = details.getUser().getId();
@@ -72,7 +72,11 @@ public class PostController {
 
         log.info("게시글 싱세보기." + userId+" " + postId);
 
-        return new CMRespDto<>(1,"게시글 상세보기", postService.한건가져오기(userId, postId, details.getUser().getId()));
+        if(details != null) {
+            id = details.getUser().getId();
+        }
+
+        return new CMRespDto<>(1,"게시글 상세보기", postService.한건가져오기(userId, postId, id));
     }
 
 

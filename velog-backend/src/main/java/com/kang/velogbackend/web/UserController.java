@@ -1,13 +1,11 @@
 package com.kang.velogbackend.web;
 
-import com.kang.velogbackend.congfig.auth.PrincipalDetails;
 import com.kang.velogbackend.service.UserService;
 import com.kang.velogbackend.web.dto.CMRespDto;
 import com.kang.velogbackend.web.dto.user.UserVelogRespDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,12 +19,12 @@ public class UserController {
 
 
 
-    @GetMapping("/user/{id}") //개인 벨로그
-    public CMRespDto<?> profile(@PathVariable Long id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    @GetMapping("/user/{userId}") //개인 벨로그
+    public CMRespDto<?> profile(@PathVariable Long userId) {
 
-        log.info("들어옴?" + id + principalDetails.getUser().getId());
+        log.info("들어옴?" + userId );
 
-        UserVelogRespDto userVelogRespDto = userService.회원블로그(id, principalDetails.getUser().getId());
+        UserVelogRespDto userVelogRespDto = userService.회원블로그(userId);
 
         return new CMRespDto<>(1, "개인벨로그",userVelogRespDto);
         //return null;
