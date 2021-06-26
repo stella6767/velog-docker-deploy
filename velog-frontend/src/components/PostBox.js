@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { post } from '../lib/api/post';
-import { StyledPostBoxDiv, StyledPostContentP, StyledTagLink } from './style';
+import { StyledPostBoxDiv, StyledPostContentP, StyledDetailTagLink } from './style';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
@@ -17,7 +17,7 @@ const PostBox = memo((props) => {
           <h2>{post.title}</h2>
           <StyledPostContentP dangerouslySetInnerHTML={{ __html: post.content.substr(0, 200) }} />
           <div className="tags-wrapper">
-            <StyledTagLink to="/sdaas">태그 map으로 뿌려야지..</StyledTagLink>
+            <StyledDetailTagLink to="/sdaas">태그 map으로 뿌려야지..</StyledDetailTagLink>
           </div>
           <div className="subinfo">
             <span>{moment(post.createDate).format('YYYY년 MM월 DD일')}</span>

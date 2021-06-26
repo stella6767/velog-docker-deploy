@@ -259,23 +259,6 @@ export const StyledPostContentP = styled.p`
   overflow-wrap: break-word;
 `;
 
-export const StyledTagLink = styled(Link)`
-  margin-bottom: 0.875rem;
-  background: rgb(241, 243, 245);
-  padding-left: 1rem;
-  padding-right: 1rem;
-  height: 2rem;
-  border-radius: 1rem;
-  display: inline-flex;
-  -webkit-box-align: center;
-  align-items: center;
-  margin-right: 0.875rem;
-  color: rgb(12, 166, 120);
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 1rem;
-`;
-
 export const StyledCommentForm = styled.div`
   .ant-form-item-control-input-content {
     flex: auto;
@@ -345,3 +328,68 @@ export const StyledLikeBtn = styled.button`
 `;
 
 export const StyledUnlikeBtn = styled(StyledLikeBtn)``;
+
+export const StyledTagUl = styled.ul`
+  overflow-x: auto;
+  margin-top: -1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 0.5rem;
+`;
+
+// export const StyledTagLink = styled(Link)`
+//   flex-shrink: 0;
+//   height: 1.5rem;
+//   font-size: 0.75rem;
+//   border-radius: 0.75rem;
+//   padding-left: 0.75rem;
+//   padding-right: 0.75rem;
+//   background: rgb(241, 243, 245);
+//   color: rgb(52, 58, 64);
+//   /* display: flex; */
+//   -webkit-box-align: center;
+//   align-items: center;
+//   line-height: 1.5;
+//   text-decoration: none;
+//   display: inline-block;
+// `;
+
+export const StyledTagLi = styled.li`
+  display: inline;
+  margin-left: 0.5rem;
+  flex-shrink: 0;
+  height: 1.5rem;
+  font-size: 0.75rem;
+  border-radius: 0.75rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  background: rgb(241, 243, 245);
+  color: rgb(52, 58, 64);
+  -webkit-box-align: center;
+  align-items: center;
+  line-height: 1.5;
+  text-decoration: none;
+
+  span {
+    margin-left: 0.25rem;
+    color: rgb(134, 142, 150);
+    font-size: 0.75rem;
+  }
+`;
+
+export const StyledDetailTagLink = styled(Link)`
+  margin-bottom: 0.875rem;
+  background: rgb(241, 243, 245);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  height: 2rem;
+  border-radius: 1rem;
+  display: inline-flex;
+  -webkit-box-align: center;
+  align-items: center;
+  margin-right: 0.875rem;
+  color: rgb(12, 166, 120);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+`;

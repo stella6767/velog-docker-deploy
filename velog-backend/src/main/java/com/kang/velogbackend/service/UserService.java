@@ -1,6 +1,7 @@
 package com.kang.velogbackend.service;
 
-import com.kang.velogbackend.domain.follow.FollowRepository;
+import com.kang.velogbackend.domain.tag.Tag;
+import com.kang.velogbackend.domain.tag.TagRepository;
 import com.kang.velogbackend.domain.user.User;
 import com.kang.velogbackend.domain.user.UserRepository;
 import com.kang.velogbackend.web.dto.user.UserVelogRespDto;
@@ -10,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -17,7 +20,7 @@ public class UserService {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
-    private final FollowRepository followRepository;
+    private final TagRepository tagRepository;
 
 
     @Transactional
@@ -37,15 +40,15 @@ public class UserService {
             return new IllegalArgumentException();
         });
 
-
-
         userVelogRespDto.setPostCount((long) userEntity.getPosts().size());
 
         userEntity.getPosts().forEach((post) ->{
             post.setLikeCount(post.getLikes().size());
         });//굳이 likeCount 집어넣을 필요없이 userEntity의 image의 likes 사이즈 들고오면 되지만, 뷰에서 연산을 최소화하기 위해 set해주는 작업을 거치자.
 
+        List<Tag> tagsEntity = tagRepository.findAll();
 
+        userVelogRespDto.setTags(tagsEntity);
         userVelogRespDto.setUser(userEntity);
 
         return userVelogRespDto;

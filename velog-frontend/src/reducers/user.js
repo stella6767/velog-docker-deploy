@@ -21,6 +21,7 @@ const initialState = {
   userError: null,
   userData: null,
 
+  userTags: [], //배열로 안 받으면 배열로 자동 변환안 되는 것 같은디??
   user: null,
   posts: [],
   cmRespDto: null,
@@ -42,6 +43,7 @@ const user = handleActions(
       userDone: true,
       cmRespDto: data,
       userData: data.data,
+      userTags: data.data.tags,
       posts: data.data.user.posts,
     }),
     [USER_FAILURE]: (state, { payload: error }) => ({
