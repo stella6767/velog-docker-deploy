@@ -3,26 +3,37 @@ import { useDispatch, useSelector } from 'react-redux';
 import AppLayout from '../../components/AppLayout';
 import PostCard from '../../components/PostCard';
 import { loadUserAction } from '../../reducers/auth';
-import { loadPostsAction } from '../../reducers/post';
+import { loadPostsAction, loadPostsInitAction } from '../../reducers/post';
 import { StyledMainDiv } from './style';
 
 const Home = () => {
   const [isHome] = useState(true);
+  const [page, setPage] = useState(0);
 
-  const { mainPosts, hasMorePosts, loadPostLoading, loadPostsDone, page } = useSelector(({ post, loading }) => ({
+  const { mainPosts, hasMorePosts, loadPostLoading, loadPostsDone } = useSelector(({ post, loading }) => ({
     mainPosts: post.mainPosts,
     hasMorePosts: post.hasMorePosts,
     loadPostLoading: loading['LOAD_POSTS_REQUEST'],
     loadPostsDone: post.loadPostsDone,
-    page: post.page,
   }));
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     //dispatch(loadUserAction());
+
+    dispatch(loadPostsInitAction());
+    //window.location.reload(); // 새로고침, mainPosts 데이터 초기화 작업할려는데 이렇게는 안 되겠네..
+    setPage(0);
+    console.log('왜 바로바로 실행이 안되지..');
     dispatch(loadPostsAction(page));
   }, []);
+
+  useEffect(() => {
+    if (loadPostsDone) {
+      setPage(page + 1);
+    }
+  }, [loadPostsDone]);
 
   useEffect(() => {
     console.log(mainPosts);

@@ -44,7 +44,7 @@ public class AuthController {
 
     @PostMapping("/auth/join") //Oauth 가 아닌
     public CMRespDto<?> join(@RequestBody AuthReqDto authReqDto) {
-        log.info(authReqDto.toString());//@RequestBody가 받을 수 있는 application/json 설정을 프론트엔드 쪽에서 꼭 해주라ㅠㅠ
+        log.info("회원가입 요청 들어옴 " + authReqDto.toString());//@RequestBody가 받을 수 있는 application/json 설정을 프론트엔드 쪽에서 꼭 해주라ㅠㅠ
 
         //이미 존재하는 닉네임 상관없이..
         authService.회원가입(authReqDto.toEntity());

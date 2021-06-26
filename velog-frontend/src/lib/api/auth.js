@@ -1,3 +1,4 @@
+import { deleteCookie } from '../constants/auth';
 import client from './client';
 
 // 로그인
@@ -7,7 +8,12 @@ export const login = (data) => client.post('/login', JSON.stringify(data));
 export const logout = (data) => client.get('/logout');
 
 // 회원가입
-export const join = (data) => client.post('/auth/join', JSON.stringify(data));
+export const join = (data) => {
+  deleteCookie('accessToken');
+  deleteCookie('refreshToken');
+
+  return client.post('/auth/join', JSON.stringify(data));
+};
 
 //소셜 로그인
 export const socialLogin = (data) => client.post('/auth/oauth', JSON.stringify(data));
