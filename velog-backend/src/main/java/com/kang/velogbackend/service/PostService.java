@@ -92,6 +92,33 @@ public class PostService {
 
 
     @Transactional(readOnly = true)
+    public Page<Post> 트렌딩게시글(Long principalId, Pageable pageable){
+
+        log.info("전체찾기");
+        Page<Post> posts = postRepository.findAll(pageable);
+
+
+        if(principalId != 0L){
+            //좋아요 하트 색깔 로직
+            posts.forEach((post)->{
+
+                int likeCount = post.getLikes().size();
+                post.setLikeCount(likeCount);
+
+                post.getLikes().forEach((like)->{
+                    if(like.getUser().getId() == principalId) {
+                        post.setLikeState(true);
+                    }
+                });
+            });
+        }
+
+        return posts;
+    }
+
+
+
+    @Transactional(readOnly = true)
     public Page<Post> 전체찾기(Long principalId, Pageable pageable){
 
         log.info("전체찾기");

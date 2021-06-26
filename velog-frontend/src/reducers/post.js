@@ -4,26 +4,34 @@ import { takeLatest, throttle } from 'redux-saga/effects';
 import createFakeRequestSaga, { createRequestActionTypes, createRequestSaga } from '../lib/createRequestSaga';
 import * as postAPI from '../lib/api/post';
 
+const LOAD_POSTS_INIT = 'LOAD_POSTS_INIT';
 const [LOAD_POSTS_REQUEST, LOAD_POSTS_SUCCESS, LOAD_POSTS_FAILURE] = createRequestActionTypes('LOAD_POSTS');
 const [ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE] = createRequestActionTypes('ADD_POST');
 const [GET_POST_REQUEST, GET_POST_SUCCESS, GET_POST_FAILURE] = createRequestActionTypes('GET_POST');
-const LOAD_POSTS_INIT = 'LOAD_POSTS_INIT';
+const [LIKE_POST_REQUEST, LIKE_POST_SUCCESS, LIKE_POST_FAILURE] = createRequestActionTypes('LIKE_POST');
+const [LIKE_DELETE_REQUEST, LIKE_DELETE_SUCCESS, LIKE_DELETE_FAILURE] = createRequestActionTypes('LIKE_DELETE');
 
 export const loadPostsInitAction = createAction(LOAD_POSTS_INIT);
 export const loadPostsAction = createAction(LOAD_POSTS_REQUEST, (data) => data);
 export const addPostAction = createAction(ADD_POST_REQUEST, (data) => data);
 export const getPostAction = createAction(GET_POST_REQUEST, ({ userId, postId }) => ({ userId, postId }));
+export const likePostAction = createAction(LIKE_POST_REQUEST, (data) => data);
+export const likeDeleteAction = createAction(LIKE_DELETE_REQUEST, (data) => data);
 
 //const loadPostsSaga = createFakeRequestSaga(LOAD_POSTS_REQUEST, '');
 const loadPostsSaga = createRequestSaga(LOAD_POSTS_REQUEST, postAPI.allList);
 const addPostSaga = createRequestSaga(ADD_POST_REQUEST, postAPI.post);
 const getPostSaga = createRequestSaga(GET_POST_REQUEST, postAPI.detail);
+const likePostSaga = createRequestSaga(LIKE_POST_REQUEST, postAPI.like);
+const likeDeleteSaga = createRequestSaga(LIKE_DELETE_REQUEST, postAPI.unlike);
 
 export function* postSaga() {
   //이벤트 리스너!
   yield throttle(3000, LOAD_POSTS_REQUEST, loadPostsSaga);
   yield takeLatest(ADD_POST_REQUEST, addPostSaga);
   yield takeLatest(GET_POST_REQUEST, getPostSaga);
+  yield takeLatest(LIKE_POST_REQUEST, likePostSaga);
+  yield takeLatest(LIKE_DELETE_REQUEST, likeDeleteSaga);
 }
 
 const initialState = {
@@ -39,6 +47,14 @@ const initialState = {
   //게시글 상세보기
   getPostDone: false,
   getPostError: null,
+
+  //게시글 좋아요
+  likePostDone: false,
+  likePostError: null,
+
+  //게시글 싫어요
+  likeDeleteDone: false,
+  likeDeleteError: null,
 
   //page: 0, //10개 단위,
   post: null,
@@ -112,6 +128,42 @@ const post = handleActions(
     [GET_POST_FAILURE]: (state, { payload: error }) => ({
       ...state,
       getPostError: error,
+    }),
+
+    //게시글 좋아요
+    [LIKE_POST_REQUEST]: (state, { payload: data }) =>
+      produce(state, (draft) => {
+        draft.cmRespDto = data;
+        draft.likePostDone = false;
+        draft.likePostError = null;
+      }),
+    [LIKE_POST_SUCCESS]: (state, { payload: data }) => ({
+      ...state,
+      likePostError: null,
+      likePostDone: true,
+      cmRespDto: data,
+    }),
+    [LIKE_POST_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      likePostError: error,
+    }),
+
+    //게시글 싫어요
+    [LIKE_DELETE_REQUEST]: (state, { payload: data }) =>
+      produce(state, (draft) => {
+        draft.cmRespDto = data;
+        draft.likeDeleteDone = false;
+        draft.likeDeleteError = null;
+      }),
+    [LIKE_DELETE_SUCCESS]: (state, { payload: data }) => ({
+      ...state,
+      likeDeleteError: null,
+      likeDeleteDone: true,
+      cmRespDto: data,
+    }),
+    [LIKE_DELETE_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      likeDeleteError: error,
     }),
   },
   initialState,

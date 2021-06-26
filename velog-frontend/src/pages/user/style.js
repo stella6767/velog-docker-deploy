@@ -44,33 +44,6 @@ export const Global = createGlobalStyle`
     word-break: keep-all;
 }
 
-.like-btn{
-  background: white;
-    border: 1px solid rgb(173, 181, 189);
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-    display: flex;
-    -webkit-box-align: center;
-    align-items: center;
-    height: 1.5rem;
-    border-radius: 0.75rem;
-    outline: none;
-
-    svg {
-      width: 0.75rem;
-      height: 0.75rem;
-      margin-right: 0.75rem;
-      color: rgb(173, 181, 189);
-    }
-
-    span{
-      font-size: 0.75rem;
-      font-weight: bold;
-      color: rgb(173, 181, 189);
-    }
-}
-
-
 
 `;
 

@@ -10,7 +10,7 @@ import Search from './pages/search/Search';
 import useUpdateEffect from './lib/hooks/useUpdateEffect';
 import Header from './pages/Header';
 import User from './pages/user/User';
-import PostDetail from './pages/user/PostDetail';
+import PostDetail from './pages/post/PostDetail';
 import 'antd/dist/antd.css';
 import { Switch } from 'react-router-dom';
 
@@ -26,6 +26,7 @@ function App() {
     }
   }, [logoutDone]);
 
+  //404 에러페이지는 만들지 고민중
   return (
     <>
       <Switch>
@@ -36,6 +37,7 @@ function App() {
         <Route path="/header" exact={true} component={Header} />
         <Route path="/:userId" exact={true} component={User} />
         <Route path="/:userId/:postId" exact={true} component={PostDetail} />
+        <Route path="/recent" exact={true} component={PostDetail} />
       </Switch>
     </>
   );

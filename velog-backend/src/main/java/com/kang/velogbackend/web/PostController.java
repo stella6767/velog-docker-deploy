@@ -3,6 +3,7 @@ package com.kang.velogbackend.web;
 import com.kang.velogbackend.congfig.auth.PrincipalDetails;
 import com.kang.velogbackend.domain.post.Post;
 import com.kang.velogbackend.handler.customexception.NoLoginException;
+import com.kang.velogbackend.service.LikesService;
 import com.kang.velogbackend.service.PostService;
 import com.kang.velogbackend.web.dto.CMRespDto;
 import com.kang.velogbackend.web.dto.post.PostSaveReqDto;
@@ -22,13 +23,14 @@ public class PostController {
 
     private static final Logger log = LoggerFactory.getLogger(PostController.class);
     private final PostService postService;
+    private  final LikesService likesService;
     private Long id = 0L;
 
     // 주소: /post/all?page=0   자동으로 이렇게 먹음
     @GetMapping("/post/all")
-    public CMRespDto<?> findAll(@AuthenticationPrincipal PrincipalDetails details, @PageableDefault(sort = "id",direction = Sort.Direction.DESC, size = 10) Pageable pageable){
+    public CMRespDto<?> findAllByRecent(@AuthenticationPrincipal PrincipalDetails details, @PageableDefault(sort = "id",direction = Sort.Direction.DESC, size = 10) Pageable pageable){
 
-        log.info("메인 페이지.");
+        log.info("최신글 페이지.");
 
 
         if(details != null){
@@ -37,6 +39,20 @@ public class PostController {
 
         Page<Post> posts = postService.전체찾기(id, pageable);
 
+        return new CMRespDto<>(1, "게시글리스트 불러오기", posts);
+    }
+
+
+    @GetMapping("/post/trend")  //프론트단에서는 "/" 로 맵핑.
+    public CMRespDto<?> findAllByLike(@AuthenticationPrincipal PrincipalDetails details, @PageableDefault(sort = "id",direction = Sort.Direction.DESC, size = 10) Pageable pageable){
+
+        log.info("메인 페이지.");
+
+        if(details != null){
+            id = details.getUser().getId();
+        }
+
+        Page<Post> posts = postService.전체찾기(id, pageable);
         return new CMRespDto<>(1, "게시글리스트 불러오기", posts);
     }
 
@@ -79,6 +95,30 @@ public class PostController {
         return new CMRespDto<>(1,"게시글 상세보기", postService.한건가져오기(userId, postId, id));
     }
 
+
+    @PostMapping("/post/{postId}/likes")
+    public CMRespDto<?> like(@AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable Long postId){
+
+        log.info("좋아요 버튼 클릭");
+        if(principalDetails == null) {
+            throw new NoLoginException("로그인이 필요한 서비스입니다.");
+        }
+
+        likesService.좋아요(postId, principalDetails.getUser().getId());
+        return new CMRespDto<>(1, "좋아요 등록",null);
+    }
+
+
+    @DeleteMapping("/post/{postId}/likes")
+    public CMRespDto<?> unLike(@AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable Long postId){
+        log.info("좋아요 해제 클릭");
+        if(principalDetails == null) {
+            throw new NoLoginException("로그인이 필요한 서비스입니다.");
+        }
+
+        likesService.싫어요(postId, principalDetails.getUser().getId());
+        return new CMRespDto<>(1, "좋아요 해제",null);
+    }
 
 
 

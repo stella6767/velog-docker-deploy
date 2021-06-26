@@ -14,6 +14,12 @@ export const allList = (page) => {
   return client.get(`/post/all?page=${page}`);
 };
 
+//게시글 좋아요
+export const like = (postId) => client.post(`/post/${postId}/likes`);
+
+//게시글 싫어요(좋아요 해제)
+export const unlike = (postId) => client.delete(`/post/${postId}/likes`);
+
 //quil editor 이미지 업로드용도
 export const imgUpload = (data) => client.post('/post/2/thumbnail', JSON.stringify(data), { headers });
 

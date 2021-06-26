@@ -23,7 +23,6 @@ const Home = () => {
     //dispatch(loadUserAction());
 
     dispatch(loadPostsInitAction());
-    //window.location.reload(); // 새로고침, mainPosts 데이터 초기화 작업할려는데 이렇게는 안 되겠네..
     setPage(0);
     console.log('왜 바로바로 실행이 안되지..');
     dispatch(loadPostsAction(page));

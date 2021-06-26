@@ -13,14 +13,10 @@ export const Global = createGlobalStyle`
 
 
  .ant-layout-content {
-  padding-top: 0.5rem;
+  padding-top: 1rem;
 } 
 
-.hideHeader { 
-  position: fixed;
-  background-color: #F2F5F7;
-  z-index: 100;
-}
+
 
 
 .ant-card-cover > img{

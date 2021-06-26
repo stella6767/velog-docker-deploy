@@ -1,31 +1,40 @@
 import React, { memo } from 'react';
 import AppHeader from '../../components/AppHeader';
-import { StyledPostDetailContainer, Global, StyledHeadDescDiv, StyledDetailContentDiv, StyledDetailCommentDiv } from './style';
+import { StyledPostDetailContainer, Global, StyledHeadDescDiv, StyledDetailContentDiv, StyledDetailCommentDiv } from '../user/style';
 import { Link } from 'react-router-dom';
 import CommentForm from '../../components/CommentForm';
 import CommentCard from '../../components/CommentCard';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { getPostAction } from '../../reducers/post';
+import { getPostAction, likePostAction } from '../../reducers/post';
 import { useSelector } from 'react-redux';
 import { HeartOutlined, HeartFilled } from '@ant-design/icons';
+import { useCallback } from 'react';
+import useUpdateEffect from '../../lib/hooks/useUpdateEffect';
+import { useState } from 'react';
+import PostDetailHeader from '../../components/PostDetailHeader';
 
 const PostDetail = memo((props) => {
-  const { post, getPostDone } = useSelector(({ post, loading }) => ({
+  const { post, getPostDone, likePostDone, likePostError, likeDeleteDone, likeDeleteError } = useSelector(({ post, loading }) => ({
     post: post.post,
     getPostDone: post.getPostDone,
+    likePostDone: post.likePostDone,
+    likePostError: post.likePostError,
+    likeDeleteDone: post.likeDeleteDone,
+    likeDeleteError: post.likeDeleteError,
   }));
 
   const dispatch = useDispatch();
 
+  // const [likeState, setLikeState] = useState(post.likeState || false); // useState(post.likeState);
+  // const [likeCount, setLikeCount] = useState(post.likeCount || 0);
+
   useEffect(() => {
-    console.log('props', props);
-    console.log('postId', props.match.params.postId);
-    console.log('userId', props.match.params.userId);
-    //dispatch(getPostAction(props.match.params.userId, props.match.params.postId));
+    // console.log('props', props);
+    // console.log('postId', props.match.params.postId);
+    // console.log('userId', props.match.params.userId);
     const postId = props.match.params.postId;
     const userId = props.match.params.userId;
-
     dispatch(getPostAction({ userId, postId }));
   }, []);
 
@@ -36,27 +45,15 @@ const PostDetail = memo((props) => {
           <Global />
           <AppHeader />
           <StyledPostDetailContainer>
-            <div className="head-wrapper">
-              <h1>{post.title}</h1>
-              <StyledHeadDescDiv>
-                <div className="information">
-                  <span className="username">
-                    <Link to="/@eungyeole">{post.user.username}</Link>
-                  </span>
-                  <span className="separator" style={{ marginLeft: '1rem' }}>
-                    ·
-                  </span>
-                  <span style={{ marginLeft: '1rem' }}>6일 전</span>
-                </div>
-                <div>
-                  <button className="like-btn">
-                    {post.likeState ? <HeartFilled /> : <HeartOutlined />}
-                    <span>{post.likeCount}</span>
-                  </button>
-                </div>
-              </StyledHeadDescDiv>
-            </div>
-
+            <PostDetailHeader
+              post={post}
+              likePostDone={likePostDone}
+              likePostError={likePostError}
+              likeDeleteDone={likeDeleteDone}
+              likeDeleteError={likeDeleteError}
+              userId={props.match.params.userId}
+              postId={props.match.params.postId}
+            />
             <StyledDetailContentDiv dangerouslySetInnerHTML={{ __html: post.content }} />
             <StyledDetailCommentDiv>
               <h3>{post.comments.length}개의 댓글</h3>

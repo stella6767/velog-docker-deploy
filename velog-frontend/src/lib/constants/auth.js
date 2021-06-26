@@ -15,5 +15,3 @@ export const deleteCookie = (name) => {
   let Cookie = `${name}=;Expires=${date.toUTCString()}`;
   document.cookie = Cookie;
 };
-
-// export let page;

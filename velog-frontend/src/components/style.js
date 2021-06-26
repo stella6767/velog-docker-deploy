@@ -158,11 +158,22 @@ export const StyledAppHeader = styled.header`
   padding-right: 2rem;
   top: 0;
   left: 0;
+  position: fixed;
+  background-color: #f2f5f7;
 
   @media only screen and (min-width: 900px) {
     padding-left: 10rem;
     padding-right: 10rem;
     //900px 이상이면 적용
+  }
+
+  &.hideHeader {
+    //반응형 헤더
+    /* background-color: #f2f5f7;
+    z-index: 100; */
+    position: static;
+    top: -1rem;
+    left: 0;
   }
 `;
 
@@ -305,3 +316,32 @@ export const StyledCommentForm = styled.div`
     line-height: 1.75;
   }
 `;
+
+export const StyledLikeBtn = styled.button`
+  background: white;
+  border: 1px solid rgb(173, 181, 189);
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  height: 1.5rem;
+  border-radius: 0.75rem;
+  outline: none;
+  cursor: pointer;
+
+  svg {
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-right: 0.75rem;
+    color: rgb(173, 181, 189);
+  }
+
+  span {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: rgb(173, 181, 189);
+  }
+`;
+
+export const StyledUnlikeBtn = styled(StyledLikeBtn)``;

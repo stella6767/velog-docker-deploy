@@ -32,9 +32,9 @@ const AppHeader = memo((props) => {
   const handleScroll = () => {
     const { pageYOffset } = window;
     const deltaY = pageYOffset - pageY;
-    const hide = pageYOffset !== 0 && deltaY >= 0; //시작점이거나 deltaY 양수이면 true
+    const hide = pageYOffset === 0 || deltaY >= 0; //시작점이거나 deltaY 양수이면 true
 
-    //console.log('hide', hide, 'pageTOffset', pageYOffset, 'deltaY', deltaY);
+    //console.log('hide', hide, 'pageTYOffset', pageYOffset, 'deltaY', deltaY);
     setHide(hide); //false
 
     setPageY(pageYOffset); //pageY는 현재 스크롤 위치를 계속 저장한다.
@@ -137,7 +137,7 @@ const AppHeader = memo((props) => {
   return (
     <>
       <Global />
-      <StyledAppHeader className={!hide && 'hideHeader'}>
+      <StyledAppHeader className={hide && 'hideHeader'}>
         <HeaderTopDiv>
           <Link to="/">
             <img src={logo_img} alt="logo" />
