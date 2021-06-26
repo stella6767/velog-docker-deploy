@@ -21,7 +21,7 @@ const Editor = ({ onChange, onSubmit, loading, value }) => (
 );
 
 const CommentForm = (props) => {
-  const { postId } = props;
+  const { postId, setCommentLength, commentLength } = props;
 
   const { commentLoading, commentPostDone } = useSelector(({ loading, comment }) => ({
     commentLoading: loading['COMMENT_POST_REQUEST'],
@@ -34,6 +34,7 @@ const CommentForm = (props) => {
   useUpdateEffect(() => {
     if (commentPostDone) {
       setValue('');
+      setCommentLength(commentLength + 1);
     }
   }, [commentPostDone]);
 

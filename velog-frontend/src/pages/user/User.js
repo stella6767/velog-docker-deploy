@@ -1,12 +1,9 @@
-import React, { memo } from 'react';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import React, { memo, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import AppLayout from '../../components/AppLayout';
 import PostBox from '../../components/PostBox';
-import { loadPostsAction } from '../../reducers/post';
 import { userAction } from '../../reducers/user';
-import { StyledUserContainerDiv, StyledUserDescDiv, StyledUserProfileImg, StyledUserTopDiv, StyledUserVelogDiv, Global } from './style';
+import { Global, StyledUserContainerDiv, StyledUserDescDiv, StyledUserProfileImg, StyledUserTopDiv, StyledUserVelogDiv } from './style';
 
 const User = memo((props) => {
   const { posts, userData, userLoading } = useSelector(({ user, loading }) => ({

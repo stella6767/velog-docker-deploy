@@ -9,9 +9,16 @@ export const detail = ({ userId, postId }) => {
   return client.get(`/post/${userId}/${postId}`);
 };
 
-export const allList = (page) => {
+//최신순으로 게시글리스트
+export const recentList = (page) => {
   console.log('page: ', page);
   return client.get(`/post/all?page=${page}`);
+};
+
+//좋아요 있는 게시글 중 좋아요 많은 순대로
+export const trendList = (page) => {
+  console.log('page: ', page);
+  return client.get(`/post/trend?page=${page}`);
 };
 
 //게시글 좋아요

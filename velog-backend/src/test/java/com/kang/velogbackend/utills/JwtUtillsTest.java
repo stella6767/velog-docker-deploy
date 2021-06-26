@@ -1,5 +1,6 @@
 package com.kang.velogbackend.utills;
 
+import com.kang.velogbackend.domain.post.PostRepository;
 import com.kang.velogbackend.utils.CookieUtill;
 import com.kang.velogbackend.utils.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -19,6 +20,11 @@ public class JwtUtillsTest {
 
     @Autowired
     private CookieUtill cookieUtill;
+
+
+    @Autowired
+    private PostRepository postRepository;
+
 
     @Test
     public void 토큰검증_테스트()  {
@@ -41,4 +47,19 @@ public class JwtUtillsTest {
             System.out.println("다시 검증 " + userId);
         }
     }
+
+
+
+    @Test
+    public void likeCount_Test () {
+
+
+
+
+
+    }
+
+
+
+
 }

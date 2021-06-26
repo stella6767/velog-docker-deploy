@@ -9,11 +9,11 @@ const HomeHeader = () => {
       <HeaderBottomDiv>
         <HeaderLeftDiv>
           <HeaderSubDiv>
-            <Link to="" className="HeaderSubA">
+            <Link to="/" className="HeaderSubA">
               <img src="/images/trending.svg" alt="" />
               트렌딩
             </Link>
-            <Link to="" className="HeaderSubA">
+            <Link to="/recent" className="HeaderSubA">
               <img src="/images/recent.svg" alt="" /> 최신
             </Link>
           </HeaderSubDiv>

@@ -13,6 +13,7 @@ import User from './pages/user/User';
 import PostDetail from './pages/post/PostDetail';
 import 'antd/dist/antd.css';
 import { Switch } from 'react-router-dom';
+import Recent from './pages/recent/Recent';
 
 function App() {
   const { cmRespDto, logoutDone } = useSelector(({ auth }) => ({
@@ -31,6 +32,7 @@ function App() {
     <>
       <Switch>
         <Route path="/" exact={true} component={Home} />
+        <Route path="/recent" exact={true} component={Recent} />
         <Route path="/write" exact={true} component={writeForm} />
         <Route path="/search" exact={true} component={Search} />
         <Route path="/setting" exact={true} component={Profile} />

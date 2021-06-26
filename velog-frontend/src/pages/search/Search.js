@@ -1,13 +1,10 @@
 import { SearchOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
-import React from 'react';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import PostBox from '../../components/PostBox';
 import SearchLayout from '../../components/SearchLayout';
-import { loadPostsAction } from '../../reducers/post';
 import './style.css';
 
 const StyledSearchDiv = styled.div`
@@ -36,7 +33,7 @@ const Search = () => {
 
   useEffect(() => {
     console.log('더미데이터 최초 한번 받아옴');
-    dispatch(loadPostsAction(10));
+    //dispatch(loadPostsAction(10));
   }, []);
 
   return (

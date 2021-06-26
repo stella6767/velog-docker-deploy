@@ -13,6 +13,7 @@ import { useCallback } from 'react';
 import useUpdateEffect from '../../lib/hooks/useUpdateEffect';
 import { useState } from 'react';
 import PostDetailHeader from '../../components/PostDetailHeader';
+import PostDetailComment from '../../components/PostDetailComment';
 
 const PostDetail = memo((props) => {
   const { post, getPostDone, likePostDone, likePostError, likeDeleteDone, likeDeleteError } = useSelector(({ post, loading }) => ({
@@ -55,14 +56,7 @@ const PostDetail = memo((props) => {
               postId={props.match.params.postId}
             />
             <StyledDetailContentDiv dangerouslySetInnerHTML={{ __html: post.content }} />
-            <StyledDetailCommentDiv>
-              <h3>{post.comments.length}개의 댓글</h3>
-              <CommentForm postId={post.id} />
-              {/* {post.comments.map((comment) => (
-                <CommentCard key={comment.id} comment={comment} />
-              ))} */}
-              <CommentCard />
-            </StyledDetailCommentDiv>
+            <PostDetailComment post={post} userId={props.match.params.userId} postId={props.match.params.postId} />
           </StyledPostDetailContainer>
         </>
       )}

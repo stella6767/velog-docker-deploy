@@ -95,7 +95,7 @@ public class PostService {
     public Page<Post> 트렌딩게시글(Long principalId, Pageable pageable){
 
         log.info("전체찾기");
-        Page<Post> posts = postRepository.findAll(pageable);
+        Page<Post> posts = postRepository.mTrending(pageable);
 
 
         if(principalId != 0L){
@@ -121,7 +121,7 @@ public class PostService {
     @Transactional(readOnly = true)
     public Page<Post> 전체찾기(Long principalId, Pageable pageable){
 
-        log.info("전체찾기");
+        log.info("최신 순으로 찾기");
         Page<Post> posts = postRepository.findAll(pageable);
 
 

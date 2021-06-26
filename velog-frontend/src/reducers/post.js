@@ -5,21 +5,24 @@ import createFakeRequestSaga, { createRequestActionTypes, createRequestSaga } fr
 import * as postAPI from '../lib/api/post';
 
 const LOAD_POSTS_INIT = 'LOAD_POSTS_INIT';
-const [LOAD_POSTS_REQUEST, LOAD_POSTS_SUCCESS, LOAD_POSTS_FAILURE] = createRequestActionTypes('LOAD_POSTS');
+const [LOAD_RECENT_POSTS_REQUEST, LOAD_RECENT_POSTS_SUCCESS, LOAD_RECENT_POSTS_FAILURE] = createRequestActionTypes('LOAD_RECENT_POSTS');
+const [LOAD_TREND_POSTS_REQUEST, LOAD_TREND_POSTS_SUCCESS, LOAD_TREND_POSTS_FAILURE] = createRequestActionTypes('LOAD_TREND_POSTS');
 const [ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE] = createRequestActionTypes('ADD_POST');
 const [GET_POST_REQUEST, GET_POST_SUCCESS, GET_POST_FAILURE] = createRequestActionTypes('GET_POST');
 const [LIKE_POST_REQUEST, LIKE_POST_SUCCESS, LIKE_POST_FAILURE] = createRequestActionTypes('LIKE_POST');
 const [LIKE_DELETE_REQUEST, LIKE_DELETE_SUCCESS, LIKE_DELETE_FAILURE] = createRequestActionTypes('LIKE_DELETE');
 
 export const loadPostsInitAction = createAction(LOAD_POSTS_INIT);
-export const loadPostsAction = createAction(LOAD_POSTS_REQUEST, (data) => data);
+export const loadRecentPostsAction = createAction(LOAD_RECENT_POSTS_REQUEST, (data) => data);
+export const loadTrendPostsAction = createAction(LOAD_TREND_POSTS_REQUEST, (data) => data);
 export const addPostAction = createAction(ADD_POST_REQUEST, (data) => data);
 export const getPostAction = createAction(GET_POST_REQUEST, ({ userId, postId }) => ({ userId, postId }));
 export const likePostAction = createAction(LIKE_POST_REQUEST, (data) => data);
 export const likeDeleteAction = createAction(LIKE_DELETE_REQUEST, (data) => data);
 
 //const loadPostsSaga = createFakeRequestSaga(LOAD_POSTS_REQUEST, '');
-const loadPostsSaga = createRequestSaga(LOAD_POSTS_REQUEST, postAPI.allList);
+const loadRecentPostsSaga = createRequestSaga(LOAD_RECENT_POSTS_REQUEST, postAPI.recentList);
+const loadTrendPostsSaga = createRequestSaga(LOAD_TREND_POSTS_REQUEST, postAPI.trendList);
 const addPostSaga = createRequestSaga(ADD_POST_REQUEST, postAPI.post);
 const getPostSaga = createRequestSaga(GET_POST_REQUEST, postAPI.detail);
 const likePostSaga = createRequestSaga(LIKE_POST_REQUEST, postAPI.like);
@@ -27,7 +30,8 @@ const likeDeleteSaga = createRequestSaga(LIKE_DELETE_REQUEST, postAPI.unlike);
 
 export function* postSaga() {
   //이벤트 리스너!
-  yield throttle(3000, LOAD_POSTS_REQUEST, loadPostsSaga);
+  yield throttle(3000, LOAD_RECENT_POSTS_REQUEST, loadRecentPostsSaga);
+  yield throttle(3000, LOAD_TREND_POSTS_REQUEST, loadTrendPostsSaga);
   yield takeLatest(ADD_POST_REQUEST, addPostSaga);
   yield takeLatest(GET_POST_REQUEST, getPostSaga);
   yield takeLatest(LIKE_POST_REQUEST, likePostSaga);
@@ -35,9 +39,13 @@ export function* postSaga() {
 }
 
 const initialState = {
-  //게시글 리스트 가져오기
-  loadPostsDone: false,
-  loadPostsError: null,
+  //최신 순으로 게시글 리스트 가져오기
+  loadRecentPostsDone: false,
+  loadRecentPostsError: null,
+
+  //좋아요순으로 게시글 리스트 가져오기
+  loadTrendPostsDone: false,
+  loadTrendPostsError: null,
 
   //게시글 작성
   addPostDone: false,
@@ -61,35 +69,56 @@ const initialState = {
   hasMorePosts: true,
   cmRespDto: null,
   error: null,
-  mainPosts: [],
+  trendPosts: [],
+  recentPosts: [],
 };
 
 const post = handleActions(
   {
-    //메인 posts 초기화
+    //모든 posts 초기화
     [LOAD_POSTS_INIT]: (state) => ({
       ...state,
-      mainPosts: [],
+      trendPosts: [],
+      recentPosts: [],
     }),
-    //홈 페이지 게시글 리스트 불러오기
-    [LOAD_POSTS_REQUEST]: (state, { payload: data }) =>
+    //홈 페이지 게시글 리스트 불러오기(트렌딩)
+    [LOAD_TREND_POSTS_REQUEST]: (state, { payload: data }) =>
       produce(state, (draft) => {
         draft.cmRespDto = data;
-        draft.loadPostsDone = false;
-        draft.loadPostsError = null;
+        draft.loadTrendPostsDone = false;
+        draft.loadTrendPostsError = null;
       }),
-    [LOAD_POSTS_SUCCESS]: (state, { payload: data }) => ({
+    [LOAD_TREND_POSTS_SUCCESS]: (state, { payload: data }) => ({
       ...state,
-      loadPostsError: null,
-      loadPostsDone: true,
-      mainPosts: state.mainPosts.concat(data.data.content),
+      loadTrendPostsError: null,
+      loadTrendPostsDone: true,
+      trendPosts: state.trendPosts.concat(data.data.content),
       cmRespDto: data,
-      //page: state.page + 1,
       hasMorePosts: !data.data.last,
     }),
-    [LOAD_POSTS_FAILURE]: (state, { payload: error }) => ({
+    [LOAD_TREND_POSTS_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      loadPostssError: error,
+      loadTrendPostssError: error,
+    }),
+
+    //최신 게시글 순 불러오기
+    [LOAD_RECENT_POSTS_REQUEST]: (state, { payload: data }) =>
+      produce(state, (draft) => {
+        draft.cmRespDto = data;
+        draft.loadRecentPostsDone = false;
+        draft.loadRecentPostsError = null;
+      }),
+    [LOAD_RECENT_POSTS_SUCCESS]: (state, { payload: data }) => ({
+      ...state,
+      loadRecentPostsError: null,
+      loadRecentPostsDone: true,
+      recentPosts: state.recentPosts.concat(data.data.content),
+      cmRespDto: data,
+      hasMorePosts: !data.data.last,
+    }),
+    [LOAD_RECENT_POSTS_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      loadRecentPostssError: error,
     }),
 
     //게시글 작성

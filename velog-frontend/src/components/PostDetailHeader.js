@@ -39,6 +39,7 @@ const PostDetailHeader = memo((props) => {
     }
 
     if (likeDeleteError) {
+      //이렇게 하기보다 principal 체크를 하는 게 response data msg를 출력시키는 게 더 젛확하겠으나 귀찮으니 패스
       alert('로그인이 필요한 서비스입니다.');
     }
   }, [likeDeleteDone, likeDeleteError]);

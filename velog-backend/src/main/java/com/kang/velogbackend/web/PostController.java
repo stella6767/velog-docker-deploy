@@ -30,29 +30,26 @@ public class PostController {
     @GetMapping("/post/all")
     public CMRespDto<?> findAllByRecent(@AuthenticationPrincipal PrincipalDetails details, @PageableDefault(sort = "id",direction = Sort.Direction.DESC, size = 10) Pageable pageable){
 
-        log.info("최신글 페이지.");
-
+        log.info("최신게시글 페이지.");
 
         if(details != null){
             id = details.getUser().getId();
         }
-
         Page<Post> posts = postService.전체찾기(id, pageable);
-
         return new CMRespDto<>(1, "게시글리스트 불러오기", posts);
     }
 
 
     @GetMapping("/post/trend")  //프론트단에서는 "/" 로 맵핑.
-    public CMRespDto<?> findAllByLike(@AuthenticationPrincipal PrincipalDetails details, @PageableDefault(sort = "id",direction = Sort.Direction.DESC, size = 10) Pageable pageable){
+    public CMRespDto<?> findAllByLike(@AuthenticationPrincipal PrincipalDetails details, @PageableDefault(size = 10) Pageable pageable){
 
-        log.info("메인 페이지.");
+        log.info("메인 페이지(트렌딩 페이지)");
 
         if(details != null){
             id = details.getUser().getId();
         }
 
-        Page<Post> posts = postService.전체찾기(id, pageable);
+        Page<Post> posts = postService.트렌딩게시글(id, pageable);
         return new CMRespDto<>(1, "게시글리스트 불러오기", posts);
     }
 
