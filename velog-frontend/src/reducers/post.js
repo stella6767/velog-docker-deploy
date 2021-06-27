@@ -7,6 +7,7 @@ import * as postAPI from '../lib/api/post';
 const LOAD_POSTS_INIT = 'LOAD_POSTS_INIT';
 const [LOAD_RECENT_POSTS_REQUEST, LOAD_RECENT_POSTS_SUCCESS, LOAD_RECENT_POSTS_FAILURE] = createRequestActionTypes('LOAD_RECENT_POSTS');
 const [LOAD_TREND_POSTS_REQUEST, LOAD_TREND_POSTS_SUCCESS, LOAD_TREND_POSTS_FAILURE] = createRequestActionTypes('LOAD_TREND_POSTS');
+const [LOAD_SEARCH_POSTS_REQUEST, LOAD_SEARCH_POSTS_SUCCESS, LOAD_SEARCH_POSTS_FAILURE] = createRequestActionTypes('LOAD_SEARCH_POSTS');
 const [ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE] = createRequestActionTypes('ADD_POST');
 const [GET_POST_REQUEST, GET_POST_SUCCESS, GET_POST_FAILURE] = createRequestActionTypes('GET_POST');
 const [LIKE_POST_REQUEST, LIKE_POST_SUCCESS, LIKE_POST_FAILURE] = createRequestActionTypes('LIKE_POST');
@@ -15,6 +16,7 @@ const [LIKE_DELETE_REQUEST, LIKE_DELETE_SUCCESS, LIKE_DELETE_FAILURE] = createRe
 export const loadPostsInitAction = createAction(LOAD_POSTS_INIT);
 export const loadRecentPostsAction = createAction(LOAD_RECENT_POSTS_REQUEST, (data) => data);
 export const loadTrendPostsAction = createAction(LOAD_TREND_POSTS_REQUEST, (data) => data);
+export const loadSearchPostsAction = createAction(LOAD_SEARCH_POSTS_REQUEST, ({ page, keyword }) => ({ page, keyword }));
 export const addPostAction = createAction(ADD_POST_REQUEST, (data) => data);
 export const getPostAction = createAction(GET_POST_REQUEST, ({ userId, postId }) => ({ userId, postId }));
 export const likePostAction = createAction(LIKE_POST_REQUEST, (data) => data);
@@ -23,6 +25,7 @@ export const likeDeleteAction = createAction(LIKE_DELETE_REQUEST, (data) => data
 //const loadPostsSaga = createFakeRequestSaga(LOAD_POSTS_REQUEST, '');
 const loadRecentPostsSaga = createRequestSaga(LOAD_RECENT_POSTS_REQUEST, postAPI.recentList);
 const loadTrendPostsSaga = createRequestSaga(LOAD_TREND_POSTS_REQUEST, postAPI.trendList);
+const loadSearchPostsSaga = createRequestSaga(LOAD_SEARCH_POSTS_REQUEST, postAPI.searchList);
 const addPostSaga = createRequestSaga(ADD_POST_REQUEST, postAPI.post);
 const getPostSaga = createRequestSaga(GET_POST_REQUEST, postAPI.detail);
 const likePostSaga = createRequestSaga(LIKE_POST_REQUEST, postAPI.like);
@@ -32,6 +35,7 @@ export function* postSaga() {
   //이벤트 리스너!
   yield throttle(3000, LOAD_RECENT_POSTS_REQUEST, loadRecentPostsSaga);
   yield throttle(3000, LOAD_TREND_POSTS_REQUEST, loadTrendPostsSaga);
+  yield throttle(3000, LOAD_SEARCH_POSTS_REQUEST, loadSearchPostsSaga);
   yield takeLatest(ADD_POST_REQUEST, addPostSaga);
   yield takeLatest(GET_POST_REQUEST, getPostSaga);
   yield takeLatest(LIKE_POST_REQUEST, likePostSaga);
@@ -46,6 +50,10 @@ const initialState = {
   //좋아요순으로 게시글 리스트 가져오기
   loadTrendPostsDone: false,
   loadTrendPostsError: null,
+
+  //검색 키워드순으로 게시글 리스트 가져오기
+  loadSearchPostsDone: false,
+  loadSearchPostsError: null,
 
   //게시글 작성
   addPostDone: false,
@@ -71,6 +79,7 @@ const initialState = {
   error: null,
   trendPosts: [],
   recentPosts: [],
+  searchPosts: [],
 };
 
 const post = handleActions(
@@ -80,6 +89,7 @@ const post = handleActions(
       ...state,
       trendPosts: [],
       recentPosts: [],
+      searchPosts: [],
     }),
     //홈 페이지 게시글 리스트 불러오기(트렌딩)
     [LOAD_TREND_POSTS_REQUEST]: (state, { payload: data }) =>
@@ -119,6 +129,26 @@ const post = handleActions(
     [LOAD_RECENT_POSTS_FAILURE]: (state, { payload: error }) => ({
       ...state,
       loadRecentPostssError: error,
+    }),
+
+    //검색 게시글 리스트
+    [LOAD_SEARCH_POSTS_REQUEST]: (state, { payload: data }) =>
+      produce(state, (draft) => {
+        draft.cmRespDto = data;
+        draft.loadSearchPostsDone = false;
+        draft.loadSearchPostsError = null;
+      }),
+    [LOAD_SEARCH_POSTS_SUCCESS]: (state, { payload: data }) => ({
+      ...state,
+      loadSearchPostsError: null,
+      loadSearchPostsDone: true,
+      searchPosts: state.searchPosts.concat(data.data.content),
+      cmRespDto: data,
+      hasMorePosts: !data.data.last,
+    }),
+    [LOAD_SEARCH_POSTS_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      loadSearchPostsError: error,
     }),
 
     //게시글 작성

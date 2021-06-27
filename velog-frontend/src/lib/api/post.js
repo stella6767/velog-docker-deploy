@@ -21,6 +21,12 @@ export const trendList = (page) => {
   return client.get(`/post/trend?page=${page}`);
 };
 
+//검색 게시글 리스트
+export const searchList = ({ page, keyword }) => {
+  console.log('page: ', page);
+  return client.get(`/post/search?page=${page}&keyword=${keyword}`);
+};
+
 //게시글 좋아요
 export const like = (postId) => client.post(`/post/${postId}/likes`);
 

@@ -29,6 +29,16 @@ public class PostService {
     private final PostRepository postRepository;
     private final TagRepository tagRepository;
 
+
+    @Transactional(readOnly = true) //1.변경감지 안하도록 하고(쓸데없는 연산제거), 2.고립성 유지
+    public Page<Post> 검색하기(String keyword, Pageable pageable){
+        return postRepository.mFindByKeyword(keyword,pageable);
+    }
+
+
+
+
+
     @Transactional//서비스 함수가 종료될 때 commit할지 rollback할지 트랜잭션 관리하겠다.
     public Long 저장하기(PostSaveReqDto postSaveReqDto, PrincipalDetails principalDetails)  {
 

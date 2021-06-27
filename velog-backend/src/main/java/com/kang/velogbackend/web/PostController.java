@@ -70,6 +70,20 @@ public class PostController {
     }
 
 
+    @GetMapping("/post/search")
+    public CMRespDto<?> search(@RequestParam(value="keyword") String keyword,
+                         @PageableDefault(sort = "id",direction = Sort.Direction.DESC, size = 10) Pageable pageable) {
+
+        log.info("키워드 "+keyword);
+
+        Page<Post> searchPosts = postService.검색하기(keyword,pageable);
+
+        return new CMRespDto<>(1, keyword + " 검색결과", searchPosts);
+    }
+
+
+
+
 
 //    @PostMapping("/post/{id}/thumbnail")
 //    public CMRespDto<?> postThumbnail(@PathVariable int id, MultipartFile postThumbnail, @AuthenticationPrincipal PrincipalDetails principalDetails){
@@ -116,8 +130,6 @@ public class PostController {
         likesService.싫어요(postId, principalDetails.getUser().getId());
         return new CMRespDto<>(1, "좋아요 해제",null);
     }
-
-
 
 
 

@@ -330,11 +330,9 @@ export const StyledLikeBtn = styled.button`
 export const StyledUnlikeBtn = styled(StyledLikeBtn)``;
 
 export const StyledTagUl = styled.ul`
-  overflow-x: auto;
-  margin-top: -1.5rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  margin-bottom: 0.5rem;
+  list-style: none;
+  width: 100%;
+  overflow: auto;
 `;
 
 // export const StyledTagLink = styled(Link)`
@@ -355,23 +353,16 @@ export const StyledTagUl = styled.ul`
 // `;
 
 export const StyledTagLi = styled.li`
-  display: inline;
-  margin-left: 0.5rem;
-  flex-shrink: 0;
-  height: 1.5rem;
-  font-size: 0.75rem;
-  border-radius: 0.75rem;
+  display: inline-block;
+  clear: both;
   padding-left: 0.75rem;
   padding-right: 0.75rem;
-  background: rgb(241, 243, 245);
-  color: rgb(52, 58, 64);
-  -webkit-box-align: center;
-  align-items: center;
-  line-height: 1.5;
+  border-radius: 0.75rem;
   text-decoration: none;
+  border: solid 2px #86bb71;
+  margin-left: 1rem;
 
   span {
-    margin-left: 0.25rem;
     color: rgb(134, 142, 150);
     font-size: 0.75rem;
   }
@@ -392,4 +383,10 @@ export const StyledDetailTagLink = styled(Link)`
   text-decoration: none;
   font-weight: 500;
   font-size: 1rem;
+`;
+
+export const StyledPostDetailTagDiv = styled.div`
+  width: 100%;
+  overflow-x: auto;
+  padding-top: 1rem;
 `;

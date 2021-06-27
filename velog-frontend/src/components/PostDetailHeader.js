@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import useUpdateEffect from '../lib/hooks/useUpdateEffect';
 import { useState } from 'react';
 import moment from 'moment';
-import { StyledLikeBtn, StyledUnlikeBtn } from './style';
+import { StyledDetailTagLink, StyledLikeBtn, StyledPostDetailTagDiv, StyledUnlikeBtn } from './style';
 
 const PostDetailHeader = memo((props) => {
   const { post, likePostDone, likePostError, userId, postId, likeDeleteDone, likeDeleteError } = props;
@@ -83,6 +83,11 @@ const PostDetailHeader = memo((props) => {
             )}
           </div>
         </StyledHeadDescDiv>
+        <StyledPostDetailTagDiv>
+          {post.tags.map((tag) => (
+            <StyledDetailTagLink>{tag.name}</StyledDetailTagLink>
+          ))}
+        </StyledPostDetailTagDiv>
       </div>
     </>
   );

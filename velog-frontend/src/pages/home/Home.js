@@ -24,7 +24,6 @@ const Home = () => {
 
     dispatch(loadPostsInitAction());
     setPage(0);
-    console.log('왜 바로바로 실행이 안되지..');
     dispatch(loadTrendPostsAction(page));
   }, []);
 
