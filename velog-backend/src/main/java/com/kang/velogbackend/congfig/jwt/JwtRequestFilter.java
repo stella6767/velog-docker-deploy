@@ -37,6 +37,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final RedisService redisService;
     private final UserRepository userRepository;
 
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("무조건 이 필터를 탄다. 인증이 안 되면 그냥 다음 필터를 타도록 설정.");
@@ -57,15 +58,24 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             if(userId!=null){
 
+
                 User userEntity = userRepository.findById(userId).orElseThrow(()->{
                     return new IllegalArgumentException("id를 찾을 수 없습니다.");
                 });
+
+                //이중 처리..
+                //principalDetailsService.loadUserByUsername(userEntity.getUsername());
+
+
 
                 if(jwtUtil.validateToken(accessToken, userEntity)){
                     log.info("세션에 담고..");
                     PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
                     Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+
+//                    HttpSession session = request.getSession();
+//                    session.setAttribute("principal", principalDetails);
                 }
             }
         }catch (ExpiredJwtException e){
@@ -104,10 +114,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                     });
 
                     log.info("세션에 다시 담는다.");
+                    //principalDetailsService.loadUserByUsername(userEntity.getUsername());
 
                     PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
                     Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication); //세션에 다시 담고..
+
+                    //세션에 직접 담아야 되나..
+//                    HttpSession session = request.getSession();
+//                    session.setAttribute("principal", principalDetails);
 
 
                     String newAccessToken =jwtUtil.generateAccessToken(Long.parseLong(refreshUserId));

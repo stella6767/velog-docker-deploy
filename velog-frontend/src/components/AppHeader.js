@@ -122,7 +122,7 @@ const AppHeader = memo((props) => {
           <div onClick={tokenTest}>user Test</div>
         </Menu.Item>
         <Menu.Item>
-          <div onClick={adminTeset}>admin Test</div>
+          <Link to="/list/liked">읽기 목록</Link>
         </Menu.Item>
         <Menu.Item>
           <Link to="/setting">설정</Link>

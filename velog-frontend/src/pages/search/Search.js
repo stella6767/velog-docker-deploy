@@ -92,8 +92,8 @@ const Search = (props) => {
   };
 
   const handleInput = (e) => {
-    console.log(e.target.name);
-    console.log(e.target.value);
+    // console.log(e.target.name);
+    // console.log(e.target.value);
     //computed property names 문법(키 값 동적할당)
     setKeyword(e.target.value);
   };

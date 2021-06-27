@@ -1,5 +1,7 @@
 package com.kang.velogbackend.service;
 
+import com.kang.velogbackend.domain.post.Post;
+import com.kang.velogbackend.domain.post.PostRepository;
 import com.kang.velogbackend.domain.tag.Tag;
 import com.kang.velogbackend.domain.tag.TagRepository;
 import com.kang.velogbackend.domain.user.User;
@@ -8,6 +10,8 @@ import com.kang.velogbackend.web.dto.user.UserVelogRespDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +24,7 @@ public class UserService {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
     private final TagRepository tagRepository;
 
 
@@ -54,6 +59,25 @@ public class UserService {
         return userVelogRespDto;
     }
 
+
+
+    @Transactional(readOnly = true)
+    public Page<Post> 좋아요게시글목록(Long principalId, Pageable pageable){
+
+        log.info("전체찾기");
+        Page<Post> likePosts = postRepository.mLikeList(pageable, principalId);
+
+            //좋아요 하트 색깔 로직
+        likePosts.forEach((post)->{
+                int likeCount = post.getLikes().size();
+                post.setLikeCount(likeCount);
+                        post.setLikeState(true);
+
+            });
+
+
+        return likePosts;
+    }
 
 
 

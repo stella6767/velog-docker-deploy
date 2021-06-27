@@ -14,6 +14,7 @@ import PostDetail from './pages/post/PostDetail';
 import 'antd/dist/antd.css';
 import { Switch } from 'react-router-dom';
 import Recent from './pages/recent/Recent';
+import LikeList from './pages/user/LikeList';
 
 function App() {
   const { cmRespDto, logoutDone } = useSelector(({ auth }) => ({
@@ -38,6 +39,8 @@ function App() {
         <Route path="/setting" exact={true} component={Profile} />
         <Route path="/header" exact={true} component={Header} />
         <Route path="/:userId" exact={true} component={User} />
+        <Route path="/list/liked" exact={true} component={LikeList} />
+
         <Route path="/:userId/:postId" exact={true} component={PostDetail} />
         <Route path="/recent" exact={true} component={PostDetail} />
       </Switch>
