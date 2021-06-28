@@ -10,7 +10,7 @@ import { useRef } from 'react';
 
 // const StyledRecommentFrom
 
-const CommentCard = memo((props) => {
+const RecommentCard = memo((props) => {
   const { comment, userId, postId } = props;
 
   //const actions = [<span key="comment-basic-reply-to">Reply to</span>];  계층형 댓글은 시간날때
@@ -49,9 +49,9 @@ const CommentCard = memo((props) => {
       <div className="recomment-form">
         <RecommentForm />
       </div> */}
-      {showRecomment && <RecommentForm commentId={comment.id} />}
+      {showRecomment && <RecommentForm />}
     </>
   );
 });
 
-export default CommentCard;
+export default RecommentCard;

@@ -2,9 +2,14 @@ package com.kang.velogbackend.service;
 
 import com.kang.velogbackend.domain.comment.Comment;
 import com.kang.velogbackend.domain.comment.CommentRepository;
+import com.kang.velogbackend.domain.comment.recomment.Recomment;
+import com.kang.velogbackend.domain.comment.recomment.RecommentRepository;
 import com.kang.velogbackend.domain.post.Post;
 import com.kang.velogbackend.domain.user.User;
+import com.kang.velogbackend.web.dto.recomment.RecommentSaveReqDto;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,7 +17,33 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CommentService {
 
+
+    private static final Logger log = LoggerFactory.getLogger(CommentService.class);
+
     private final CommentRepository commentRepository;
+    private final RecommentRepository recommentRepository;
+
+
+    @Transactional
+    public Recomment 대댓글쓰기(User principal, RecommentSaveReqDto recommentSaveReqDto, Long id) {
+
+        Recomment recomment = recommentSaveReqDto.toEntity();
+        recomment.setUser(principal);
+
+        Comment commentEntity = commentRepository.findById(id).orElseThrow(()->{
+            return new IllegalArgumentException("id를 찾을 수 없습니다.");
+        });
+
+        recomment.setComment(commentEntity);
+
+
+        log.info("user Entity post lazy loading error를 피하기 위해..");
+
+        //양방향 관계 시 엔티티를 리턴하지 말자.. lazy post
+        return   recommentRepository.save(recomment);
+    }
+
+
 
     @Transactional
     public Comment 댓글쓰기(User principal, String content, Long postId){

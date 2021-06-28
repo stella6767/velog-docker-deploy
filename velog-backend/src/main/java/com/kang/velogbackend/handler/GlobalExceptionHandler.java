@@ -1,5 +1,6 @@
 package com.kang.velogbackend.handler;
 
+import com.kang.velogbackend.handler.customexception.DuplicateException;
 import com.kang.velogbackend.handler.customexception.NoLoginException;
 import com.kang.velogbackend.web.dto.CMRespDto;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED); //에러를 보낸다.
     }
 
+
+    @ExceptionHandler(value = DuplicateException.class)
+    public CMRespDto<?> illegalArgumentException(DuplicateException e){
+
+        return new CMRespDto<>(-1,"같은 유저네임이 있습니다.", null);
+    }
 
 //    @ExceptionHandler(value = Exception.class)
 //    public CMRespDto<?> Exception(Exception e){

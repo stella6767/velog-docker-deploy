@@ -1,8 +1,9 @@
 import { Button, Comment, Form, Input } from 'antd';
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useUpdateEffect from '../lib/hooks/useUpdateEffect';
-import { commentPostsAction } from '../reducers/comment';
+import comment, { commentPostsAction } from '../reducers/comment';
 import { StyledCommentForm } from './style';
 
 const { TextArea } = Input;
@@ -21,11 +22,12 @@ const Editor = ({ onChange, onSubmit, loading, value }) => (
 );
 
 const CommentForm = (props) => {
-  const { postId, setCommentLength, commentLength } = props;
+  const { postId, setCommentLength, commentLength, setComments, comments } = props;
 
-  const { commentLoading, commentPostDone } = useSelector(({ loading, comment }) => ({
+  const { commentLoading, commentPostDone, comment } = useSelector(({ loading, comment }) => ({
     commentLoading: loading['COMMENT_POST_REQUEST'],
     commentPostDone: comment.commentPostDone,
+    comment: comment.comment,
   }));
   const dispatch = useDispatch();
 
@@ -35,8 +37,16 @@ const CommentForm = (props) => {
     if (commentPostDone) {
       setValue('');
       setCommentLength(commentLength + 1);
+
+      console.log('성공', comment);
+      //setComments(comments.concat(comment));
+      setComments([comment, ...comments]); //배열 앞에 추가
     }
   }, [commentPostDone]);
+
+  useEffect(() => {
+    console.log(comments);
+  }, [comments]);
 
   const handleSubmit = () => {
     if (!value) {

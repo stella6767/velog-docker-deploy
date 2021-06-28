@@ -41,7 +41,7 @@ const PostDetail = memo((props) => {
 
   return (
     <>
-      {getPostDone && (
+      {post && (
         <>
           <Global />
           <AppHeader />
@@ -55,7 +55,7 @@ const PostDetail = memo((props) => {
               userId={props.match.params.userId}
               postId={props.match.params.postId}
             />
-            <StyledDetailContentDiv dangerouslySetInnerHTML={{ __html: post.content }} />
+            {post.content && <StyledDetailContentDiv dangerouslySetInnerHTML={{ __html: post.content }} />}
             <PostDetailComment post={post} userId={props.match.params.userId} postId={props.match.params.postId} />
           </StyledPostDetailContainer>
         </>

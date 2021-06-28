@@ -5,14 +5,18 @@ import createFakeRequestSaga, { createRequestActionTypes, createRequestSaga } fr
 import * as commentAPI from '../lib/api/comment';
 
 const [COMMENT_POST_REQUEST, COMMENT_POST_SUCCESS, COMMENT_POST_FAILURE] = createRequestActionTypes('COMMENT_POST');
+const [RECOMMENT_POST_REQUEST, RECOMMENT_POST_SUCCESS, RECOMMENT_POST_FAILURE] = createRequestActionTypes('RECOMMENT_POST');
 
 export const commentPostsAction = createAction(COMMENT_POST_REQUEST, ({ content, postId }) => ({ content, postId }));
+export const recommentPostsAction = createAction(RECOMMENT_POST_REQUEST, ({ commentId, content }) => ({ commentId, content }));
 
 const commentPostsSaga = createRequestSaga(COMMENT_POST_REQUEST, commentAPI.save);
+const recommentPostsSaga = createRequestSaga(RECOMMENT_POST_REQUEST, commentAPI.recommentSave);
 
 export function* commentSaga() {
   //이벤트 리스너!
   yield takeLatest(COMMENT_POST_REQUEST, commentPostsSaga);
+  yield takeLatest(RECOMMENT_POST_REQUEST, recommentPostsSaga);
 }
 
 const initialState = {
@@ -20,6 +24,10 @@ const initialState = {
   commentPostDone: false,
   commentPostError: null,
 
+  recommentPostDone: false,
+  recommentPostError: null,
+
+  comment: null,
   cmRespDto: null,
   error: null,
 };
@@ -37,10 +45,28 @@ const comment = handleActions(
       commentPostError: null,
       commentPostDone: true,
       cmRespDto: data,
+      comment: data.data,
     }),
     [COMMENT_POST_FAILURE]: (state, { payload: error }) => ({
       ...state,
       commentPostError: error,
+    }),
+    //대댓글 작성
+    [RECOMMENT_POST_REQUEST]: (state, { payload: data }) =>
+      produce(state, (draft) => {
+        draft.recommentPostDone = false;
+        draft.recommentPostError = null;
+      }),
+    [RECOMMENT_POST_SUCCESS]: (state, { payload: data }) => ({
+      ...state,
+      recommentPostError: null,
+      recommentPostDone: true,
+      cmRespDto: data,
+      comment: data.data,
+    }),
+    [RECOMMENT_POST_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      recommentPostError: error,
     }),
   },
   initialState,

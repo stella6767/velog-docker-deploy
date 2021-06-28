@@ -12,6 +12,8 @@ export const join = (data) => {
   deleteCookie('accessToken');
   deleteCookie('refreshToken');
 
+  console.log('http only쿠키 삭제가 안 되는데??');
+
   return client.post('/auth/join', JSON.stringify(data));
 };
 

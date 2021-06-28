@@ -20,7 +20,7 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100, unique = true)
     private String username;
 
     @Column(nullable = false, length = 100) //12345 -> 해쉬(비밀번호 암호화)
@@ -37,6 +37,7 @@ public class User extends BaseTimeEntity {
     private Role role;
 
     //@JsonIgnore
+    @ToString.Exclude //이게 문제가 아닌데, @DaTA 안 해줬는데..
     @OrderBy("id DESC")
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY) //DTO 만들어서 LazyLoading issue 해결
     private List<Post> posts;

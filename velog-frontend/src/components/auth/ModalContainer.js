@@ -38,7 +38,12 @@ const AuthModal = memo((props) => {
     if (joinDone) {
       alert(authData.msg);
       console.log(joinDone);
-      setJoinVisible(false);
+
+      if (authData.statusCode === -1) {
+        setJoinVisible(true);
+      } else {
+        setJoinVisible(false);
+      }
     }
   }, [joinDone, joinError]);
 
