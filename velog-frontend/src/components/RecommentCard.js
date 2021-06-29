@@ -53,11 +53,13 @@ const RecommentCard = memo((props) => {
     <>
       {recomment && (
         <Comment
-          actions={[
-            <span key="comment-nested-reply-to" onClick={onReplyClick}>
-              답글
-            </span>,
-          ]}
+          actions={
+            [
+              // <span key="comment-nested-reply-to" onClick={onReplyClick}>
+              //   답글
+              // </span>,
+            ]
+          }
           author={<Link to={`/${recomment.user.id}`}>{recomment.user.username}</Link>}
           // avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" alt="Han Solo" />}
           content={<p dangerouslySetInnerHTML={{ __html: recomment.content }} />}
@@ -72,7 +74,7 @@ const RecommentCard = memo((props) => {
         </Comment>
       )}
 
-      {showRecomment && <RecommentForm />}
+      {/* {showRecomment && <RecommentForm />} */}
     </>
   );
 });
