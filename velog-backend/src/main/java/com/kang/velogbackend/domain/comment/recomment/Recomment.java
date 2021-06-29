@@ -1,6 +1,7 @@
 package com.kang.velogbackend.domain.comment.recomment;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.kang.velogbackend.domain.BaseTimeEntity;
 import com.kang.velogbackend.domain.comment.Comment;
 import com.kang.velogbackend.domain.user.User;
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id") //무한참조 방지
 @Entity
 public class Recomment extends BaseTimeEntity {
 
@@ -23,7 +25,7 @@ public class Recomment extends BaseTimeEntity {
     private String content;
 
     @ToString.Exclude
-    @JsonIgnore //user 객체를 때리지 않게..
+    //@JsonIgnore //user 객체를 때리지 않게..
     @ManyToOne
     @JoinColumn(name = "userId") // 테이블에 userId로적힘
     private User user;

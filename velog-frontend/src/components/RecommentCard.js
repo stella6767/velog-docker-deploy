@@ -11,7 +11,7 @@ import { useRef } from 'react';
 // const StyledRecommentFrom
 
 const RecommentCard = memo((props) => {
-  const { comment, userId, postId } = props;
+  const { recomment } = props;
 
   //const actions = [<span key="comment-basic-reply-to">Reply to</span>];  계층형 댓글은 시간날때
 
@@ -23,32 +23,55 @@ const RecommentCard = memo((props) => {
     setShowRecomment(!showRecomment);
   };
 
-  const recomment = <div>adasddas</div>;
+  // const RenderRecomment = (parentId) =>
+  //   Comments.map((comment, index) => (
+  //     <>
+  //       {comment.responseTo === parentId && (
+  //         <div style={{ width: "80%", marginLeft: "40px" }}>
+  //           <SingleComment
+  //             key={index}
+  //             post_id={post_id}
+  //             comment={comment}
+  //             userData={userData}
+  //             Comments={Comments}
+  //             setComments={setComments}
+  //           />
+  //           <ReplayComment
+  //             key={index}
+  //             post_id={post_id}
+  //             comment={comment}
+  //             userData={userData}
+  //             Comments={Comments}
+  //             setComments={setComments}
+  //           />
+  //         </div>
+  //       )}
+  //     </>
+  //   ));
 
   return (
     <>
-      <Comment
-        actions={[
-          <span key="comment-nested-reply-to" onClick={onReplyClick}>
-            답글
-          </span>,
-        ]}
-        author={<Link to={`/${userId}`}>{comment.user.username}</Link>}
-        // avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" alt="Han Solo" />}
-        content={<p dangerouslySetInnerHTML={{ __html: comment.content }} />}
-        style={{ paddingBottom: '3rem' }}
-        datetime={
-          <Tooltip title={moment(comment.createDate).format('YYYY-MM-DD HH:mm:ss')}>
-            <span>{moment().fromNow()}</span>
-          </Tooltip>
-        }
-      >
-        {/* {recomment} */}
-      </Comment>
-      {/* 
-      <div className="recomment-form">
-        <RecommentForm />
-      </div> */}
+      {recomment && (
+        <Comment
+          actions={[
+            <span key="comment-nested-reply-to" onClick={onReplyClick}>
+              답글
+            </span>,
+          ]}
+          author={<Link to={`/${recomment.user.id}`}>{recomment.user.username}</Link>}
+          // avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" alt="Han Solo" />}
+          content={<p dangerouslySetInnerHTML={{ __html: recomment.content }} />}
+          style={{ paddingBottom: '3rem' }}
+          datetime={
+            <Tooltip title={moment(recomment.createDate).format('YYYY-MM-DD HH:mm:ss')}>
+              <span>{moment().fromNow()}</span>
+            </Tooltip>
+          }
+        >
+          {/* {recomment} */}
+        </Comment>
+      )}
+
       {showRecomment && <RecommentForm />}
     </>
   );

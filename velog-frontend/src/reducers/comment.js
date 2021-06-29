@@ -35,7 +35,7 @@ const initialState = {
 const comment = handleActions(
   {
     //댓글쓰기
-    [COMMENT_POST_REQUEST]: (state, { payload: data }) =>
+    [COMMENT_POST_REQUEST]: (state) =>
       produce(state, (draft) => {
         draft.commentPostDone = false;
         draft.commentPostError = null;
@@ -52,7 +52,7 @@ const comment = handleActions(
       commentPostError: error,
     }),
     //대댓글 작성
-    [RECOMMENT_POST_REQUEST]: (state, { payload: data }) =>
+    [RECOMMENT_POST_REQUEST]: (state) =>
       produce(state, (draft) => {
         draft.recommentPostDone = false;
         draft.recommentPostError = null;
@@ -62,7 +62,7 @@ const comment = handleActions(
       recommentPostError: null,
       recommentPostDone: true,
       cmRespDto: data,
-      comment: data.data,
+      //comment: data.data,
     }),
     [RECOMMENT_POST_FAILURE]: (state, { payload: error }) => ({
       ...state,

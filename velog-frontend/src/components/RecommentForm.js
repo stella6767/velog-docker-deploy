@@ -8,7 +8,7 @@ import { StyledCommentForm } from './style';
 
 const { TextArea } = Input;
 
-const Editor = ({ onChange, onSubmit, loading, value, name }) => (
+const Editor = ({ onChange, onSubmit, loading, value }) => (
   <StyledCommentForm>
     <Form.Item>
       <TextArea rows={4} onChange={onChange} value={value} placeholder="댓글을 작성하세요" />
@@ -26,8 +26,9 @@ const RecommentForm = (props) => {
 
   const { recommentLoading, recommentPostDone, comment, recommentPostError } = useSelector(({ loading, comment }) => ({
     recommentLoading: loading['RECOMMENT_POST_REQUEST'],
-    recommentPostDone: comment.commentPostDone,
-    comment: comment.comment,
+    recommentPostDone: comment.recommentPostDone,
+    recommentPostError: comment.recommentPostError,
+    //comment: comment.comment,
   }));
   const dispatch = useDispatch();
 
@@ -61,7 +62,7 @@ const RecommentForm = (props) => {
 
   return (
     <>
-      <Comment content={<Editor onChange={handleChange} onSubmit={handleSubmit} loading={recommentLoading} value={value} />} />
+      <Comment content={<Editor onChange={handleChange} onSubmit={handleSubmit} value={value} loading={recommentLoading} />} />
     </>
   );
 };

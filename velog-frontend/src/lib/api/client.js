@@ -31,12 +31,13 @@ client.interceptors.response.use(
   (response) => {
     //요청 성공 시 특정 작업 수행
     //console.log('응답값: ', response.data);
-    response.headers['withCredentials'] = true;
+    //response.headers['withCredentials'] = true;
+    console.log(response);
     return response;
   },
   (error) => {
     //요청 실패 시 특정 작업 수행
-    //console.error('error는: ', error);
+    console.error('error는: ', error);
     return Promise.reject(error);
   },
 );

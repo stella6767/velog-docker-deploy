@@ -7,6 +7,7 @@ import com.kang.velogbackend.domain.comment.recomment.RecommentRepository;
 import com.kang.velogbackend.domain.post.Post;
 import com.kang.velogbackend.domain.user.User;
 import com.kang.velogbackend.web.dto.recomment.RecommentSaveReqDto;
+import com.kang.velogbackend.web.dto.recomment.RecommentSaveRespDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ public class CommentService {
 
 
     @Transactional
-    public Recomment 대댓글쓰기(User principal, RecommentSaveReqDto recommentSaveReqDto, Long id) {
+    public RecommentSaveRespDto 대댓글쓰기(User principal, RecommentSaveReqDto recommentSaveReqDto, Long id) {
 
         Recomment recomment = recommentSaveReqDto.toEntity();
         recomment.setUser(principal);
@@ -37,10 +38,20 @@ public class CommentService {
         recomment.setComment(commentEntity);
 
 
+        Recomment recommentEntity = recommentRepository.save(recomment);
+
+
+        RecommentSaveRespDto recommentSaveRespDto = RecommentSaveRespDto.builder()
+                .id(recommentEntity.getId())
+                .content(recommentEntity.getContent())
+                .comment(recommentEntity.getComment())
+                .userId(principal.getId())
+                .username(principal.getUsername())
+                .build();
         log.info("user Entity post lazy loading error를 피하기 위해..");
 
         //양방향 관계 시 엔티티를 리턴하지 말자.. lazy post
-        return   recommentRepository.save(recomment);
+        return  recommentSaveRespDto;
     }
 
 

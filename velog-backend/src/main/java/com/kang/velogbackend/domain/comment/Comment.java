@@ -39,8 +39,7 @@ public class Comment extends BaseTimeEntity {
 
     //양방향 매핑
     @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JsonIgnoreProperties({"comment","user"})
-    //@JsonIgnore
+    @JsonIgnoreProperties({"comment"})
     @OrderBy("id desc")
     private List<Recomment> recomments;
 

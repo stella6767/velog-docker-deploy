@@ -24,7 +24,7 @@ export function createRequestSaga(type, request) {
     try {
       const response = yield call(request, action.payload); //api 호출
       console.log('api 호출 성공: ', type, action);
-      console.log('response: ', response);
+      console.log('response: ', response, 'success', SUCCESS, 'faliure', FAILURE); //promise 반환해주는 return 꼭 작성해주자..
 
       yield put({
         type: SUCCESS,

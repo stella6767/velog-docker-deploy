@@ -43,7 +43,7 @@ const CommentCard = memo((props) => {
           </Tooltip>
         }
       >
-        {/* {recomment} */}
+        {props.children}
       </Comment>
       {/* 
       <div className="recomment-form">

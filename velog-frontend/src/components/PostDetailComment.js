@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { StyledDetailCommentDiv } from '../pages/user/style';
 import CommentCard from './CommentCard';
 import CommentForm from './CommentForm';
+import RecommentCard from './RecommentCard';
 import RecommentForm from './RecommentForm';
 
 //댓글박스
@@ -27,12 +28,18 @@ const PostDetailComment = memo((props) => {
           setComments={setComments}
           comments={comments}
         />
-        {comments.map((comment, index) => (
-          <CommentCard key={comment.id} comment={comment} userId={userId} postId={postId} ref={commentRefs[index]}>
-            {/* <div>대댓글</div> */}
-          </CommentCard>
-        ))}
-        {/* <CommentCard /> */}
+        {comments.map((comment, index) =>
+          comment.recomments != null ? (
+            <CommentCard key={comment.id} comment={comment} userId={userId} postId={postId} ref={commentRefs[index]}>
+              {/* <div>대댓글</div> */}
+              {comment.recomments.map((recomment) => (
+                <RecommentCard key={recomment.id} recomment={recomment} />
+              ))}
+            </CommentCard>
+          ) : (
+            <CommentCard key={comment.id} comment={comment} userId={userId} postId={postId} ref={commentRefs[index]} />
+          ),
+        )}
       </StyledDetailCommentDiv>
     </>
   );
