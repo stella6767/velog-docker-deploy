@@ -26,6 +26,19 @@ public class PostController {
     private  final LikesService likesService;
     private Long id = 0L;
 
+
+    @DeleteMapping("/post/{id}")
+    public CMRespDto<?> deleteById(@PathVariable Long id, @AuthenticationPrincipal PrincipalDetails details){
+
+        log.info("게시글 삭제" + id);
+
+        int result = postService.삭제하기(id, details.getUser().getId());
+
+        return new CMRespDto<>(result, "게시글 삭제 성공", null);
+    }
+
+
+
     // 주소: /post/all?page=0   자동으로 이렇게 먹음
     @GetMapping("/post/all")
     public CMRespDto<?> findAllByRecent(@AuthenticationPrincipal PrincipalDetails details, @PageableDefault(sort = "id",direction = Sort.Direction.DESC, size = 10) Pageable pageable){

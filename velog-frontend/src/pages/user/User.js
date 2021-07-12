@@ -5,7 +5,14 @@ import PostBox from '../../components/PostBox';
 import { StyledTagUl } from '../../components/style';
 import TagUserBtn from '../../components/TagUserBtn';
 import { userAction } from '../../reducers/user';
-import { Global, StyledUserContainerDiv, StyledUserDescDiv, StyledUserProfileImg, StyledUserTopDiv, StyledUserVelogDiv } from './style';
+import {
+  Global,
+  StyledUserContainerDiv,
+  StyledUserDescDiv,
+  StyledUserProfileImg,
+  StyledUserTopDiv,
+  StyledUserVelogDiv,
+} from './style';
 
 //이 페이지 인피니트 스크롤링은 나중에 구현하자.
 const User = memo((props) => {
@@ -40,8 +47,8 @@ const User = memo((props) => {
             <StyledUserTopDiv>
               <StyledUserProfileImg />
               <StyledUserDescDiv>
-                <div className="name">강민규</div>
-                <div className="description">개발자 지망생~~ 여기 적는 글들은 신뢰성 0%이므로 믿지 마세요!</div>
+                <div className="name">{userData.user.username}</div>
+                <div className="description">개발자 지망생~~ 이 사이트는 velog를 모방하였습니다.</div>
               </StyledUserDescDiv>
             </StyledUserTopDiv>
             <div className="line-height-div" />

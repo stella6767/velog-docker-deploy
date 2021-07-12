@@ -3,15 +3,29 @@ import { StyledHeadDescDiv } from '../pages/user/style';
 import { HeartOutlined, HeartFilled } from '@ant-design/icons';
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { likeDeleteAction, likePostAction } from '../reducers/post';
-import { Link } from 'react-router-dom';
+import { likeDeleteAction, likePostAction, postDeleteAction } from '../reducers/post';
+import { Link, useHistory } from 'react-router-dom';
 import useUpdateEffect from '../lib/hooks/useUpdateEffect';
 import { useState } from 'react';
 import moment from 'moment';
 import { StyledDetailTagLink, StyledLikeBtn, StyledPostDetailTagDiv, StyledUnlikeBtn } from './style';
+import { Button } from 'antd';
 
 const PostDetailHeader = memo((props) => {
-  const { post, likePostDone, likePostError, userId, postId, likeDeleteDone, likeDeleteError } = props;
+  const {
+    post,
+    likePostDone,
+    likePostError,
+    userId,
+    postId,
+    likeDeleteDone,
+    likeDeleteError,
+    principal,
+    postDeleteDone,
+    postDeleteError,
+  } = props;
+
+  let history = useHistory();
 
   const dispatch = useDispatch();
   //이렇게 받아야지 redux data와 동기화가 안전하게 이루어짐.. 딱히 방법이 안 떠오르네..
@@ -44,6 +58,18 @@ const PostDetailHeader = memo((props) => {
     }
   }, [likeDeleteDone, likeDeleteError]);
 
+  useUpdateEffect(() => {
+    if (postDeleteDone) {
+      alert('게시글 삭제에 성공하였습니다.');
+      history.replace(`/${principal.id}`);
+    }
+
+    //좋아요 됐으면
+    if (postDeleteError) {
+      alert('게시글 삭제에 실패하였습니다.');
+    }
+  }, [postDeleteDone, postDeleteError]);
+
   const onLike = useCallback(() => {
     //console.log('like btn 클릭됨', postId);
     dispatch(likePostAction(postId));
@@ -55,10 +81,17 @@ const PostDetailHeader = memo((props) => {
     dispatch(likeDeleteAction(postId));
   }, []);
 
+  const onDeletePost = useCallback(() => {
+    console.log('게시글 삭제 클릭됨', postId);
+
+    dispatch(postDeleteAction(postId));
+  }, []);
+
   return (
     <>
       <div className="head-wrapper">
         <h1>{post.title}</h1>
+
         <StyledHeadDescDiv>
           <div className="information">
             <span className="username">
@@ -69,6 +102,13 @@ const PostDetailHeader = memo((props) => {
             </span>
             <span style={{ marginLeft: '1rem' }}>{moment(post.createDate).format('YYYY년 MM월 DD일')}</span>
           </div>
+
+          {userId == principal.id && (
+            <Button type="primary" shape="round" danger onClick={onDeletePost}>
+              삭제
+            </Button>
+          )}
+
           <div>
             {likeState ? (
               <StyledLikeBtn onClick={onUnLike}>

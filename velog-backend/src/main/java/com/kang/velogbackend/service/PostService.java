@@ -35,7 +35,21 @@ public class PostService {
         return postRepository.mFindByKeyword(keyword,pageable);
     }
 
+    @Transactional
+    public int 삭제하기(Long id, Long userId){
 
+        Post postEntity = postRepository.findById(id).orElseThrow(()->{
+            return new IllegalArgumentException("id를 찾을 수 없습니다.");
+        });
+
+        if(postEntity.getUser().getId() == userId) {
+            postRepository.deleteById(id);
+            return 1;
+        }else {
+            return -1;
+        }
+
+    }
 
 
 
@@ -165,12 +179,6 @@ public class PostService {
 //        return PostEntity;
 //    }//함수 종료=>트랜잭션 종료 => 영속화 되어있는 데이터를 DB로 갱신(flush) => commit ===========>더티체킹
 
-    @Transactional
-    public String 삭제하기(Long id) {
-        postRepository.deleteById(id);//오류가 터지면 익셉션을 타니까...신경쓰지 말고
-
-        return "ok";
-    }
 
 
 }

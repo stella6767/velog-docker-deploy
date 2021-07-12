@@ -25,7 +25,7 @@ const Profile = () => {
           </StyledUserThubnailDiv>
           <StyledUserInfoDiv>
             <h2>강민규</h2>
-            <p>개발자 지망생~~ 여기 적는 글들은 신뢰성 0%이므로 믿지 마세요!</p>
+            <p>여기 페이지는 기능들을 구현하지 않았습니다. </p>
             <button className="sc-fcdeBU eZBjgD">수정</button>
           </StyledUserInfoDiv>
         </StyledUserDescTopSection>

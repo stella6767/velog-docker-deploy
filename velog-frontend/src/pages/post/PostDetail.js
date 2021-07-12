@@ -1,6 +1,12 @@
 import React, { memo } from 'react';
 import AppHeader from '../../components/AppHeader';
-import { StyledPostDetailContainer, Global, StyledHeadDescDiv, StyledDetailContentDiv, StyledDetailCommentDiv } from '../user/style';
+import {
+  StyledPostDetailContainer,
+  Global,
+  StyledHeadDescDiv,
+  StyledDetailContentDiv,
+  StyledDetailCommentDiv,
+} from '../user/style';
 import { Link } from 'react-router-dom';
 import CommentForm from '../../components/CommentForm';
 import CommentCard from '../../components/CommentCard';
@@ -16,14 +22,29 @@ import PostDetailHeader from '../../components/PostDetailHeader';
 import PostDetailComment from '../../components/PostDetailComment';
 
 const PostDetail = memo((props) => {
-  const { post, getPostDone, likePostDone, likePostError, likeDeleteDone, likeDeleteError } = useSelector(({ post, loading }) => ({
+  const {
+    post,
+    getPostDone,
+    likePostDone,
+    likePostError,
+    likeDeleteDone,
+    likeDeleteError,
+    principal,
+    postDeleteDone,
+    postDeleteError,
+  } = useSelector(({ post, loading, auth }) => ({
     post: post.post,
     getPostDone: post.getPostDone,
     likePostDone: post.likePostDone,
     likePostError: post.likePostError,
     likeDeleteDone: post.likeDeleteDone,
     likeDeleteError: post.likeDeleteError,
+    postDeleteDone: post.postDeleteDone,
+    postDeleteError: post.postDeleteError,
+    principal: auth.principal,
   }));
+
+  const history = props.history;
 
   const dispatch = useDispatch();
 
@@ -52,6 +73,10 @@ const PostDetail = memo((props) => {
               likePostError={likePostError}
               likeDeleteDone={likeDeleteDone}
               likeDeleteError={likeDeleteError}
+              principal={principal}
+              history={history}
+              postDeleteDone={postDeleteDone}
+              postDeleteError={postDeleteError}
               userId={props.match.params.userId}
               postId={props.match.params.postId}
             />

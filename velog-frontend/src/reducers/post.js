@@ -5,13 +5,17 @@ import createFakeRequestSaga, { createRequestActionTypes, createRequestSaga } fr
 import * as postAPI from '../lib/api/post';
 
 const LOAD_POSTS_INIT = 'LOAD_POSTS_INIT';
-const [LOAD_RECENT_POSTS_REQUEST, LOAD_RECENT_POSTS_SUCCESS, LOAD_RECENT_POSTS_FAILURE] = createRequestActionTypes('LOAD_RECENT_POSTS');
-const [LOAD_TREND_POSTS_REQUEST, LOAD_TREND_POSTS_SUCCESS, LOAD_TREND_POSTS_FAILURE] = createRequestActionTypes('LOAD_TREND_POSTS');
-const [LOAD_SEARCH_POSTS_REQUEST, LOAD_SEARCH_POSTS_SUCCESS, LOAD_SEARCH_POSTS_FAILURE] = createRequestActionTypes('LOAD_SEARCH_POSTS');
+const [LOAD_RECENT_POSTS_REQUEST, LOAD_RECENT_POSTS_SUCCESS, LOAD_RECENT_POSTS_FAILURE] =
+  createRequestActionTypes('LOAD_RECENT_POSTS');
+const [LOAD_TREND_POSTS_REQUEST, LOAD_TREND_POSTS_SUCCESS, LOAD_TREND_POSTS_FAILURE] =
+  createRequestActionTypes('LOAD_TREND_POSTS');
+const [LOAD_SEARCH_POSTS_REQUEST, LOAD_SEARCH_POSTS_SUCCESS, LOAD_SEARCH_POSTS_FAILURE] =
+  createRequestActionTypes('LOAD_SEARCH_POSTS');
 const [ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE] = createRequestActionTypes('ADD_POST');
 const [GET_POST_REQUEST, GET_POST_SUCCESS, GET_POST_FAILURE] = createRequestActionTypes('GET_POST');
 const [LIKE_POST_REQUEST, LIKE_POST_SUCCESS, LIKE_POST_FAILURE] = createRequestActionTypes('LIKE_POST');
 const [LIKE_DELETE_REQUEST, LIKE_DELETE_SUCCESS, LIKE_DELETE_FAILURE] = createRequestActionTypes('LIKE_DELETE');
+const [POST_DELETE_REQUEST, POST_DELETE_SUCCESS, POST_DELETE_FAILURE] = createRequestActionTypes('POST_DELETE');
 
 export const loadPostsInitAction = createAction(LOAD_POSTS_INIT);
 export const loadRecentPostsAction = createAction(LOAD_RECENT_POSTS_REQUEST, (data) => data);
@@ -21,6 +25,7 @@ export const addPostAction = createAction(ADD_POST_REQUEST, (data) => data);
 export const getPostAction = createAction(GET_POST_REQUEST, ({ userId, postId }) => ({ userId, postId }));
 export const likePostAction = createAction(LIKE_POST_REQUEST, (data) => data);
 export const likeDeleteAction = createAction(LIKE_DELETE_REQUEST, (data) => data);
+export const postDeleteAction = createAction(POST_DELETE_REQUEST, (data) => data);
 
 //const loadPostsSaga = createFakeRequestSaga(LOAD_POSTS_REQUEST, '');
 const loadRecentPostsSaga = createRequestSaga(LOAD_RECENT_POSTS_REQUEST, postAPI.recentList);
@@ -30,6 +35,7 @@ const addPostSaga = createRequestSaga(ADD_POST_REQUEST, postAPI.post);
 const getPostSaga = createRequestSaga(GET_POST_REQUEST, postAPI.detail);
 const likePostSaga = createRequestSaga(LIKE_POST_REQUEST, postAPI.like);
 const likeDeleteSaga = createRequestSaga(LIKE_DELETE_REQUEST, postAPI.unlike);
+const postDeleteSaga = createRequestSaga(POST_DELETE_REQUEST, postAPI.deletePost);
 
 export function* postSaga() {
   //이벤트 리스너!
@@ -40,6 +46,7 @@ export function* postSaga() {
   yield takeLatest(GET_POST_REQUEST, getPostSaga);
   yield takeLatest(LIKE_POST_REQUEST, likePostSaga);
   yield takeLatest(LIKE_DELETE_REQUEST, likeDeleteSaga);
+  yield takeLatest(POST_DELETE_REQUEST, postDeleteSaga);
 }
 
 const initialState = {
@@ -59,6 +66,10 @@ const initialState = {
   addPostDone: false,
   addPostError: null,
   addPostId: null,
+
+  //게시글 삭제
+  postDeleteDone: false,
+  postDeleteError: null,
 
   //게시글 상세보기
   getPostDone: false,
@@ -187,6 +198,23 @@ const post = handleActions(
     [GET_POST_FAILURE]: (state, { payload: error }) => ({
       ...state,
       getPostError: error,
+    }),
+
+    //게시글 삭제하기
+    [POST_DELETE_REQUEST]: (state, { payload: data }) =>
+      produce(state, (draft) => {
+        draft.postDeleteDone = false;
+        draft.postDeleteError = null;
+      }),
+    [POST_DELETE_SUCCESS]: (state, { payload: data }) => ({
+      ...state,
+      postDeleteError: null,
+      postDeleteDone: true,
+      cmRespDto: data,
+    }),
+    [POST_DELETE_FAILURE]: (state, { payload: error }) => ({
+      ...state,
+      postDeleteError: error,
     }),
 
     //게시글 좋아요

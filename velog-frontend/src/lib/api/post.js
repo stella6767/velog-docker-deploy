@@ -3,6 +3,9 @@ import client from './client';
 //게시글 작성
 export const post = (data) => client.post('/post', JSON.stringify(data));
 
+//게시글 삭제
+export const deletePost = (postId) => client.delete(`/post/${postId}`);
+
 //게시글 상세보기
 export const detail = ({ userId, postId }) => {
   //console.log('이게 되냐?', userId, postId);
