@@ -20,8 +20,6 @@ const Home = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    //dispatch(loadUserAction()); App.js에서 해야되나..
-
     dispatch(loadPostsInitAction());
     setPage(0);
     dispatch(loadTrendPostsAction(page));

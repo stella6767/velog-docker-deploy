@@ -20,13 +20,13 @@ export const oauthAction = (data) => ({
 export const joinAction = createAction(JOIN_REQUEST, (data) => data);
 export const loginAction = createAction(LOGIN_REQUEST, (data) => data);
 export const logoutAction = createAction(LOGOUT_REQUEST, (data) => data);
-export const loadUserAction = createAction(LOAD_USER_REQUEST, (data) => data);
+export const loadUserAction = createAction(LOAD_USER_REQUEST);
 
 // //사가 생성
 const joinSaga = createRequestSaga(JOIN_REQUEST, authAPI.join);
 const loginSaga = createRequestSaga(LOGIN_REQUEST, authAPI.login);
 const logoutSaga = createRequestSaga(LOGOUT_REQUEST, authAPI.logout); //토큰재발급 요청
-const loadUserSaga = createFakeRequestSaga(LOAD_USER_REQUEST, ''); //SSR 적용 안할 시 일단 가짜로..
+const loadUserSaga = createRequestSaga(LOAD_USER_REQUEST, authAPI.loadUser); //SSR 적용 안할 시 일단 가짜로..
 
 export function* authSaga() {
   //이벤트 리스너!
@@ -47,6 +47,9 @@ const initialState = {
 
   logoutDone: false,
   logoutError: null,
+
+  loaUserDone: false,
+  lodUserError: null,
 
   cmRespDto: null,
   error: null,
@@ -121,15 +124,20 @@ const auth = handleActions(
     [LOAD_USER_REQUEST]: (state, { payload: data }) =>
       produce(state, (draft) => {
         draft.loginDone = false;
+        draft.loaUserDone = false;
       }),
     [LOAD_USER_SUCCESS]: (state, { payload: data }) => ({
       ...state,
       loginDone: true,
+      loaUserDone: true,
+      principal: data.data,
     }),
     [LOAD_USER_FAILURE]: (state, { payload: error }) => ({
       ...state,
       // logoutError: error,
       loginDone: false,
+      lodUserError: error,
+      principal: null,
     }),
   },
   initialState,

@@ -16,6 +16,7 @@ const PostCard = (props) => {
   return (
     <>
       <Global />
+
       <Card cover={post.thumbnail != null ? <img alt="example" src={post.thumbnail} /> : null} loading={loading}>
         {/* <Card cover={<img alt="" src={`${post.thumnail}`} />}> */}
         <Link to={`/${post.user.id}/${post.id}`}>

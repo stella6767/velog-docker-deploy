@@ -11,11 +11,12 @@ export const logout = (data) => client.get('/logout');
 export const join = (data) => {
   deleteCookie('accessToken');
   deleteCookie('refreshToken');
-
-  console.log('http only쿠키 삭제가 안 되는데??');
-
+  //console.log('http only쿠키 삭제가 안 되는데??');
   return client.post('/auth/join', JSON.stringify(data));
 };
 
 //소셜 로그인
 export const socialLogin = (data) => client.post('/auth/oauth', JSON.stringify(data));
+
+//CSR 유저정보 유지하기.
+export const loadUser = () => client.get('/auth/loadUser');

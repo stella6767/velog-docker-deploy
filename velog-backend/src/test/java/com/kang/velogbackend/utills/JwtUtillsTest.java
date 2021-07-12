@@ -50,16 +50,5 @@ public class JwtUtillsTest {
 
 
 
-    @Test
-    public void likeCount_Test () {
-
-
-
-
-
-    }
-
-
-
 
 }

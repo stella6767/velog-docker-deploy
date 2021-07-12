@@ -1,6 +1,7 @@
 package com.kang.velogbackend.web;
 
 
+import com.kang.velogbackend.congfig.auth.PrincipalDetails;
 import com.kang.velogbackend.congfig.oauth.GoogleInfo;
 import com.kang.velogbackend.congfig.oauth.OAuth2UserInfo;
 import com.kang.velogbackend.domain.user.Role;
@@ -16,7 +17,9 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,6 +55,21 @@ public class AuthController {
 
         return new CMRespDto<>(1, "회원가입 성공", null);
     }
+
+
+    @GetMapping("/auth/loadUser")
+    public CMRespDto<?> loadUser(@AuthenticationPrincipal PrincipalDetails principalDetails, HttpServletResponse resp) throws IOException {
+        User user = principalDetails.getUser();
+
+        if(user == null){
+            resp.sendRedirect("/logout");
+        }
+
+        log.info("CSR 유저정보 유지" + user);
+
+        return new CMRespDto<>(HttpStatus.OK.value(), "CSR 로그인 정보 유지", jwtUtil.makeLoginRespDto(user));
+    }
+
 
 
     @PostMapping("/login")
