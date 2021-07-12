@@ -1,7 +1,6 @@
-import React, { memo } from 'react';
-import { StyledTagLi, StyledTagLink } from './style';
-import { Link } from 'react-router-dom';
 import { Tag } from 'antd';
+import React, { memo } from 'react';
+import { Link } from 'react-router-dom';
 
 const TagUserBtn = memo((props) => {
   const { tag } = props;

@@ -1,21 +1,22 @@
-import React, { memo } from 'react';
-import { useRef } from 'react';
-import { createRef } from 'react';
-import { useState } from 'react';
+import React, { memo, useState } from 'react';
+import useUpdateEffect from '../lib/hooks/useUpdateEffect';
 import { StyledDetailCommentDiv } from '../pages/user/style';
 import CommentCard from './CommentCard';
 import CommentForm from './CommentForm';
-import RecommentCard from './RecommentCard';
-import RecommentForm from './RecommentForm';
 
 //댓글박스
 const PostDetailComment = memo((props) => {
-  const { post, userId, postId } = props;
+  const { post, userId, postId, getPostDone } = props;
 
   const [commentLength, setCommentLength] = useState(post.comments.length);
   const [comments, setComments] = useState(post.comments);
 
-  const commentRefs = Array.from({ length: comments.length }).map(() => createRef()); //배열 동적 타겟.
+  useUpdateEffect(() => {
+    if (getPostDone) {
+      setComments(post.comments);
+      setCommentLength(post.comments.length);
+    }
+  }, [getPostDone]);
 
   return (
     <>
@@ -28,18 +29,9 @@ const PostDetailComment = memo((props) => {
           setComments={setComments}
           comments={comments}
         />
-        {comments.map((comment, index) =>
-          comment.recomments != null ? (
-            <CommentCard key={comment.id} comment={comment} userId={userId} postId={postId} ref={commentRefs[index]}>
-              {/* <div>대댓글</div> */}
-              {comment.recomments.map((recomment) => (
-                <RecommentCard key={recomment.id} recomment={recomment} />
-              ))}
-            </CommentCard>
-          ) : (
-            <CommentCard key={comment.id} comment={comment} userId={userId} postId={postId} ref={commentRefs[index]} />
-          ),
-        )}
+        {comments.map((comment) => (
+          <CommentCard key={comment.id} comment={comment} userId={userId} postId={postId} />
+        ))}
       </StyledDetailCommentDiv>
     </>
   );

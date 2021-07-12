@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import useUpdateEffect from '../lib/hooks/useUpdateEffect';
 import logo_img from '../logo.svg';
 import { logoutAction } from '../reducers/auth';
-import { adminTestAction, testAction } from '../reducers/test';
+import { testAction } from '../reducers/test';
 import AuthModal from './auth/ModalContainer';
 import HomeHeader from './HomeHeader';
 import './MyHeader.scss';
@@ -88,18 +88,6 @@ const AppHeader = memo((props) => {
     setLoginVisible(true);
   };
 
-  const tokenTest = () => {
-    dispatch(testAction());
-  };
-
-  const adminTeset = () => {
-    dispatch(adminTestAction());
-  };
-
-  // const generalTeset = () => {
-  //   dispatch(test2Action());
-  // };
-
   const logout = () => {
     dispatch(logoutAction());
   };
@@ -119,16 +107,10 @@ const AppHeader = memo((props) => {
           <div onClick={logout}>로그아웃</div>
         </Menu.Item>
         <Menu.Item>
-          <div onClick={tokenTest}>user Test</div>
-        </Menu.Item>
-        <Menu.Item>
           <Link to="/list/liked">읽기 목록</Link>
         </Menu.Item>
         <Menu.Item>
           <Link to="/setting">설정</Link>
-        </Menu.Item>
-        <Menu.Item>
-          <Link to="/1/1">게시글 상세보기</Link>
         </Menu.Item>
       </Menu>
     );
@@ -152,13 +134,23 @@ const AppHeader = memo((props) => {
               <div style={{ marginLeft: '1rem' }} className="loginButtonDiv">
                 <Button onClick={showLoginModal}>로그인 </Button>
                 {/* 모달 컨테이너 */}
-                <AuthModal data={data} loginVisible={loginVisible} setLoginVisible={setLoginVisible} joinDone={joinDone} joinError={joinError} />
+                <AuthModal
+                  data={data}
+                  loginVisible={loginVisible}
+                  setLoginVisible={setLoginVisible}
+                  joinDone={joinDone}
+                  joinError={joinError}
+                />
               </div>
             ) : (
               <>
                 <StyledLoginSuccessDiv>
                   <StyledDropdown overlay={() => menu(principal.id)} trigger={['click']}>
-                    <div className="ant-dropdown-link" onClick={(e) => e.preventDefault()} style={{ display: 'flex', marginTop: '0.3rem' }}>
+                    <div
+                      className="ant-dropdown-link"
+                      onClick={(e) => e.preventDefault()}
+                      style={{ display: 'flex', marginTop: '0.3rem' }}
+                    >
                       <div>
                         <StyledUserImg />
                       </div>

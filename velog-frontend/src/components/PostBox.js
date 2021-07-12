@@ -1,8 +1,7 @@
-import React, { memo } from 'react';
-import { post } from '../lib/api/post';
-import { StyledPostBoxDiv, StyledPostContentP, StyledDetailTagLink } from './style';
 import moment from 'moment';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
+import { StyledDetailTagLink, StyledPostBoxDiv, StyledPostContentP } from './style';
 
 //트렌딩 페이지나 최신 페이지가 아닐 경우
 const PostBox = memo((props) => {
@@ -13,8 +12,6 @@ const PostBox = memo((props) => {
       {post && (
         <Link to={`/${userId}/${post.id}`}>
           <StyledPostBoxDiv>
-            {/* <div></div>여기는 유저 info
-        <div></div>여기는 image */}
             <h2>{post.title}</h2>
             <StyledPostContentP dangerouslySetInnerHTML={{ __html: post.content.substr(0, 200) }} />
             <div className="tags-wrapper">

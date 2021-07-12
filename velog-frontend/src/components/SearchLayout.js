@@ -4,10 +4,6 @@ import { Global } from '../style';
 import AppHeader from './AppHeader';
 
 const SearchLayout = (props) => {
-  // const { principal } = useSelector(({ auth }) => ({
-  //   principal: auth.principal,
-  // }));
-
   return (
     <>
       <Layout>

@@ -70,7 +70,9 @@ const LoginModal = memo((props) => {
                 type="primary"
                 htmlType="submit"
                 loading={loading}
-                disabled={!loginForm.isFieldsTouched(true) || !!loginForm.getFieldsError().filter(({ errors }) => errors.length).length}
+                disabled={
+                  !loginForm.isFieldsTouched(true) || !!loginForm.getFieldsError().filter(({ errors }) => errors.length).length
+                }
               >
                 Log in
               </Button>

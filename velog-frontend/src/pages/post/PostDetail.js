@@ -1,25 +1,10 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import AppHeader from '../../components/AppHeader';
-import {
-  StyledPostDetailContainer,
-  Global,
-  StyledHeadDescDiv,
-  StyledDetailContentDiv,
-  StyledDetailCommentDiv,
-} from '../user/style';
-import { Link } from 'react-router-dom';
-import CommentForm from '../../components/CommentForm';
-import CommentCard from '../../components/CommentCard';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { getPostAction, likePostAction } from '../../reducers/post';
-import { useSelector } from 'react-redux';
-import { HeartOutlined, HeartFilled } from '@ant-design/icons';
-import { useCallback } from 'react';
-import useUpdateEffect from '../../lib/hooks/useUpdateEffect';
-import { useState } from 'react';
-import PostDetailHeader from '../../components/PostDetailHeader';
 import PostDetailComment from '../../components/PostDetailComment';
+import PostDetailHeader from '../../components/PostDetailHeader';
+import { getPostAction } from '../../reducers/post';
+import { Global, StyledDetailContentDiv, StyledPostDetailContainer } from '../user/style';
 
 const PostDetail = memo((props) => {
   const {
@@ -44,17 +29,9 @@ const PostDetail = memo((props) => {
     principal: auth.principal,
   }));
 
-  const history = props.history;
-
   const dispatch = useDispatch();
 
-  // const [likeState, setLikeState] = useState(post.likeState || false); // useState(post.likeState);
-  // const [likeCount, setLikeCount] = useState(post.likeCount || 0);
-
   useEffect(() => {
-    // console.log('props', props);
-    // console.log('postId', props.match.params.postId);
-    // console.log('userId', props.match.params.userId);
     const postId = props.match.params.postId;
     const userId = props.match.params.userId;
     dispatch(getPostAction({ userId, postId }));
@@ -74,14 +51,18 @@ const PostDetail = memo((props) => {
               likeDeleteDone={likeDeleteDone}
               likeDeleteError={likeDeleteError}
               principal={principal}
-              history={history}
               postDeleteDone={postDeleteDone}
               postDeleteError={postDeleteError}
               userId={props.match.params.userId}
               postId={props.match.params.postId}
             />
             {post.content && <StyledDetailContentDiv dangerouslySetInnerHTML={{ __html: post.content }} />}
-            <PostDetailComment post={post} userId={props.match.params.userId} postId={props.match.params.postId} />
+            <PostDetailComment
+              post={post}
+              userId={props.match.params.userId}
+              postId={props.match.params.postId}
+              getPostDone={getPostDone}
+            />
           </StyledPostDetailContainer>
         </>
       )}
