@@ -66,10 +66,6 @@ const AppHeader = memo((props) => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(loadUserAction());
-  }, []);
-
   useUpdateEffect(() => {
     console.log(loginDone, 'loginError', loginError);
 
@@ -114,9 +110,6 @@ const AppHeader = memo((props) => {
         </Menu.Item>
         <Menu.Item>
           <Link to="/setting">설정</Link>
-        </Menu.Item>
-        <Menu.Item>
-          <Link to="/tag">태그</Link>
         </Menu.Item>
       </Menu>
     );

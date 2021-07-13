@@ -1,4 +1,6 @@
 import 'antd/dist/antd.css';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { Route } from 'react-router';
 import { Switch } from 'react-router-dom';
@@ -13,6 +15,7 @@ import Search from './pages/search/Search';
 import TagSearch from './pages/search/TagSearch';
 import LikeList from './pages/user/LikeList';
 import User from './pages/user/User';
+import { loadUserAction } from './reducers/auth';
 
 function App() {
   const { cmRespDto, logoutDone } = useSelector(({ auth }) => ({
@@ -27,6 +30,11 @@ function App() {
   }, [logoutDone]);
 
   //404 에러페이지는 만들지 고민중
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadUserAction());
+  }, []);
 
   return (
     <>

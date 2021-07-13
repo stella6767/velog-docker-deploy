@@ -13,9 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
@@ -44,21 +43,40 @@ public class UserController {
 
         log.info("유저 개인이 좋아요 한 글 리스트");
 
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        //@AuthenticationPrincipal PrincipalDetails details,  이거 못 쓰겠네.. 테스트 때는 된 거 같은데..
-//       log.info("principal 하고 details가 다른가.. " + ((PrincipalDetails)principal).getUser().getId());
-//       //log.info(details.getUser().getUsername());
-//
-//        if(details != null){
-//            log.info(details.getUser().getId().toString());
-//        }
-
         if(details == null){
             throw new NoLoginException("로그인이 필요한 서비스입니다");
         }
 
         Page<Post> likePosts = userService.좋아요게시글목록(details.getUser().getId(), pageable );
         return new CMRespDto<>(1, "좋아요 한 게시글목록", likePosts);
+    }
+
+
+
+    @DeleteMapping("/user")
+    public CMRespDto<?> deleteById(@AuthenticationPrincipal PrincipalDetails details){
+
+        log.info("회원 탈퇴 ");
+
+        if(details == null){
+            throw new NoLoginException("로그인이 필요한 서비스입니다");
+        }
+
+        int result = userService.회원탈퇴(details.getUser().getId());
+
+        return new CMRespDto<>(result, "회원탈퇴하였습니다.", null);
+    }
+
+
+    @PutMapping("/user/{id}/profileImageUrl")
+    public CMRespDto<?> profileImageUrlUpdate(@PathVariable Long id, MultipartFile profileImageFile, @AuthenticationPrincipal PrincipalDetails principalDetails){
+
+        log.info("파일 받기 : "+profileImageFile.getOriginalFilename());
+
+//        User userEntity = userService.회원사진변경(profileImageFile, principalDetails);
+//        principalDetails.setUser(userEntity); //세션 값에 저장된 imagProfile도 변경함으로서 세션 이미지를 들고있는 jsp 경로 모두 변경
+//        return new CMRespDto<>(1, null);
+        return null;
     }
 
 

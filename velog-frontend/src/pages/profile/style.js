@@ -1,5 +1,25 @@
 import styled from 'styled-components';
 
+export const StyledProfileModal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  .modal {
+    width: 400px;
+    background-color: #fff;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+`;
+
 export const StyledUserDescTopSection = styled.section`
   display: flex;
   height: 13.75rem;
@@ -57,6 +77,9 @@ export const StyledUserDescBottomSection = styled.section`
 export const StyledSubDetailDiv = styled.div`
   padding-top: 1rem;
   padding-bottom: 1rem;
+
+  .wrapper {
+  }
 `;
 
 export const StyledProfileImg = styled.img`

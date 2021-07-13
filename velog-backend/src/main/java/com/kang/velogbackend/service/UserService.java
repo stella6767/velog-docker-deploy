@@ -29,12 +29,15 @@ public class UserService {
 
 
     @Transactional
-    public User 회원찾기(Long id) {
+    public int 회원탈퇴(Long id) {
         User userEntity = userRepository.findById(id).orElseThrow(()->{
             return new IllegalArgumentException("id를 찾을 수 없습니다.");
-        }); //1차 캐시
-        return userEntity;
-    }//더티체킹
+        });
+
+            userRepository.deleteById(id);
+            return 1;
+
+    }
 
 
     @Transactional(readOnly = true)
