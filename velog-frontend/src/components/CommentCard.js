@@ -8,6 +8,10 @@ import { commentDeleteAction } from '../reducers/comment';
 const CommentCard = memo((props) => {
   const { comment, userId } = props;
 
+  const { principal } = useSelector(({ auth }) => ({
+    principal: auth.principal,
+  }));
+
   const dispatch = useDispatch();
 
   const onDeleteClick = () => {
@@ -16,24 +20,18 @@ const CommentCard = memo((props) => {
     dispatch(commentDeleteAction(comment.id));
   };
 
-  // useUpdateEffect(() => { //여기서 할 필요없구만..
-  //   if (commentDeleteError) {
-  //     alert('댓글 삭제에 실패하였습니다.');
-  //   }
-
-  //   if (commentDeleteDone) {
-  //     setComments(...);
-  //   }
-  // }, [commentDeleteDone, commentDeleteError]);
-
   return (
     <>
       <Comment
-        actions={[
-          <span key="comment-nested-reply-to" onClick={onDeleteClick}>
-            삭제
-          </span>,
-        ]}
+        actions={
+          principal != null && principal.id === comment.user.id
+            ? [
+                <span key="comment-nested-reply-to" onClick={onDeleteClick}>
+                  삭제
+                </span>,
+              ]
+            : null
+        }
         author={<Link to={`/${userId}`}>{comment.user.username}</Link>}
         content={<p dangerouslySetInnerHTML={{ __html: comment.content }} />}
         style={{ paddingBottom: '3rem' }}

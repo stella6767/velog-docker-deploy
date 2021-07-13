@@ -3,37 +3,11 @@ import { Input } from 'antd';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
 import PostBox from '../../components/PostBox';
 import SearchLayout from '../../components/SearchLayout';
 import { loadPostsInitAction, loadSearchPostsAction } from '../../reducers/post';
-import './style.css';
-
-const StyledSearchDiv = styled.div`
-  display: flex;
-  height: 4rem;
-  position: relative;
-  border: solid 1px black;
-
-  .search-Input {
-    padding-left: 3rem;
-  }
-
-  input::placeholder {
-    opacity: 1;
-    font-size: 1.3rem;
-  }
-`;
-
-const StyledSearchContainerDiv = styled.div`
-  /* padding: 2rem; */
-  padding-left: 3rem;
-  padding-right: 3rem;
-  padding-top: 2rem;
-  width: 768px;
-  margin-left: auto;
-  margin-right: auto;
-`;
+import './style.js';
+import { StyledSearchContainerDiv, StyledSearchDiv } from './style.js';
 
 const Search = (props) => {
   const { searchPosts, loading, loadSearchPostsDone, loadSearchPostsError, hasMorePosts } = useSelector(({ post, loading }) => ({

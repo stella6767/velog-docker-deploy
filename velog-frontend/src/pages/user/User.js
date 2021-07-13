@@ -2,8 +2,6 @@ import React, { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AppLayout from '../../components/AppLayout';
 import PostBox from '../../components/PostBox';
-import { StyledTagUl } from '../../components/style';
-import TagUserBtn from '../../components/TagUserBtn';
 import { userAction } from '../../reducers/user';
 import {
   Global,
@@ -57,11 +55,6 @@ const User = memo((props) => {
 
           {/* map함수 괄호 잘못 적어서 2시간 삽질했네!!!!!!!!!!!  */}
 
-          <StyledTagUl>
-            {userData.tags.map((tag) => (
-              <TagUserBtn key={tag.id} tag={tag} />
-            ))}
-          </StyledTagUl>
           <div>
             {posts.map((post) => (
               <PostBox key={post.id} post={post} userId={props.match.params.userId} />

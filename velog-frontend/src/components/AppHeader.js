@@ -5,8 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import useUpdateEffect from '../lib/hooks/useUpdateEffect';
 import logo_img from '../logo.svg';
-import { logoutAction } from '../reducers/auth';
-import { testAction } from '../reducers/test';
+import { loadUserAction, logoutAction } from '../reducers/auth';
 import AuthModal from './auth/ModalContainer';
 import HomeHeader from './HomeHeader';
 import './MyHeader.scss';
@@ -66,6 +65,10 @@ const AppHeader = memo((props) => {
   }, [principal]);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadUserAction());
+  }, []);
 
   useUpdateEffect(() => {
     console.log(loginDone, 'loginError', loginError);

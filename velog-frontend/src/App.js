@@ -1,26 +1,23 @@
+import 'antd/dist/antd.css';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router';
+import { Switch } from 'react-router-dom';
 import './App.css';
-import { logoutMsg } from './lib/constants/auth';
-import Home from './pages/home/Home';
-import writeForm from './pages/post/writeForm';
-import Profile from './pages/profile/Profile';
-import Search from './pages/search/Search';
 import useUpdateEffect from './lib/hooks/useUpdateEffect';
 import Header from './pages/Header';
-import User from './pages/user/User';
+import Home from './pages/home/Home';
 import PostDetail from './pages/post/PostDetail';
-import 'antd/dist/antd.css';
-import { Switch } from 'react-router-dom';
+import writeForm from './pages/post/writeForm';
+import Profile from './pages/profile/Profile';
 import Recent from './pages/recent/Recent';
+import Search from './pages/search/Search';
+import TagSearch from './pages/search/TagSearch';
 import LikeList from './pages/user/LikeList';
-import { useDispatch } from 'react-redux';
+import User from './pages/user/User';
 import { loadUserAction } from './reducers/auth';
 
 function App() {
-  const dispatch = useDispatch();
-
   const { cmRespDto, logoutDone } = useSelector(({ auth }) => ({
     cmRespDto: auth.cmRespDto,
     logoutDone: auth.logoutDone,
@@ -33,10 +30,6 @@ function App() {
   }, [logoutDone]);
 
   //404 에러페이지는 만들지 고민중
-
-  useEffect(() => {
-    dispatch(loadUserAction());
-  }, []);
 
   return (
     <>
@@ -52,6 +45,8 @@ function App() {
 
         <Route path="/:userId/:postId" exact={true} component={PostDetail} />
         <Route path="/recent" exact={true} component={PostDetail} />
+        {/* <Route path="/tag/:tagId" exact={true} component={TagSearch} /> */}
+        <Route path="/tag" exact={true} component={TagSearch} />
       </Switch>
     </>
   );
