@@ -31,20 +31,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED); //에러를 보낸다.
     }
 
+    @ExceptionHandler(value= NullPointerException.class)
+    public ResponseEntity<?> nullPointerException(NoLoginException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED); //에러를 보낸다.
+    }
+
 
     @ExceptionHandler(value = DuplicateException.class)
     public CMRespDto<?> illegalArgumentException(DuplicateException e){
 
         return new CMRespDto<>(-1,"같은 유저네임이 있습니다.", null);
     }
-
-//    @ExceptionHandler(value = Exception.class)
-//    public CMRespDto<?> Exception(Exception e){
-//        log.warn(e.getMessage());
-//
-//        return new CMRespDto<>(-1, "에러터짐ㅠㅠ",null);
-//    }
-
 
 
 }

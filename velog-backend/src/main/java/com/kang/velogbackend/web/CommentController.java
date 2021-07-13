@@ -5,16 +5,11 @@ import com.kang.velogbackend.domain.comment.Comment;
 import com.kang.velogbackend.handler.customexception.NoLoginException;
 import com.kang.velogbackend.service.CommentService;
 import com.kang.velogbackend.web.dto.CMRespDto;
-import com.kang.velogbackend.web.dto.recomment.RecommentSaveReqDto;
-import com.kang.velogbackend.web.dto.recomment.RecommentSaveRespDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -24,16 +19,18 @@ public class CommentController {
     private final CommentService commentService;
 
 
-    @PostMapping("/comment/recomment/{id}")
-    public CMRespDto<?> recommentsave(@PathVariable Long id , @RequestBody RecommentSaveReqDto recommentSaveReqDto
-            , @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    @DeleteMapping("/comment/{id}")
+    public CMRespDto<?> deleteById(@PathVariable Long id, @AuthenticationPrincipal PrincipalDetails details){
 
-        log.info("대댓글 달기" + recommentSaveReqDto.toString());
-        RecommentSaveRespDto recommentSaveRespDto = commentService.대댓글쓰기(principalDetails.getUser(), recommentSaveReqDto,id);
+        log.info("댓글 삭제" + id);
 
-        log.info(recommentSaveRespDto.toString());
-        //와 미치겠네....DTO 만들어서 응답하거나 프론트단에서 재로딩해야 될 듯...
-        return new CMRespDto<>(1,"대댓글 달기 성공", null);
+        if(details == null){
+            throw new NoLoginException("로그인이 필요한 서비스입니다.");
+        }
+
+        int result = commentService.삭제하기(id, details.getUser().getId());
+
+        return  new CMRespDto<>(result,"댓글 삭제", null);
     }
 
 
