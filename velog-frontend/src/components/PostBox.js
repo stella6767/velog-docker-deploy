@@ -16,7 +16,7 @@ const PostBox = memo((props) => {
             <StyledPostContentP dangerouslySetInnerHTML={{ __html: post.content.substr(0, 200) }} />
             <div className="tags-wrapper">
               {post.tags.map((tag) => (
-                <StyledDetailTagLink to="/sdaas">{tag.name}</StyledDetailTagLink>
+                <StyledDetailTagLink to={`/tag?name=${tag.name}`}>{tag.name}</StyledDetailTagLink>
               ))}
             </div>
             <div className="subinfo">

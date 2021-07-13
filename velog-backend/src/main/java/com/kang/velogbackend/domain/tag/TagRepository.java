@@ -11,5 +11,9 @@ public interface TagRepository extends JpaRepository<Tag,Long> {
     @Query(value = "select * from Tag where postId in (select Id from Post where userId = :userId)", nativeQuery=true)
     List<Tag> mFindUserTags(@Param("userId") Long userId);
 
+    @Query(value = "select * from Tag where name= :name", nativeQuery=true)
+    List<Tag> mFindByName(@Param("name") String name);
+
+
 
 }

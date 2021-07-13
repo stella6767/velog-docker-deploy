@@ -1,5 +1,11 @@
 import styled from 'styled-components';
 
+export const StyledTagSearchedDiv = styled.div`
+  display: flex;
+  height: 4rem;
+  position: relative;
+`;
+
 export const StyledSearchDiv = styled.div`
   display: flex;
   height: 4rem;
