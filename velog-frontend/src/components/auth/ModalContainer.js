@@ -14,7 +14,7 @@ const AuthModal = memo((props) => {
   }));
 
   //함수들은 나중에 다 usecCallback로 바꿔주자..
-  const { loginVisible, setLoginVisible, joinDone, joinError, data } = props;
+  const { loginVisible, setLoginVisible, joinDone, joinError } = props;
   const [joinVisible, setJoinVisible] = useState(false);
   const [loginForm] = Form.useForm();
   const [joinForm] = Form.useForm();

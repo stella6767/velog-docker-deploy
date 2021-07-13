@@ -1,10 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import { HeartFilled, HeartOutlined } from '@ant-design/icons';
 import { Card } from 'antd';
-import { Global, StyledPostCardDateDiv, StyledPostCardFootDiv } from './style';
-import { Link } from 'react-router-dom';
-import { HeartOutlined, HeartFilled } from '@ant-design/icons';
 import moment from 'moment';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Global, StyledPostCardDateDiv, StyledPostCardFootDiv } from './style';
 
 // const StyledDefaultImg = styled.img`
 //   background-image: url(/images/search.svg);

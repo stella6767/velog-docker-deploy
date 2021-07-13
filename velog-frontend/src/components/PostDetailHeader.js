@@ -73,19 +73,19 @@ const PostDetailHeader = memo((props) => {
   const onLike = useCallback(() => {
     //console.log('like btn 클릭됨', postId);
     dispatch(likePostAction(postId));
-  }, []);
+  }, [dispatch, postId]);
 
   const onUnLike = useCallback(() => {
     console.log('unlike btn 클릭됨', postId);
 
     dispatch(likeDeleteAction(postId));
-  }, []);
+  }, [dispatch, postId]);
 
   const onDeletePost = useCallback(() => {
     console.log('게시글 삭제 클릭됨', postId);
 
     dispatch(postDeleteAction(postId));
-  }, []);
+  }, [dispatch, postId]);
 
   return (
     <>
@@ -103,7 +103,7 @@ const PostDetailHeader = memo((props) => {
             <span style={{ marginLeft: '1rem' }}>{moment(post.createDate).format('YYYY년 MM월 DD일')}</span>
           </div>
 
-          {userId != null && principal != null && userId == principal.id ? (
+          {userId != null && principal != null && userId === principal.id ? (
             <Button type="primary" shape="round" danger onClick={onDeletePost}>
               삭제
             </Button>

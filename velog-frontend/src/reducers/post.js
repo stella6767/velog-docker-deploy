@@ -1,8 +1,8 @@
 import produce from 'immer';
 import { createAction, handleActions } from 'redux-actions';
 import { takeLatest, throttle } from 'redux-saga/effects';
-import createFakeRequestSaga, { createRequestActionTypes, createRequestSaga } from '../lib/createRequestSaga';
 import * as postAPI from '../lib/api/post';
+import { createRequestActionTypes, createRequestSaga } from '../lib/createRequestSaga';
 
 const LOAD_POSTS_INIT = 'LOAD_POSTS_INIT';
 const [LOAD_RECENT_POSTS_REQUEST, LOAD_RECENT_POSTS_SUCCESS, LOAD_RECENT_POSTS_FAILURE] =

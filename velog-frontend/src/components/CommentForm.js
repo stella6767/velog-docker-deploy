@@ -1,9 +1,8 @@
 import { Button, Comment, Form, Input } from 'antd';
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useUpdateEffect from '../lib/hooks/useUpdateEffect';
-import comment, { commentPostsAction } from '../reducers/comment';
+import { commentPostsAction } from '../reducers/comment';
 import { StyledCommentForm } from './style';
 
 const { TextArea } = Input;

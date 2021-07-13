@@ -1,4 +1,4 @@
-import { Button, Divider, Form, Input, Modal } from 'antd';
+import { Button, Form, Input, Modal } from 'antd';
 import React, { memo } from 'react';
 import { UserOutlined } from '@ant-design/icons';
 import { StyledAntForm } from '../style';
@@ -59,7 +59,9 @@ const JoinModal = memo((props) => {
                 type="primary"
                 htmlType="submit"
                 loading={loading}
-                disabled={!joinForm.isFieldsTouched(true) || !!joinForm.getFieldsError().filter(({ errors }) => errors.length).length}
+                disabled={
+                  !joinForm.isFieldsTouched(true) || !!joinForm.getFieldsError().filter(({ errors }) => errors.length).length
+                }
               >
                 회원가입
               </Button>

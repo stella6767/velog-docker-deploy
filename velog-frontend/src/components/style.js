@@ -1,5 +1,5 @@
 import styled, { createGlobalStyle } from 'styled-components';
-import { Dropdown, Form, Comment } from 'antd';
+import { Dropdown, Form } from 'antd';
 import { Link } from 'react-router-dom';
 
 export const Global = createGlobalStyle`

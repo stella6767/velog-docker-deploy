@@ -1,8 +1,8 @@
 import produce from 'immer';
 import { createAction, handleActions } from 'redux-actions';
 import { takeLatest, throttle } from 'redux-saga/effects';
-import createFakeRequestSaga, { createRequestActionTypes, createRequestSaga } from '../lib/createRequestSaga';
 import * as userAPI from '../lib/api/user';
+import { createRequestActionTypes, createRequestSaga } from '../lib/createRequestSaga';
 
 const USER_POSTS_INIT = 'USER_POSTS_INIT';
 const [USER_REQUEST, USER_SUCCESS, USER_FAILURE] = createRequestActionTypes('USER');

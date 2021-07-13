@@ -46,7 +46,7 @@ const AppHeader = memo((props) => {
     return () => {
       documentRef.current.removeEventListener('scroll', throttleScroll);
     };
-  }, [pageY]);
+  }, [pageY, throttleScroll]);
 
   const { isHome } = props;
 
@@ -114,6 +114,9 @@ const AppHeader = memo((props) => {
         </Menu.Item>
         <Menu.Item>
           <Link to="/setting">설정</Link>
+        </Menu.Item>
+        <Menu.Item>
+          <Link to="/tag">태그</Link>
         </Menu.Item>
       </Menu>
     );

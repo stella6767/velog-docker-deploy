@@ -1,9 +1,8 @@
 import { takeLatest } from '@redux-saga/core/effects';
+import produce from 'immer';
 import { createAction, handleActions } from 'redux-actions';
 import * as authAPI from '../lib/api/auth';
-import produce from 'immer';
-
-import createFakeRequestSaga, { createRequestActionTypes, createRequestSaga, oauthLogin } from '../lib/createRequestSaga';
+import { createRequestActionTypes, createRequestSaga, oauthLogin } from '../lib/createRequestSaga';
 
 const [JOIN_REQUEST, JOIN_SUCCESS, JOIN_FAILURE] = createRequestActionTypes('JOIN');
 const [LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE] = createRequestActionTypes('LOGIN');

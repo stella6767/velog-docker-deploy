@@ -1,5 +1,4 @@
 import { takeLatest } from '@redux-saga/core/effects';
-import React from 'react';
 import { createAction, handleActions } from 'redux-actions';
 import * as testAPI from '../lib/api/test';
 import { createRequestActionTypes, createRequestSaga } from '../lib/createRequestSaga';
