@@ -2,6 +2,7 @@ package com.kang.velogbackend.web;
 
 import com.kang.velogbackend.congfig.auth.PrincipalDetails;
 import com.kang.velogbackend.domain.post.Post;
+import com.kang.velogbackend.domain.user.User;
 import com.kang.velogbackend.handler.customexception.NoLoginException;
 import com.kang.velogbackend.service.UserService;
 import com.kang.velogbackend.web.dto.CMRespDto;
@@ -15,6 +16,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RequiredArgsConstructor
 @RestController
@@ -69,14 +72,14 @@ public class UserController {
 
 
     @PutMapping("/user/{id}/profileImageUrl")
-    public CMRespDto<?> profileImageUrlUpdate(@PathVariable Long id, MultipartFile profileImageFile, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public CMRespDto<?> profileImageUrlUpdate(@PathVariable Long id, MultipartFile profileImageFile, @AuthenticationPrincipal PrincipalDetails principalDetails, HttpServletRequest request){
 
+        log.info("들어오긴 했나.." + id);
         log.info("파일 받기 : "+profileImageFile.getOriginalFilename());
+        User userEntity = userService.회원사진변경(profileImageFile, principalDetails, request);
+        principalDetails.setUser(userEntity); //세션 값에 저장된 imagProfile도 변경함으로서 세션 이미지를 들고있는 jsp 경로 모두 변경
 
-//        User userEntity = userService.회원사진변경(profileImageFile, principalDetails);
-//        principalDetails.setUser(userEntity); //세션 값에 저장된 imagProfile도 변경함으로서 세션 이미지를 들고있는 jsp 경로 모두 변경
-//        return new CMRespDto<>(1, null);
-        return null;
+        return new CMRespDto<>(1, "프로필 사진을 변경하였습니다.", userEntity.getProfileImgUrl());
     }
 
 

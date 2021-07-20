@@ -32,6 +32,11 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 #    show-sql: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
 
   jackson:
     serialization:
@@ -53,3 +58,5 @@ jwt:
 
 
 
+file:
+  path: /Users/gangmingyu/Documents/velog/velog-backend/src/main/resources/upload

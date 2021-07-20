@@ -32,6 +32,9 @@ public class User extends BaseTimeEntity {
     @Column  //이거 구현하기 귀찮아서 할지 말지 생각중..
     private String picture;
 
+    @Transient
+    private String profileImgUrl;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;

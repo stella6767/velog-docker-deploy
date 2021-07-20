@@ -1,73 +1,81 @@
-import React from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import AppLayout from '../../components/AppLayout';
+import { imgPutAction } from '../../reducers/user';
 import {
   StyledImgRemoveButton,
   StyledImgUploadButton,
   StyledProfileImg,
-  StyledProfileModal,
   StyledSubDetailDiv,
   StyledUserDescBottomSection,
   StyledUserDescTopSection,
   StyledUserInfoDiv,
   StyledUserThubnailDiv,
 } from './style';
-
 import './style.css';
-import { Form } from 'antd';
-import { useRef } from 'react';
-import { useCallback } from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { imgPutAction } from '../../reducers/user';
 
 const Profile = () => {
-  const { principal } = useSelector(({ auth }) => ({
+  const { principal, uploadImgDone, profileImg } = useSelector(({ auth, user }) => ({
     principal: auth.principal,
+    uploadImgDone: user.uploadImgDone,
+    profileImg: user.profileImg,
   }));
+
+  const [imgFile, setImgFile] = useState();
+  const [imgEvent, setImgEvent] = useState();
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (uploadImgDone) {
+      let reader = new FileReader();
+      reader.onload = () => {
+        userImg.current.attr('src', imgEvent.target.result);
+      };
+      reader.readAsDataURL(imgFile); // 이 코드 실행시 reader.onload 실행됨.
+    }
+  }, [uploadImgDone]);
+
   const imageInput = useRef();
+
+  const userImg = useRef();
+
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click();
   }, [imageInput.current]);
 
-  const onSubmitForm = useCallback(() => {}, []);
   const onChangeImages = useCallback((e, userId) => {
     console.log('images', e.target.files);
     console.log('principalId', userId);
     let files = e.target.files;
     let filesArr = Array.prototype.slice.call(files);
 
-    const imageFormData = new FormData();
+    const data = new FormData();
 
     filesArr.forEach((f) => {
       if (!f.type.match('image.*')) {
         alert('이미지를 등록해야 합니다.');
         return;
       }
+      //let profileImageForm = document.querySelector('#profile-image_form');
+      //console.log('profileimg', profileImageForm);
+      data.append('profileImageFile', f);
 
-      let profileImageForm = document.querySelector('#profile-image_form')[0];
+      setImgFile(f);
+      setImgEvent(e);
 
-      console.log('profileimg', profileImageForm);
-
-      //let data = new FormData(profileImageForm);
-      //console.log('data', data);
-      imageFormData.append('image', f);
-
-      console.log('imageFormData', imageFormData);
-
-      //dispatch(imgPutAction({ userId, data }));
+      console.log('imageFormData', data);
+      dispatch(imgPutAction({ userId, data }));
     });
 
-    // const data = new FormData(); //imageFormData
     // [].forEach.call(e.target.files, (f) => {
     //   data.append('image', f);
     //   console.log('f', f);
     // });
-
     // console.log(data);
-    //객체로 받을 때는 변수명 일치 신경쓰셈
+    // //객체로 받을 때는 변수명 일치 신경쓰셈
+
+    //dispatch(imgPutAction({ userId, data }));
   }, []);
 
   return (
@@ -76,18 +84,18 @@ const Profile = () => {
         {principal && (
           <StyledUserDescTopSection>
             <StyledUserThubnailDiv>
-              <StyledProfileImg src="/images/userImage.jpg" alt="" />
-              <Form encType="multipart/form-data" onFinish={onSubmitForm} id="profile-image_form">
-                <input
-                  type="file"
-                  name="image"
-                  multiple
-                  hidden
-                  ref={imageInput}
-                  onChange={(e) => onChangeImages(e, principal.id)}
-                />
-                <StyledImgUploadButton onClick={onClickImageUpload}>이미지 업로드</StyledImgUploadButton>
-              </Form>
+              <StyledProfileImg src={profileImg && profileImg} alt="" ref={userImg} onerror="this.src='/images/userImage.jpg'" />
+
+              <input
+                type="file"
+                name="profileImageFile"
+                multiple
+                hidden
+                ref={imageInput}
+                onChange={(e) => onChangeImages(e, principal.id)}
+              />
+
+              <StyledImgUploadButton onClick={onClickImageUpload}>이미지 업로드</StyledImgUploadButton>
               <StyledImgRemoveButton>이미지 제거</StyledImgRemoveButton>
             </StyledUserThubnailDiv>
             <StyledUserInfoDiv>

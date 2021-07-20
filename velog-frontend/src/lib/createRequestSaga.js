@@ -19,7 +19,7 @@ export function createRequestSaga(type, request) {
     yield put(startLoading(type)); //로딩 시작
     //피라미터로 action을 받아 오면 액션의 정보를 조회할 수 있습니다.
 
-    console.log('request', request);
+    console.log('request', request, 'success', SUCCESS, 'failure', FAILURE);
 
     try {
       const response = yield call(request, action.payload); //api 호출
