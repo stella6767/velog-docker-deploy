@@ -34,7 +34,7 @@ const writeForm = memo((props) => {
   }, [addPostDone, postId]);
 
   const onPostFinish = (values) => {
-    console.log('post 제출함', values);
+    //console.log('post 제출함', values);
     dispatch(addPostAction(values));
   };
 
@@ -42,10 +42,10 @@ const writeForm = memo((props) => {
   // },[]);
 
   const exitForm = () => {
-    console.log('props', props);
-    console.log('history객체', props.history);
-    console.log('match 객체', props.match);
-    console.log('location 객체', props.location);
+    // console.log('props', props);
+    // console.log('history객체', props.history);
+    // console.log('match 객체', props.match);
+    // console.log('location 객체', props.location);
 
     props.history.goBack();
   };

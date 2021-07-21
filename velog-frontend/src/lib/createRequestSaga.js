@@ -20,8 +20,8 @@ export function createRequestSaga(type, request) {
     //피라미터로 action을 받아 오면 액션의 정보를 조회할 수 있습니다.
     try {
       const response = yield call(request, action.payload); //api 호출
-      console.log('api 호출 성공: ', type, action);
-      console.log('response: ', response, 'success', SUCCESS, 'faliure', FAILURE); //promise 반환해주는 return 꼭 작성해주자..
+      //console.log('api 호출 성공: ', type, action);
+      //console.log('response: ', response, 'success', SUCCESS, 'faliure', FAILURE); //promise 반환해주는 return 꼭 작성해주자..
 
       yield put({
         type: SUCCESS,
@@ -42,11 +42,11 @@ export function createRequestSaga(type, request) {
 }
 
 export function* oauthLogin(action) {
-  console.log('작동안하니?' + action);
+  //console.log('작동안하니?' + action);
 
   try {
     const response = yield call(authAPI.socialLogin, action.data);
-    console.log('response: ', response);
+    //console.log('response: ', response);
     yield put({
       type: 'LOGIN_SUCCESS',
       payload: response.data,

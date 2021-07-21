@@ -24,12 +24,12 @@ const User = memo((props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('userData: ', userData);
+    //console.log('userData: ', userData);
   }, [userData]);
 
   useEffect(() => {
     //console.log('유저데이터 한번 받아옴 10개 기준, 일단은 다 받아오자..');
-    console.log('url parame', props.match.params.userId);
+    //console.log('url parame', props.match.params.userId);
     dispatch(userAction(props.match.params.userId));
   }, []);
 

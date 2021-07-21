@@ -32,7 +32,7 @@ const Home = () => {
   }, [loadTrendPostsDone]);
 
   useEffect(() => {
-    console.log(trendPosts);
+    //console.log(trendPosts);
 
     function onScroll() {
       if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {

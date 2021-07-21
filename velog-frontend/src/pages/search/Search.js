@@ -28,7 +28,7 @@ const Search = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log(searchPosts);
+    //console.log(searchPosts);
 
     function onScroll() {
       if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {

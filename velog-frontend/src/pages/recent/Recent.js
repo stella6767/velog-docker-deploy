@@ -26,7 +26,7 @@ const Recent = memo((props) => {
     //dispatch(loadUserAction());
     dispatch(loadPostsInitAction());
     setPage(0);
-    console.log('왜 바로바로 실행이 안되지..');
+    //console.log('왜 바로바로 실행이 안되지..');
     dispatch(loadRecentPostsAction(page));
   }, []);
 
@@ -37,7 +37,7 @@ const Recent = memo((props) => {
   }, [loadRecentPostsDone]);
 
   useEffect(() => {
-    console.log(recentPosts);
+    //console.log(recentPosts);
 
     function onScroll() {
       if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {

@@ -24,7 +24,7 @@ const TagSearch = memo(() => {
   });
 
   useEffect(() => {
-    console.log('쿼리 파싱 결과', query);
+    //console.log('쿼리 파싱 결과', query);
 
     dispatch(tagAction(query.name));
   }, []);

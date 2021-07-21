@@ -33,7 +33,7 @@ const Profile = () => {
       console.log('profileImg', profileImg); //약간의 시간적 오차가 있음
       //기본적으로 새로고침하면 state 값 상실,
     }
-    console.log('profileImg', profileImg);
+    //console.log('profileImg', profileImg);
   }, [uploadImgDone, profileImg]);
 
   const imageInput = useRef();
@@ -45,8 +45,8 @@ const Profile = () => {
   }, [imageInput.current]);
 
   const onChangeImages = useCallback((e, userId) => {
-    console.log('images', e.target.files);
-    console.log('principalId', userId);
+    //console.log('images', e.target.files);
+    //console.log('principalId', userId);
     let files = e.target.files;
     let filesArr = Array.prototype.slice.call(files);
 

@@ -13,7 +13,7 @@ const LoginModal = memo((props) => {
   const dispatch = useDispatch();
 
   const googleLogin = (response) => {
-    console.log(1, response);
+    //console.log(1, response);
     dispatch(oauthAction(response));
   };
 

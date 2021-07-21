@@ -44,14 +44,14 @@ const CommentForm = (props) => {
   }, [commentPostDone]);
 
   useEffect(() => {
-    console.log(comments);
+    //console.log(comments);
   }, [comments]);
 
   const handleSubmit = () => {
     if (!value) {
       return;
     }
-    console.log(value);
+    //console.log(value);
     const content = value; //이름을 일치시켜야 된다..
     dispatch(commentPostsAction({ content, postId }));
   };

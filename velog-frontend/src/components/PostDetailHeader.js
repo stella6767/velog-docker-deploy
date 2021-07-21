@@ -103,7 +103,7 @@ const PostDetailHeader = memo((props) => {
             <span style={{ marginLeft: '1rem' }}>{moment(post.createDate).format('YYYY년 MM월 DD일')}</span>
           </div>
 
-          {userId != null && principal != null && userId === principal.id ? (
+          {principal != null && userId == principal.id ? (
             <Button type="primary" shape="round" danger onClick={onDeletePost}>
               삭제
             </Button>

@@ -14,19 +14,19 @@ export const detail = ({ userId, postId }) => {
 
 //최신순으로 게시글리스트
 export const recentList = (page) => {
-  console.log('page: ', page);
+  //console.log('page: ', page);
   return client.get(`/post/all?page=${page}`);
 };
 
 //좋아요 있는 게시글 중 좋아요 많은 순대로
 export const trendList = (page) => {
-  console.log('page: ', page);
+  //console.log('page: ', page);
   return client.get(`/post/trend?page=${page}`);
 };
 
 //검색 게시글 리스트
 export const searchList = ({ page, keyword }) => {
-  console.log('page: ', page);
+  //console.log('page: ', page);
   return client.get(`/post/search?page=${page}&keyword=${keyword}`);
 };
 
