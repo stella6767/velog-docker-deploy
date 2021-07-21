@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AppLayout from '../../components/AppLayout';
+import { notImpl } from '../../lib/constants/auth';
+import useUpdateEffect from '../../lib/hooks/useUpdateEffect';
 import { imgPutAction } from '../../reducers/user';
 import {
   StyledImgRemoveButton,
@@ -21,20 +23,18 @@ const Profile = () => {
     profileImg: user.profileImg,
   }));
 
-  const [imgFile, setImgFile] = useState();
-  const [imgEvent, setImgEvent] = useState();
+  // const [imgFile, setImgFile] = useState();
+  // const [imgEvent, setImgEvent] = useState();
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (uploadImgDone) {
-      let reader = new FileReader();
-      reader.onload = () => {
-        userImg.current.attr('src', imgEvent.target.result);
-      };
-      reader.readAsDataURL(imgFile); // 이 코드 실행시 reader.onload 실행됨.
+      console.log('profileImg', profileImg); //약간의 시간적 오차가 있음
+      //기본적으로 새로고침하면 state 값 상실,
     }
-  }, [uploadImgDone]);
+    console.log('profileImg', profileImg);
+  }, [uploadImgDone, profileImg]);
 
   const imageInput = useRef();
 
@@ -61,8 +61,9 @@ const Profile = () => {
       //console.log('profileimg', profileImageForm);
       data.append('profileImageFile', f);
 
-      setImgFile(f);
-      setImgEvent(e);
+      //setImgFile(f);
+      //console.log('event', e.target.result); //없네??
+      //setImgEvent(e.target.result);
 
       console.log('imageFormData', data);
       dispatch(imgPutAction({ userId, data }));
@@ -84,7 +85,7 @@ const Profile = () => {
         {principal && (
           <StyledUserDescTopSection>
             <StyledUserThubnailDiv>
-              <StyledProfileImg src={profileImg && profileImg} alt="" ref={userImg} onerror="this.src='/images/userImage.jpg'" />
+              <StyledProfileImg src={profileImg} alt="" ref={userImg} />
 
               <input
                 type="file"
@@ -96,11 +97,11 @@ const Profile = () => {
               />
 
               <StyledImgUploadButton onClick={onClickImageUpload}>이미지 업로드</StyledImgUploadButton>
-              <StyledImgRemoveButton>이미지 제거</StyledImgRemoveButton>
+              <StyledImgRemoveButton onClick={notImpl}>이미지 제거</StyledImgRemoveButton>
             </StyledUserThubnailDiv>
             <StyledUserInfoDiv>
               <h2>{principal.username}</h2>
-              <p>이 페이지 중 벨로그 제목, 소셜 정보, 이메일 주소 등은 미구현 상태입니다. </p>
+              <p>이 페이지 중 벨로그 제목, 소셜 정보, 이메일 주소, 회원 탈퇴 등은 미구현 상태입니다. </p>
               {/* <button className="sc-fcdeBU eZBjgD">수정</button> */}
             </StyledUserInfoDiv>
           </StyledUserDescTopSection>

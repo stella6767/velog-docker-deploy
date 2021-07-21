@@ -15,3 +15,7 @@ export const deleteCookie = (name) => {
   let Cookie = `${name}=;Expires=${date.toUTCString()}`;
   document.cookie = Cookie;
 };
+
+export const notImpl = () => {
+  alert('미구현했습니다.');
+};

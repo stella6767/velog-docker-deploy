@@ -52,11 +52,8 @@ public class UserService {
         System.out.println("파일패스 : "+imageFilePath);
 
         String imageUrl = "http://localhost:" +  request.getLocalPort() + "/upload/" + imageFileName;
-
-
         log.info(request.getLocalAddr() + " " + request.getRequestURI());
-
-        log.info(imageUrl);
+        log.info("imageUrl: " + imageUrl);
 
         try {
             Files.write(imageFilePath, profileImageFile.getBytes());

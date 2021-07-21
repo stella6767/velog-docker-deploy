@@ -10,7 +10,7 @@ export const userImg = ({ userId, data }) => {
   // for (var pair of data.entries()) {
   //   console.log(pair[0] + ', ' + pair[1]);
   // }
-  client.put(`/user/${userId}/profileImageUrl`, data, config); //Json화 시켜줘서 오류가 떳구나!!! multipart인데!!!
+  return client.put(`/user/${userId}/profileImageUrl`, data, config); //Json화 시켜줘서 오류가 떳구나!!! multipart인데!!! return문 또 빼먹었네..
 };
 
 const config = {

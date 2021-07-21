@@ -59,4 +59,4 @@ jwt:
 
 
 file:
-  path: /Users/gangmingyu/Documents/velog/velog-backend/src/main/resources/upload
+  path: /Users/gangmingyu/Documents/velog/velog-backend/src/main/resources/static/upload/

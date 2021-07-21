@@ -79,7 +79,7 @@ public class UserController {
         User userEntity = userService.회원사진변경(profileImageFile, principalDetails, request);
         principalDetails.setUser(userEntity); //세션 값에 저장된 imagProfile도 변경함으로서 세션 이미지를 들고있는 jsp 경로 모두 변경
 
-        return new CMRespDto<>(1, "프로필 사진을 변경하였습니다.", userEntity.getProfileImgUrl());
+        return new CMRespDto<>(1, "프로필 사진을 변경하였습니다.",  userEntity.getProfileImgUrl());
     }
 
 
