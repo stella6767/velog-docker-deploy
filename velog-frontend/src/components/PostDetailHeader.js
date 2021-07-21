@@ -125,7 +125,9 @@ const PostDetailHeader = memo((props) => {
         </StyledHeadDescDiv>
         <StyledPostDetailTagDiv>
           {post.tags.map((tag) => (
-            <StyledDetailTagLink to={`/tag?name=${tag.name}`}>{tag.name}</StyledDetailTagLink>
+            <StyledDetailTagLink key={tag.id} to={`/tag?name=${tag.name}`}>
+              {tag.name}
+            </StyledDetailTagLink>
           ))}
         </StyledPostDetailTagDiv>
       </div>

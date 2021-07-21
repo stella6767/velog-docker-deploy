@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AppLayout from '../../components/AppLayout';
 import { notImpl } from '../../lib/constants/auth';
-import useUpdateEffect from '../../lib/hooks/useUpdateEffect';
 import { imgPutAction } from '../../reducers/user';
 import {
   StyledImgRemoveButton,

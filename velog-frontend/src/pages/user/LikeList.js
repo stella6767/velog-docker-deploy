@@ -1,11 +1,7 @@
-import React, { memo } from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import React, { memo, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import AppLayout from '../../components/AppLayout';
 import PostCard from '../../components/PostCard';
-import { loadPostsInitAction } from '../../reducers/post';
 import { loadUserPostAction, userPostsInitAction } from '../../reducers/user';
 import { StyledMainDiv } from '../home/style';
 

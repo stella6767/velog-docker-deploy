@@ -73,7 +73,7 @@ const writeForm = memo((props) => {
             <Input placeholder="#태그" />
           </Form.Item>
           <Form.Item name="content">
-            <TextEditor name="content" value={value} onChange={(value) => setvalue(value)} name="content" />
+            <TextEditor name="content" value={value} onChange={(value) => setvalue(value)} />
           </Form.Item>
           <Form.Item>
             <StyledButtonDiv>

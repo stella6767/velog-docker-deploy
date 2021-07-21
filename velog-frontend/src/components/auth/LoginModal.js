@@ -27,6 +27,7 @@ const LoginModal = memo((props) => {
         width={550}
         footer={[
           <div
+            key="footer"
             style={{
               display: 'flex',
               justifyContent: 'flex-end',

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import useUpdateEffect from '../lib/hooks/useUpdateEffect';
 import logo_img from '../logo.svg';
-import { loadUserAction, logoutAction } from '../reducers/auth';
+import { logoutAction } from '../reducers/auth';
 import AuthModal from './auth/ModalContainer';
 import HomeHeader from './HomeHeader';
 import './MyHeader.scss';
@@ -50,7 +50,7 @@ const AppHeader = memo((props) => {
 
   const { isHome } = props;
 
-  const { loginDone, loginError, joinDone, joinError, data, principal } = useSelector(({ auth, test, loading }) => ({
+  const { loginDone, loginError, joinDone, joinError, data, principal } = useSelector(({ auth }) => ({
     loginDone: auth.loginDone,
     loginError: auth.loginError,
     data: auth.cmRespDto,

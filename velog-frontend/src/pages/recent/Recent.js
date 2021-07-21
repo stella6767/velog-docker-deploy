@@ -1,8 +1,5 @@
-import React, { memo } from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import React, { memo, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import AppLayout from '../../components/AppLayout';
 import PostCard from '../../components/PostCard';
 import { loadPostsInitAction, loadRecentPostsAction } from '../../reducers/post';
@@ -57,7 +54,7 @@ const Recent = memo((props) => {
   return (
     <>
       <AppLayout isHome={isHome}>
-        {recentPosts.length != 1 && (
+        {recentPosts.length != 0 && (
           <StyledMainDiv>
             {recentPosts.map((post) => (
               <PostCard key={post.id} post={post} loading={loadPostLoading} />

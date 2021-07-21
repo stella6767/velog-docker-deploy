@@ -14,7 +14,7 @@ import {
 
 //이 페이지 인피니트 스크롤링은 나중에 구현하자.
 const User = memo((props) => {
-  const { posts, userData, userDone } = useSelector(({ user, loading }) => ({
+  const { posts, userData, userDone } = useSelector(({ user }) => ({
     userData: user.userData,
     //userLoading: loading['USER_REQUEST'],
     userDone: user.userDone,

@@ -33,6 +33,6 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(name = "userId")
     @ManyToOne
     private User user;
-    
+
 
 }
