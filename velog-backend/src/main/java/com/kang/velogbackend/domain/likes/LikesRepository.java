@@ -11,11 +11,11 @@ public interface LikesRepository extends JpaRepository<Likes, Long> {
 
 
     @Modifying
-    @Query(value = "INSERT INTO likes(postId, userId) VALUES(:postId, :principalId)", nativeQuery = true)
+    @Query(value = "INSERT INTO Likes(postId, userId) VALUES(:postId, :principalId)", nativeQuery = true)
     int mLike(@Param("postId") Long postId, @Param("principalId") Long principalId);
 
     @Modifying
-    @Query(value = "DELETE FROM likes WHERE postId = :postId AND userId = :principalId", nativeQuery = true)
+    @Query(value = "DELETE FROM Likes WHERE postId = :postId AND userId = :principalId", nativeQuery = true)
     int mUnLike(@Param("postId") Long postId,@Param("principalId")  Long principalId);
 
 }

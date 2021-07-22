@@ -3,53 +3,66 @@ import { StyledHeadDescDiv } from '../pages/user/style';
 import { HeartOutlined, HeartFilled } from '@ant-design/icons';
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { likeDeleteAction, likePostAction, postDeleteAction } from '../reducers/post';
+import { getPostAction, likeDeleteAction, likePostAction, postDeleteAction } from '../reducers/post';
 import { Link, useHistory } from 'react-router-dom';
 import useUpdateEffect from '../lib/hooks/useUpdateEffect';
 import { useState } from 'react';
 import moment from 'moment';
 import { StyledDetailTagLink, StyledLikeBtn, StyledPostDetailTagDiv, StyledUnlikeBtn } from './style';
 import { Button } from 'antd';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 const PostDetailHeader = memo((props) => {
-  const {
-    post,
-    likePostDone,
-    likePostError,
-    userId,
-    postId,
-    likeDeleteDone,
-    likeDeleteError,
-    principal,
-    postDeleteDone,
-    postDeleteError,
-  } = props;
+  const { userId, postId, principal, postDeleteDone, postDeleteError } = props;
+
+  const { post, likePostDone, likePostError, likeDeleteDone, likeDeleteError } = useSelector(({ post }) => ({
+    post: post.post,
+    likePostDone: post.likePostDone,
+    likePostError: post.likePostError,
+    likeDeleteDone: post.likeDeleteDone,
+    likeDeleteError: post.likeDeleteError,
+  }));
 
   let history = useHistory();
 
   const dispatch = useDispatch();
-  //이렇게 받아야지 redux data와 동기화가 안전하게 이루어짐.. 딱히 방법이 안 떠오르네..
-  const [likeState, setLikeState] = useState(post.likeState);
-  const [likeCount, setLikeCount] = useState(post.likeCount);
+  //이렇게 받아야지 redux data와 동기화가 안전하게 이루어짐.. 딱히 방법이 안 떠오르네.. ..뭐지..
+  const [likeState, setLikeState] = useState(null);
+  const [likeCount, setLikeCount] = useState(null);
+
+  useEffect(() => {
+    setLikeState(post.likeState); //안 되네......
+    setLikeCount(post.likeCount);
+    //console.log('likeState', post.likeState);
+  }, [post]);
 
   useUpdateEffect(() => {
     if (likePostError) {
-      alert('로그인이 필요한 서비스입니다.');
+      alert('좋아요 등록에 실패하였습니다.');
     }
 
     //좋아요 됐으면
     if (likePostDone) {
       //console.log('둘 다 실행되는구만.. 하나의 useUpdateEffect에 4개 변수를 다 넣으니, 둘 다 실행됨, 아마도 변수 초기화 과정에서 꼬인듯');
-      setLikeState(true);
-      setLikeCount(likeCount + 1);
+      //setLikeState(true);
+      //setLikeCount(likeCount + 1);
+
+      dispatch(getPostAction({ userId, postId }));
+      //console.log('dispatch 이후 redux store 상태가 바로 변경이 안 되므로 위처럼 다시 한 번 불러와야됨..', post);
+
+      setLikeState(post.likeState);
+      setLikeCount(post.likeCount);
     }
   }, [likePostError, likePostDone]);
 
   useUpdateEffect(() => {
     //싫어요 했으면
     if (likeDeleteDone) {
-      setLikeState(false);
-      setLikeCount(likeCount - 1);
+      dispatch(getPostAction({ userId, postId }));
+      //console.log('요렇게는 바로 반영이 되는데..', post);
+      setLikeState(post.likeState);
+      setLikeCount(post.likeCount);
     }
 
     if (likeDeleteError) {

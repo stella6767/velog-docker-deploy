@@ -1,4 +1,6 @@
 
+#공통설정
+
 server:
   servlet:
     context-path: /

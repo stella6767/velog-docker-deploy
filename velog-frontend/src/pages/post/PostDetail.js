@@ -7,23 +7,9 @@ import { getPostAction } from '../../reducers/post';
 import { Global, StyledDetailContentDiv, StyledPostDetailContainer } from '../user/style';
 
 const PostDetail = memo((props) => {
-  const {
-    post,
-    getPostDone,
-    likePostDone,
-    likePostError,
-    likeDeleteDone,
-    likeDeleteError,
-    principal,
-    postDeleteDone,
-    postDeleteError,
-  } = useSelector(({ post, loading, auth }) => ({
+  const { post, getPostDone, principal, postDeleteDone, postDeleteError } = useSelector(({ post, auth }) => ({
     post: post.post,
     getPostDone: post.getPostDone,
-    likePostDone: post.likePostDone,
-    likePostError: post.likePostError,
-    likeDeleteDone: post.likeDeleteDone,
-    likeDeleteError: post.likeDeleteError,
     postDeleteDone: post.postDeleteDone,
     postDeleteError: post.postDeleteError,
     principal: auth.principal,
@@ -34,7 +20,7 @@ const PostDetail = memo((props) => {
   useEffect(() => {
     const postId = props.match.params.postId;
     const userId = props.match.params.userId;
-    dispatch(getPostAction({ userId, postId }));
+    dispatch(getPostAction({ userId, postId })); //Redux store 값이랑 동기화가 한발 늦게 되네..
   }, []);
 
   return (
@@ -45,11 +31,6 @@ const PostDetail = memo((props) => {
           <AppHeader />
           <StyledPostDetailContainer>
             <PostDetailHeader
-              post={post}
-              likePostDone={likePostDone}
-              likePostError={likePostError}
-              likeDeleteDone={likeDeleteDone}
-              likeDeleteError={likeDeleteError}
               principal={principal}
               postDeleteDone={postDeleteDone}
               postDeleteError={postDeleteError}
