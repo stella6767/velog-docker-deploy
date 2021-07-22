@@ -1,5 +1,5 @@
+
 server:
-  port: 8080
   servlet:
     context-path: /
     encoding:
@@ -7,6 +7,22 @@ server:
       enabled: true
 
 spring:
+  profiles:
+    active:
+      - dev
+
+---
+
+
+server:
+  port: 8080
+
+spring:
+  config:
+    activate:
+      on-profile:
+        - dev
+
   cache:
     type: redis
   redis:
@@ -32,6 +48,73 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 #    show-sql: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+    security:
+      user:
+        name: kang
+        password: 1234
+
+#logging:
+#  level:
+#    root: debug
+#
+
+
+jwt:
+  secret: kimdonggeunkimdonggeunkimdonggeunkimdonggeunkimdonggeunkimdonggeunkimdonggeunkimdonggeun
+
+
+
+file:
+  path: /Users/gangmingyu/Documents/velog/velog-backend/src/main/resources/static/upload/
+
+
+---
+
+
+server:
+  port: 8090
+
+spring:
+  config:
+    activate:
+      on-profile:
+        - prod
+
+  cache:
+    type: redis
+  redis:
+    host: 127.0.0.1
+    port: 6397
+
+    lettuce:
+      pool:
+        max-active: 10
+        max-idle: 10
+        min-idle: 5
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/velog?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+    username: kang
+    password: Stella@6767
+
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  #    show-sql: true
   servlet:
     multipart:
       enabled: true
