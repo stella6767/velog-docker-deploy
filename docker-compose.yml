@@ -1,0 +1,54 @@
+version: '3'
+services:
+  redis: #서비스명
+    #컨테이너 이름
+    container_name: redis
+    #reids 폴더 내부의 Dockerfile을 실행
+    build: ./redis/.
+    #외부에 공개할 host명
+    hostname: redis
+    ports:
+      - '6397:6379'
+  #데이터베이스 호스트 네임 지정 (database)
+  database:
+    # 만약 image를 만들었으면,
+    # image: skjin20800/every:db1.0
+    build: ./database/.
+    # 외부에 공개할 host명
+    hostname: dbhost
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./db:/var/lib/mysql
+    restart: always #컨테이너 죽어도 자동 재실행
+    depends_on: #redis 실행 후 실행
+      - redis
+
+  backend:
+    restart: always
+    build: ./velog-backend/.
+    ports:
+      - '8080:8080'
+    depends_on:
+      - database
+
+  frontend:
+    restart: always
+    build: ./velog-frontend/.
+    ports:
+      - '3000:3000'
+    depends_on:
+      - backend
+
+  nginx:
+    build: ./nginx/.
+    hostname: nginxhost
+    ports:
+      - '80:80'
+    # networks:
+    #   - test_net
+    depends_on:
+      - frontend
+
+volumes:
+  db: #docker 내부에 db라는 폴더를 하나 만듬
